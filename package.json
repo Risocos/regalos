@@ -1,6 +1,7 @@
 {
   "name": "regalos",
   "version": "0.1.0",
+  "homepage": "https://risocos.github.io/regalos",
   "private": true,
   "dependencies": {
     "react": "^16.3.2",
@@ -11,6 +12,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "gh-pages": "^1.1.0"
   }
 }
