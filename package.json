@@ -4,9 +4,11 @@
   "homepage": "https://risocos.github.io/regalos",
   "private": true,
   "dependencies": {
+    "npm": "^6.0.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "semantic-ui-react": "^0.80.0"
   },
   "scripts": {
     "start": "react-scripts start",
