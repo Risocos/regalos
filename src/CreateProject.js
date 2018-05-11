@@ -28,19 +28,6 @@ export class CreateProject extends Component {
 
             //Utility variables
             formMessage: [],
-
-            //Error tracking, true means error, false means OK
-            //Used in validate function
-            errors: [
-                true,
-                true,
-                true,
-                true,
-                true,
-                true,
-                true,
-                true,
-            ],
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
