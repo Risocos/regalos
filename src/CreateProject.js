@@ -56,6 +56,10 @@ export class CreateProject extends Component {
         });
     }
 
+    isANumber(string) {
+        return !isNaN(parseFloat(string)) && isFinite(string);
+    }
+
     validate() {
         //Check if fields are empty, perhaps replacable with ... in arguments and using .map
         let isValid = true;
@@ -76,11 +80,20 @@ export class CreateProject extends Component {
             message.push("Target budget is empty")
             isValid = false;
         }
+
+        //Check if start date is before the end date
+        //If not, add error message and translate date to string
         if(this.state.start >= this.state.end) {
             let startDate = this.state.start.format("DD-MMMM-YYYY")
             let endDate = this.state.end.format("DD-MMMM-YYYY")
             message.push("Start date must be before end date. " +
                 "Start: " + startDate + " End: " + endDate);
+            isValid = false;
+        }
+
+        //Check if target budget is a number
+        if(!this.isANumber(this.state.target)) {
+            message.push("Target budget is not a number, please insert numbers only. Example: '10.45'")
             isValid = false;
         }
 
