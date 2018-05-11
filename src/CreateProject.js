@@ -10,27 +10,38 @@ import {FileUploader} from './FileUploader';
 //Installed dependencies for this:
 // DatePicker -> to select start and end dates,
 // moment -> required in DatePicker,
+//information for field validation: https://goshakkk.name/instant-form-fields-validation-react/
 export class CreateProject extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            projectOwner: '',
-            shortDescription: '',
-            projectPlan: '',
+            //Form values
+            owner: '',
+            desc: '',
+            plan: '',
             imagePath: '/white-image.png',
-            startDate: moment(),
-            endDate: moment(),
-            targetBudget: 0,
-            collaboratorsAvailable: [   {key: 0, value: 'Melle', text: 'Melle'},
-                {key: 1, value: 'Thijs',text: 'Thijs'},
-                {key: 2, value: 'Romy',text: 'Romy'},
-                {key :3, value: 'Jan',text: 'Jan'},
-                {key: 4, value: 'Sander',text: 'Sander'}],
-            collaboratorsChosen: [],
+            start: moment(),
+            end: moment(),
+            target: 0,
+            collabs: [],
 
-            formMessage: null,
-        }
+            //Utility variables
+            formMessage: [],
+
+            //Error tracking, true means error, false means OK
+            //Used in validate function
+            errors: [
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+            ],
+        };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
@@ -40,13 +51,13 @@ export class CreateProject extends Component {
 
     handleStartDateChange(e) {
         this.setState({
-            startDate: e,
+            start: e,
         })
     }
 
     handleEndDateChange(e) {
         this.setState({
-            endDate: e,
+            end: e,
         })
     }
 
@@ -58,63 +69,98 @@ export class CreateProject extends Component {
         });
     }
 
-    //Checks if form is filled in
-    formFilled(owner, desc, plan, start, end, budget, collabs) {
-        if(start >= end) return false;
-        if(owner==='') return false;
-        if(desc==='') return false;
-        if(plan==='') return false;
-        if(budget===0) return false;
-        if(collabs.empty) return false;
-        return true;
+    validate() {
+        //Check if fields are empty, perhaps replacable with ... in arguments and using .map
+        let isValid = true;
+        let message = [];
+        if(this.state.owner==='') {
+            message.push("Owner is empty")
+            isValid = false;
+        }
+        if(this.state.desc==='') {
+            message.push("Description is empty")
+            isValid = false;
+        }
+        if(this.state.plan==='') {
+            message.push("Project plan is empty")
+            isValid = false;
+        }
+        if(this.state.target===0) {
+            message.push("Target budget is empty")
+            isValid = false;
+        }
+        if(this.state.start >= this.state.end) {
+            let startDate = this.state.start.format("DD-MMMM-YYYY")
+            let endDate = this.state.end.format("DD-MMMM-YYYY")
+            message.push("Start date must be before end date. " +
+                "Start: " + startDate + " End: " + endDate);
+            isValid = false;
+        }
+
+        const errorMessage = (
+            <Message error>
+                <Message.Header>Oops! Something went wrong!</Message.Header>
+                <Message.List>
+                    {message.map((value) => <Message.Item key={value}>{value}</Message.Item>)}
+                </Message.List>
+            </Message>
+        );
+
+        this.setState({
+            formMessage: errorMessage
+        });
+
+        return isValid;
+
     }
 
     handleSubmit(event) {
         //TODO: handle submit with server
-        let owner = this.state.projectOwner;
-        let desc = this.state.shortDescription;
-        let plan = this.state.projectPlan;
-        let start = this.state.startDate;
-        let end = this.state.endDate;
-        let budget = this.state.targetBudget;
-        let collabs = this.state.collaboratorsChosen;
-
-        let message = null;
-
-        if(this.formFilled(owner, desc, plan, start, end, budget, collabs)) {
-            message = <Message success header="Project created"/>;
+        if (!this.validate()) {
+            console.log("should error")
         }
-        else message = <Message negative header="Information is missing"/>
+        else
+        {
+            console.log("should success ")
+            let message = <Message success header="Project created"/>;
 
-        this.setState({
-            formMessage: message,
-        })
+            this.setState({
+                 formMessage: message,
+            })
+        }
     }
 
     render() {
+        let collaboratorsAvailable = [
+            {key: 0, value: 'Melle', text: 'Melle'},
+            {key: 1, value: 'Thijs',text: 'Thijs'},
+            {key: 2, value: 'Romy',text: 'Romy'},
+            {key :3, value: 'Jan',text: 'Jan'},
+            {key: 4, value: 'Sander',text: 'Sander'}];
+
         return (
             <div className="container">
+                <div>
+                    {this.state.formMessage}
+                </div>
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group grouped>
-                        <Form.Input fluid label='Project owner' value={this.state.projectOwner} name='projectOwner' placeholder='Project Owner' onChange={this.handleInputChange}/>
-                        <Form.TextArea label='Short description' name='shortDescription' placeholder='Short description' onChange={this.handleInputChange}/>
-                        <Form.TextArea rows='7' label='Project Plan' name='projectPlan' placeholder='Project Plan'  onChange={this.handleInputChange}/>
+                        <Form.Input fluid label='Project owner' value={this.state.owner} name='owner' placeholder='Project Owner' onChange={this.handleInputChange}/>
+                        <Form.TextArea label='Short description' name='desc' placeholder='Short description' onChange={this.handleInputChange}/>
+                        <Form.TextArea rows='7' label='Project Plan' name='plan' placeholder='Project Plan'  onChange={this.handleInputChange}/>
 
                         <Image src={this.state.imagePath} size='medium' rounded />
                         <FileUploader />
-                        <label>Start Date</label><DatePicker name='startDate' selected={this.state.startDate} onChange={this.handleStartDateChange}/>
-                        <label>End Date</label><DatePicker name='endDate' selected={this.state.endDate} onChange={this.handleEndDateChange}/>
-                        <Form.Input fluid label='Target budget' name='targetBudget' placeholder='$0' onChange={this.handleInputChange}/>
+                        <label>Start Date</label><DatePicker name='start' selected={this.state.start} onChange={this.handleStartDateChange}/>
+                        <label>End Date</label><DatePicker name='end' selected={this.state.end} onChange={this.handleEndDateChange}/>
+                        <Form.Input fluid label='Target budget' name='target' placeholder='$0' onChange={this.handleInputChange}/>
 
-                        <Form.Select fluid label='Add Collaborator' placeholder='Collaborator name' name='collaboratorsChosen' options={this.state.collaboratorsAvailable} onChange={this.handleInputChange}/>
+                        <Form.Select fluid label='Add Collaborator' placeholder='Collaborator name' name='collabs' options={collaboratorsAvailable} onChange={this.handleInputChange}/>
 
                     </Form.Group>
                         <Form.Button content="Create Project" positive/>
                         <Form.Button content="Cancel" />
                 </Form>
-                <div>
-                    {this.state.formMessage}
-                </div>
             </div>
         )
     }
