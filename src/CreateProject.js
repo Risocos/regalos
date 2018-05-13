@@ -57,14 +57,10 @@ export class CreateProject extends Component {
         });
     }
 
-    handleCollabInputChange(e) {
-        //Event seems undefined, needs fix
-        const value = e.target.value;
+    handleCollabInputChange(event, text) {
         this.setState({
-            collabs: this.state.collabs.concat(value),
+            collabs: text.value,
         });
-
-
     }
 
     isANumber(string) {
@@ -74,26 +70,26 @@ export class CreateProject extends Component {
     validate() {
         let isValid = true;
         let message = [];
-        if(this.state.name==='') {
+        if (this.state.name === '') {
             message.push("Name is empty")
             isValid = false;
         }
-        if(this.state.desc==='') {
+        if (this.state.desc === '') {
             message.push("Description is empty")
             isValid = false;
         }
-        if(this.state.plan==='') {
+        if (this.state.plan === '') {
             message.push("Project plan is empty")
             isValid = false;
         }
-        if(this.state.target===0) {
+        if (this.state.target === 0) {
             message.push("Target budget is empty")
             isValid = false;
         }
 
         //Check if start date is before the end date
         //If not, add error message and translate date to string
-        if(this.state.start >= this.state.end) {
+        if (this.state.start >= this.state.end) {
             let startDate = this.state.start.format("DD-MMMM-YYYY")
             let endDate = this.state.end.format("DD-MMMM-YYYY")
             message.push("Start date must be before end date. " +
@@ -102,7 +98,7 @@ export class CreateProject extends Component {
         }
 
         //Check if target budget is a number
-        if(!this.isANumber(this.state.target)) {
+        if (!this.isANumber(this.state.target)) {
             message.push("Target budget is not a number, please insert numbers only. Example: '10.45'")
             isValid = false;
         }
@@ -124,23 +120,23 @@ export class CreateProject extends Component {
 
     }
 
-    handleSubmit(event) {
+    handleSubmit() {
         //TODO: handle submit with server
+        console.log(this.state.collabs)
         if (!this.validate()) {
         }
-        else
-        {
-            let message =   <Message success>
-                                <Message.Header>Project created</Message.Header>
-                                <p>
-                                    Go to your project!
-                                    {//TODO: create a link to newly created project
-                                    }
-                                </p>
-                            </Message>;
+        else {
+            let message = <Message success>
+                <Message.Header>Project created</Message.Header>
+                <p>
+                    Go to your project!
+                    {//TODO: create a link to newly created project
+                    }
+                </p>
+            </Message>;
 
             this.setState({
-                 formMessage: message,
+                formMessage: message,
             })
         }
     }
@@ -163,26 +159,33 @@ export class CreateProject extends Component {
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group widths='equal'>
                         <Form.Group className='formgroup' grouped>
-                            <Form.Input fluid label='Project name' value={this.state.name} name='name' placeholder='Project Name' onChange={this.handleInputChange}/>
-                            <Form.TextArea rows='7' label='Short description' name='desc' placeholder='Short description' onChange={this.handleInputChange}/>
-                            <Form.TextArea rows='15' label='Project Plan' name='plan' placeholder='Project Plan'  onChange={this.handleInputChange}/>
+                            <Form.Input fluid label='Project name' value={this.state.name} name='name'
+                                        placeholder='Project Name' onChange={this.handleInputChange}/>
+                            <Form.TextArea rows='7' label='Short description' name='desc'
+                                           placeholder='Short description' onChange={this.handleInputChange}/>
+                            <Form.TextArea rows='15' label='Project Plan' name='plan' placeholder='Project Plan'
+                                           onChange={this.handleInputChange}/>
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
-                            <Image className='image' src={this.state.imagePath} size='medium' rounded />
-                            <FileUploader />
-                            <label>Start Date</label><DatePicker name='start' selected={this.state.start} onChange={this.handleStartDateChange}/>
-                            <label>End Date</label><DatePicker name='end' selected={this.state.end} onChange={this.handleEndDateChange}/>
-                            <Form.Input fluid label='Target budget' name='target' placeholder='$0' onChange={this.handleInputChange}/>
+                            <Image className='image' src={this.state.imagePath} size='medium' rounded/>
+                            <FileUploader/>
+                            <label>Start Date</label><DatePicker name='start' selected={this.state.start}
+                                                                 onChange={this.handleStartDateChange}/>
+                            <label>End Date</label><DatePicker name='end' selected={this.state.end}
+                                                               onChange={this.handleEndDateChange}/>
+                            <Form.Input fluid label='Target budget' name='target' placeholder='$0'
+                                        onChange={this.handleInputChange}/>
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
-                            <Dropdown placeholder='Collaborator name' fluid multiple search selection options={collaboratorsAvailable} onChange={this.handleCollabInputChange}/>
+                            <Dropdown placeholder='Collaborator name' fluid multiple search selection
+                                      options={collaboratorsAvailable} onChange={this.handleCollabInputChange}/>
                             {
                                 //<Form.Select fluid label='Add Collaborator' placeholder='Collaborator name' name='collabs' options={collaboratorsAvailable} onChange={this.handleCollabInputChange}/>
                             }
                         </Form.Group>
                     </Form.Group>
-                        <Form.Button content="Create Project" positive/>
-                        <Form.Button content="Cancel" />
+                    <Form.Button content="Create Project" positive/>
+                    <Form.Button content="Cancel"/>
                 </Form>
             </div>
         )
