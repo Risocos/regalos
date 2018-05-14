@@ -148,52 +148,25 @@ export class ProjectOverview extends Component {
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
-                                        />
-                                    </Grid.Column>
-                                </Grid.Row>
-
-                                <Grid.Row>
-                                    <Grid.Column>
-                                        <Card
-                                            image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
-                                        />
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Card
-                                            image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
-                                        />
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Card
-                                            image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                 </Grid.Row>
@@ -202,25 +175,52 @@ export class ProjectOverview extends Component {
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
+                                        />
+                                    </Grid.Column>
+                                </Grid.Row>
+
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                 </Grid.Row>
