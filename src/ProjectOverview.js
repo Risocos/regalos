@@ -126,8 +126,8 @@ export class ProjectOverview extends Component {
             <div className="container">
 
                 <Form onSubmit={this.handleSubmit}>
-                    <Form.Group widths='equal'>
-                        <Form.Group className='formgroup' grouped>
+                    <Form.Group>
+                        <div className='formgroup' grouped>
                             <Form.Select label='Filter' options={options} placeholder='Filter'
                                            onchange={this.handleInputChange}/>
 
@@ -140,8 +140,8 @@ export class ProjectOverview extends Component {
 
                             <Image src='http://via.placeholder.com/400x1000'/>
 
-                        </Form.Group>
-                        <Form.Group className='formgroup' grouped>
+                        </div>
+                        <div className='formgroup'>
 
                             <Grid columns={3}>
                                 <Grid.Row>
@@ -154,7 +154,7 @@ export class ProjectOverview extends Component {
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
-                                        <Card
+                                        <Card className='middlecard'
                                             image='http://via.placeholder.com/300x300'
                                             header='Elliot Baker'
                                             meta='Friend'
@@ -225,12 +225,19 @@ export class ProjectOverview extends Component {
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
-
-                        </Form.Group>
-                        <Form.Group className='formgroup' grouped>
+                        </div>
+                        <div className='ads'>
                             <Image src='http://via.placeholder.com/400x1200'/>
-                        </Form.Group>
+                        </div>
                     </Form.Group>
+
+                    <div className='googlemaps'>
+                        <div className="gmap_canvas">
+                            <iframe width="100%" height="500" id="gmap_canvas"
+                                    src="https://maps.google.com/maps?q=university of san francisco&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                    frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0"/>
+                        </div>
+                    </div>
 
                 </Form>
             </div>
