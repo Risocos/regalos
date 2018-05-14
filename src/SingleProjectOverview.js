@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Message, Header, Button, Image} from "semantic-ui-react";
+import {Form, Message, Header, Button, Image, Progress, Statistic} from "semantic-ui-react";
 import "./SingleProjectOverview.css";
 import moment from 'moment';
 
@@ -112,18 +112,28 @@ export class SingleProjectOverview extends Component {
                             <Image src='http://via.placeholder.com/600x300'/>
                             <Header as='h2'>ProjectName</Header>
                             <Header as='h3'>TargetBudget: $10000</Header>
-                            <p>A small project Description of the project. This will be like 6 sentences. This is some bullshit to see how it will look like.</p>
+                            <Statistic>
+                                <Statistic.Value>5,550</Statistic.Value>
+                                <Statistic.Label>Donators!</Statistic.Label>
+                            </Statistic>
+
+                                <Progress percent={83} progress success>
+                                    $8300
+                                </Progress>
+
+                            <p>A small project Description of the project. This will be like 6 sentences. This is some
+                                bullshit to see how it will look like.</p>
                             <Header> <Button size='massive' color='green'>
                                 Donate now!
                             </Button>
                             </Header>
-                            <Button circular color='facebook' icon='facebook' />
-                            <Button circular color='twitter' icon='twitter' />
-                            <Button circular color='linkedin' icon='linkedin' />
-                            <Button circular color='google plus' icon='google plus' />
-                            <Button circular color='nstagram' icon='instagram' />
+                            <Button circular color='facebook' icon='facebook'/>
+                            <Button circular color='twitter' icon='twitter'/>
+                            <Button circular color='linkedin' icon='linkedin'/>
+                            <Button circular color='google plus' icon='google plus'/>
+                            <Button circular color='nstagram' icon='instagram'/>
 
-                            <p>A very detailed description.</p>
+                            <p>A very detailed description. and maybe something with photos</p>
 
                         </Form.Group>
                         <Form.Group className='projectgroupside' grouped>
