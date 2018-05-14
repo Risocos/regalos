@@ -120,7 +120,7 @@ export class ProjectOverview extends Component {
 
     render() {
         //TODO: Add navbar
-        
+
         //TODO: funtionality of filters
         return (
             <div className="container">
@@ -132,11 +132,11 @@ export class ProjectOverview extends Component {
                                            onchange={this.handleInputChange}/>
 
 
-                            <Form.Field label='United States' control='input' type='checkbox' />
-                            <Form.Field label='Europe' control='input' type='checkbox' />
-                            <Form.Field label='Asia' control='input' type='checkbox' />
-                            <Form.Field label='Australia' control='input' type='checkbox' />
-                            <Form.Field label='Africa' control='input' type='checkbox' />
+                            <Form.Field label='United States' control='input' type='checkbox' checked='true' />
+                            <Form.Field label='Europe' control='input' type='checkbox' checked='true' />
+                            <Form.Field label='Asia' control='input' type='checkbox' checked='true' />
+                            <Form.Field label='Australia' control='input' type='checkbox' checked='true' />
+                            <Form.Field label='Africa' control='input' type='checkbox' checked='true' />
 
                             <Image src='http://via.placeholder.com/400x1000'/>
 
