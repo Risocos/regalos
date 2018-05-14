@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {Form, Message, Container, Header, Button, Card, Grid} from "semantic-ui-react";
+import {Form, Message, Header, Button, Image} from "semantic-ui-react";
 import "./SingleProjectOverview.css";
 import moment from 'moment';
-import 'react-datepicker/dist/react-datepicker.css';
 
 const options = [
     {key: 'f', text: 'Filter', value: 'filter'},
@@ -10,10 +9,6 @@ const options = [
     {key: 't', text: 'Targetbudget', value: 'targetbudget'},
 ];
 
-//Installed dependencies for this:
-// DatePicker -> to select start and end dates,
-// moment -> required in DatePicker,
-//information for field validation: https://goshakkk.name/instant-form-fields-validation-react/
 export class SingleProjectOverview extends Component {
     constructor(props) {
         super(props);
@@ -108,32 +103,24 @@ export class SingleProjectOverview extends Component {
         //TODO: Fill projectname, targetbudget etc with proper values
         return (
             <div className="container">
-
-                <div>
-                    {this.state.formMessage}
-                </div>
                 <Form>
                     <Form.Group widths='equal'>
-                        <Form.Group className='formgroup' grouped>
-
-                            <b>adds</b>
-
+                        <Form.Group className='projectgroupside' grouped>
+                            <Image src='http://via.placeholder.com/280x1000'/>
                         </Form.Group>
-                        <Form.Group className='formgroup' grouped>
-                            Image
+                        <Form.Group className='projectgroupcenter' grouped>
+                            <Image src='http://via.placeholder.com/600x300'/>
+                            <Header as='h2'>ProjectName</Header>
+                            <Header as='h3'>TargetBudget:</Header>
+                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </p>
+                            <Button size='massive' color='green'>
+                                Donate!
+                            </Button>
                         </Form.Group>
-                        <Form.Group className='formgroup' grouped>
-                            <b>adds</b>
+                        <Form.Group className='projectgroupside' grouped>
+                            <Image src='http://via.placeholder.com/280x1000'/>
                         </Form.Group>
                     </Form.Group>
-                    <Container text>
-                        <Header as='h2'>ProjectName</Header>
-                        <Header as='h3'>TargetBudget:</Header>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </p>
-                        <Button size='massive' color='green'>
-                            Donate!
-                        </Button>
-                    </Container>
 
                 </Form>
             </div>
