@@ -28,6 +28,8 @@ export class CreateProject extends Component {
 
             //Utility variables
             formMessage: [],
+            uploadedFile: '',
+            imagePreview: '/white-image.png',
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -120,6 +122,25 @@ export class CreateProject extends Component {
 
     }
 
+    handleFileSubmit(e) {
+        console.log("Handeling file upload: ", this.state.imagePath);
+    }
+
+    handleImageChange(e) {
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.setState({
+                uploadedFile: file,
+                imagePreview: reader.result,
+            });
+        };
+
+        reader.readAsDataURL(file);
+    }
+
     handleSubmit() {
         //TODO: handle submit with server
         if (!this.validate()) {
@@ -155,6 +176,7 @@ export class CreateProject extends Component {
             {key: 3, value: 'Jan', text: 'Jan'},
             {key: 4, value: 'Sander', text: 'Sander'}];
 
+        let {imagePreview} = this.state.imagePreview;
 
         return (
             <Container>
@@ -172,8 +194,8 @@ export class CreateProject extends Component {
                                            onChange={this.handleInputChange}/>
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
-                            <Image className='image' src={this.state.imagePath} size='medium' rounded/>
-                            <FileUploader/>
+                            <Image className='image' src={this.state.imagePreview} size='medium' rounded/>
+                            <input type='file' onChange={(e)=>this.handleImageChange(e)} />
                             <label>Start Date</label><DatePicker name='start' selected={this.state.start}
                                                                  onChange={this.handleStartDateChange}/>
                             <label>End Date</label><DatePicker name='end' selected={this.state.end}
