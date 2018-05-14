@@ -56,8 +56,10 @@ export class NavBar extends Component {
 
     middleMenu() {
         return(
-            <Menu.Menu>
-                <Search category/>
+            <Menu.Menu >
+                <Menu.Item name='search'>
+                    <Search category/>
+                </Menu.Item>
             </Menu.Menu>
         )
     }
@@ -93,7 +95,7 @@ export class NavBar extends Component {
     render() {
         return (
             <div>
-                <Menu borderless>
+                <Menu>
                     {this.leftMenu()}
                     {this.middleMenu()}
                     {this.rightMenu()}
