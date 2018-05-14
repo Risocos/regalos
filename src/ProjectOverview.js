@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Message, Dropdown, Select, Card} from "semantic-ui-react";
+import {Form, Message, Card, Grid, Image} from "semantic-ui-react";
 import "./ProjectOverview.css";
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -79,14 +79,6 @@ export class ProjectOverview extends Component {
             isValid = false;
         }
 
-
-
-        //Check if target budget is a number
-        if (!this.isANumber(this.state.target)) {
-            message.push("Target budget is not a number, please insert numbers only. Example: '10.45'")
-            isValid = false;
-        }
-
         const errorMessage = (
             <Message error>
                 <Message.Header>Oops! Something went wrong!</Message.Header>
@@ -127,13 +119,12 @@ export class ProjectOverview extends Component {
     }
 
     render() {
-
+        //TODO: Add navbar
+        
         //TODO: funtionality of filters
         return (
             <div className="container">
-                <div>
-                    {this.state.formMessage}
-                </div>
+
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group widths='equal'>
                         <Form.Group className='formgroup' grouped>
@@ -146,20 +137,101 @@ export class ProjectOverview extends Component {
                             <Form.Field label='Asia' control='input' type='checkbox' />
                             <Form.Field label='Australia' control='input' type='checkbox' />
                             <Form.Field label='Africa' control='input' type='checkbox' />
-                            <b>adds</b>
+
+                            <Image src='http://via.placeholder.com/400x1000'/>
 
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
 
+                            <Grid columns={3}>
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Elliot Baker'
+                                            meta='Friend'
+                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Elliot Baker'
+                                            meta='Friend'
+                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Elliot Baker'
+                                            meta='Friend'
+                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                        />
+                                    </Grid.Column>
+                                </Grid.Row>
 
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Elliot Baker'
+                                            meta='Friend'
+                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Elliot Baker'
+                                            meta='Friend'
+                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Elliot Baker'
+                                            meta='Friend'
+                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                        />
+                                    </Grid.Column>
+                                </Grid.Row>
+
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Elliot Baker'
+                                            meta='Friend'
+                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Elliot Baker'
+                                            meta='Friend'
+                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Elliot Baker'
+                                            meta='Friend'
+                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                        />
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
 
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
-                            <b>adds</b>
+                            <Image src='http://via.placeholder.com/400x1200'/>
                         </Form.Group>
                     </Form.Group>
 
-                    <Form.Button content="Cancel"/>
                 </Form>
             </div>
         )
