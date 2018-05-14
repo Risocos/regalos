@@ -106,19 +106,28 @@ export class SingleProjectOverview extends Component {
                 <Form>
                     <Form.Group widths='equal'>
                         <Form.Group className='projectgroupside' grouped>
-                            <Image src='http://via.placeholder.com/280x1000'/>
+                            <Image src='http://via.placeholder.com/300x1000'/>
                         </Form.Group>
                         <Form.Group className='projectgroupcenter' grouped>
                             <Image src='http://via.placeholder.com/600x300'/>
                             <Header as='h2'>ProjectName</Header>
-                            <Header as='h3'>TargetBudget:</Header>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </p>
-                            <Button size='massive' color='green'>
-                                Donate!
+                            <Header as='h3'>TargetBudget: $10000</Header>
+                            <p>A small project Description of the project. This will be like 6 sentences. This is some bullshit to see how it will look like.</p>
+                            <Header> <Button size='massive' color='green'>
+                                Donate now!
                             </Button>
+                            </Header>
+                            <Button circular color='facebook' icon='facebook' />
+                            <Button circular color='twitter' icon='twitter' />
+                            <Button circular color='linkedin' icon='linkedin' />
+                            <Button circular color='google plus' icon='google plus' />
+                            <Button circular color='nstagram' icon='instagram' />
+
+                            <p>A very detailed description.</p>
+
                         </Form.Group>
                         <Form.Group className='projectgroupside' grouped>
-                            <Image src='http://via.placeholder.com/280x1000'/>
+                            <Image src='http://via.placeholder.com/300x1000'/>
                         </Form.Group>
                     </Form.Group>
 
