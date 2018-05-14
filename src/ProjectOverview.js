@@ -120,53 +120,53 @@ export class ProjectOverview extends Component {
 
     render() {
         //TODO: Add navbar
-        
+
         //TODO: funtionality of filters
         return (
             <div className="container">
 
                 <Form onSubmit={this.handleSubmit}>
-                    <Form.Group>
-                        <div className='formgroup' grouped>
+                    <Form.Group widths='equal'>
+                        <Form.Group className='projectgroupside' grouped>
                             <Form.Select label='Filter' options={options} placeholder='Filter'
                                            onchange={this.handleInputChange}/>
 
 
-                            <Form.Field label='United States' control='input' type='checkbox' />
-                            <Form.Field label='Europe' control='input' type='checkbox' />
-                            <Form.Field label='Asia' control='input' type='checkbox' />
-                            <Form.Field label='Australia' control='input' type='checkbox' />
-                            <Form.Field label='Africa' control='input' type='checkbox' />
+                            <Form.Field label='United States' control='input' type='checkbox' checked='true' />
+                            <Form.Field label='Europe' control='input' type='checkbox' checked='true' />
+                            <Form.Field label='Asia' control='input' type='checkbox' checked='true' />
+                            <Form.Field label='Australia' control='input' type='checkbox' checked='true' />
+                            <Form.Field label='Africa' control='input' type='checkbox' checked='true' />
 
-                            <Image src='http://via.placeholder.com/400x1000'/>
+                            <Image src='http://via.placeholder.com/300x1000'/>
 
-                        </div>
-                        <div className='formgroup'>
+                        </Form.Group>
+                        <Form.Group className='projectgroupcenter' grouped>
 
                             <Grid columns={3}>
                                 <Grid.Row>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
-                                        />
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Card className='middlecard'
-                                            image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Card
+                                            image='http://via.placeholder.com/300x300'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                 </Grid.Row>
@@ -175,25 +175,25 @@ export class ProjectOverview extends Component {
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                 </Grid.Row>
@@ -202,33 +202,34 @@ export class ProjectOverview extends Component {
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Card
                                             image='http://via.placeholder.com/300x300'
-                                            header='Elliot Baker'
-                                            meta='Friend'
-                                            description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
+                                            header='Project Name'
+                                            meta='Target budget: $10000'
+                                            description='Small project desciption of the project.'
                                         />
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
-                        </div>
-                        <div className='ads'>
-                            <Image src='http://via.placeholder.com/400x1200'/>
-                        </div>
+
+                        </Form.Group>
+                        <Form.Group className='projectgroupside' grouped>
+                            <Image src='http://via.placeholder.com/300x1200'/>
+                        </Form.Group>
                     </Form.Group>
 
                     <div className='googlemaps'>
