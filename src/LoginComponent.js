@@ -1,25 +1,33 @@
 import React, {Component} from 'react';
-import {Button, Checkbox, Form} from "semantic-ui-react";
+import {Button, Checkbox, Form, } from "semantic-ui-react";
+import {FacebookLogin} from "react-facebook-login";
 
 export class LoginComponent extends Component {
 
+
+
     render() {
         return (
-            <Form>
+            <div>
+            <Form >
                 <Form.Field>
-                    <label>First Name</label>
-                    <input placeholder='First Name'/>
+                    <label>Email</label>
+                    <input placeholder='Email'/>
                 </Form.Field>
                 <Form.Field>
-                    <label>Last Name</label>
-                    <input placeholder='Last Name'/>
+                    <label>Password</label>
+                    <input type="password" placeholder='Password'/>
                 </Form.Field>
                 <Form.Field>
-                    <Checkbox label='I agree to the Terms and Conditions'/>
+                    <Checkbox label='Remember me'/>
                 </Form.Field>
-                <Button type='submit'>Submit</Button>
+                <Button type='submit'>Log in</Button>
+
             </Form>
+            </div>
+
         )
+
     }
 
 }
