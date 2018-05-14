@@ -127,7 +127,7 @@ export class ProjectOverview extends Component {
 
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group widths='equal'>
-                        <Form.Group className='formgroup' grouped>
+                        <Form.Group className='projectgroupside' grouped>
                             <Form.Select label='Filter' options={options} placeholder='Filter'
                                            onchange={this.handleInputChange}/>
 
@@ -138,10 +138,10 @@ export class ProjectOverview extends Component {
                             <Form.Field label='Australia' control='input' type='checkbox' checked='true' />
                             <Form.Field label='Africa' control='input' type='checkbox' checked='true' />
 
-                            <Image src='http://via.placeholder.com/400x1000'/>
+                            <Image src='http://via.placeholder.com/300x1000'/>
 
                         </Form.Group>
-                        <Form.Group className='formgroup' grouped>
+                        <Form.Group className='projectgroupcenter' grouped>
 
                             <Grid columns={3}>
                                 <Grid.Row>
@@ -227,8 +227,8 @@ export class ProjectOverview extends Component {
                             </Grid>
 
                         </Form.Group>
-                        <Form.Group className='formgroup' grouped>
-                            <Image src='http://via.placeholder.com/400x1200'/>
+                        <Form.Group className='projectgroupside' grouped>
+                            <Image src='http://via.placeholder.com/300x1200'/>
                         </Form.Group>
                     </Form.Group>
 
