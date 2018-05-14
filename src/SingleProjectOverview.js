@@ -1,21 +1,20 @@
 import React, {Component} from 'react';
-import {Form, Message, Dropdown, Select, Card} from "semantic-ui-react";
-import "./ProjectOverview.css";
+import {Form, Message, Container, Header, Button, Card, Grid} from "semantic-ui-react";
+import "./SingleProjectOverview.css";
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import {FileUploader} from './FileUploader';
 
 const options = [
-    { key: 'f', text: 'Filter', value: 'filter' },
-    { key: 'p', text: 'Popularity', value: 'popularity' },
-    { key: 't', text: 'Targetbudget', value: 'targetbudget' },
+    {key: 'f', text: 'Filter', value: 'filter'},
+    {key: 'p', text: 'Popularity', value: 'popularity'},
+    {key: 't', text: 'Targetbudget', value: 'targetbudget'},
 ];
 
 //Installed dependencies for this:
 // DatePicker -> to select start and end dates,
 // moment -> required in DatePicker,
 //information for field validation: https://goshakkk.name/instant-form-fields-validation-react/
-export class ProjectOverview extends Component {
+export class SingleProjectOverview extends Component {
     constructor(props) {
         super(props);
 
@@ -36,9 +35,7 @@ export class ProjectOverview extends Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleCollabInputChange = this.handleCollabInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
-
 
 
     handleInputChange(e) {
@@ -80,7 +77,6 @@ export class ProjectOverview extends Component {
         }
 
 
-
         //Check if target budget is a number
         if (!this.isANumber(this.state.target)) {
             message.push("Target budget is not a number, please insert numbers only. Example: '10.45'")
@@ -105,61 +101,40 @@ export class ProjectOverview extends Component {
 
     }
 
-    handleSubmit() {
-        //TODO: handle submit with server
-        console.log(this.state.collabs)
-        if (!this.validate()) {
-        }
-        else {
-            let message = <Message success>
-                <Message.Header>Project created</Message.Header>
-                <p>
-                    Go to your project!
-                    {//TODO: create a link to newly created project
-                    }
-                </p>
-            </Message>;
-
-            this.setState({
-                formMessage: message,
-            })
-        }
-    }
 
     render() {
 
         //TODO: funtionality of filters
+        //TODO: Fill projectname, targetbudget etc with proper values
         return (
             <div className="container">
+
                 <div>
                     {this.state.formMessage}
                 </div>
-                <Form onSubmit={this.handleSubmit}>
+                <Form>
                     <Form.Group widths='equal'>
                         <Form.Group className='formgroup' grouped>
-                            <Form.Select label='Filter' options={options} placeholder='Filter'
-                                           onchange={this.handleInputChange}/>
 
-
-                            <Form.Field label='United States' control='input' type='checkbox' />
-                            <Form.Field label='Europe' control='input' type='checkbox' />
-                            <Form.Field label='Asia' control='input' type='checkbox' />
-                            <Form.Field label='Australia' control='input' type='checkbox' />
-                            <Form.Field label='Africa' control='input' type='checkbox' />
                             <b>adds</b>
 
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
-
-
-
+                            Image
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
                             <b>adds</b>
                         </Form.Group>
                     </Form.Group>
+                    <Container text>
+                        <Header as='h2'>ProjectName</Header>
+                        <Header as='h3'>TargetBudget:</Header>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </p>
+                        <Button size='massive' color='green'>
+                            Donate!
+                        </Button>
+                    </Container>
 
-                    <Form.Button content="Cancel"/>
                 </Form>
             </div>
         )
