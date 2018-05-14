@@ -71,27 +71,27 @@ export class CreateProject extends Component {
         let isValid = true;
         let message = [];
         if (this.state.name === '') {
-            message.push("Name is empty")
+            message.push("Name is empty");
             isValid = false;
         }
         if (this.state.desc === '') {
-            message.push("Description is empty")
+            message.push("Description is empty");
             isValid = false;
         }
         if (this.state.plan === '') {
-            message.push("Project plan is empty")
+            message.push("Project plan is empty");
             isValid = false;
         }
         if (this.state.target === 0) {
-            message.push("Target budget is empty")
+            message.push("Target budget is empty");
             isValid = false;
         }
 
         //Check if start date is before the end date
         //If not, add error message and translate date to string
         if (this.state.start >= this.state.end) {
-            let startDate = this.state.start.format("DD-MMMM-YYYY")
-            let endDate = this.state.end.format("DD-MMMM-YYYY")
+            let startDate = this.state.start.format("DD-MMMM-YYYY");
+            let endDate = this.state.end.format("DD-MMMM-YYYY");
             message.push("Start date must be before end date. " +
                 "Start: " + startDate + " End: " + endDate);
             isValid = false;
@@ -99,7 +99,7 @@ export class CreateProject extends Component {
 
         //Check if target budget is a number
         if (!this.isANumber(this.state.target)) {
-            message.push("Target budget is not a number, please insert numbers only. Example: '10.45'")
+            message.push("Target budget is not a number, please insert numbers only. Example: '10.45'");
             isValid = false;
         }
 
@@ -122,7 +122,6 @@ export class CreateProject extends Component {
 
     handleSubmit() {
         //TODO: handle submit with server
-        console.log(this.state.collabs)
         if (!this.validate()) {
         }
         else {
@@ -130,7 +129,8 @@ export class CreateProject extends Component {
                 <Message.Header>Project created</Message.Header>
                 <p>
                     Go to your project!
-                    {//TODO: create a link to newly created project
+                    {
+                        //TODO: create a link to newly created project
                     }
                 </p>
             </Message>;
@@ -179,9 +179,6 @@ export class CreateProject extends Component {
                         <Form.Group className='formgroup' grouped>
                             <Dropdown placeholder='Collaborator name' fluid multiple search selection
                                       options={collaboratorsAvailable} onChange={this.handleCollabInputChange}/>
-                            {
-                                //<Form.Select fluid label='Add Collaborator' placeholder='Collaborator name' name='collabs' options={collaboratorsAvailable} onChange={this.handleCollabInputChange}/>
-                            }
                         </Form.Group>
                     </Form.Group>
                     <Form.Button content="Create Project" positive/>
