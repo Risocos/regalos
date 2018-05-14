@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Image, Message, Dropdown} from "semantic-ui-react";
+import {Container, Form, Image, Message, Dropdown} from "semantic-ui-react";
 import "./CreateProject.css";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
@@ -125,15 +125,20 @@ export class CreateProject extends Component {
         if (!this.validate()) {
         }
         else {
+            const items = [ this.state.name,
+                            this.state.desc,
+                            this.state.plan,
+                            this.state.start.format("DD-MMMM-YYYY"),
+                            this.state.end.format("DD-MMMM-YYYY"),
+                            this.state.target,
+                            this.state.collabs,
+            ];
             let message = <Message success>
                 <Message.Header>Project created</Message.Header>
-                <p>
-                    Go to your project!
-                    {
-                        //TODO: create a link to newly created project
-                    }
-                </p>
-            </Message>;
+                    <Message.List>
+                        {items.map((value) => <Message.Item key={value}>{value}</Message.Item>)}
+                    </Message.List>
+                </Message>;
 
             this.setState({
                 formMessage: message,
@@ -152,8 +157,8 @@ export class CreateProject extends Component {
 
 
         return (
-            <div className="container">
-                <div>
+            <Container>
+                <div className='message'>
                     {this.state.formMessage}
                 </div>
                 <Form onSubmit={this.handleSubmit}>
@@ -184,7 +189,7 @@ export class CreateProject extends Component {
                     <Form.Button content="Create Project" positive/>
                     <Form.Button content="Cancel"/>
                 </Form>
-            </div>
+            </Container>
         )
     }
 }
