@@ -138,7 +138,7 @@ export class ProjectOverview extends Component {
                             <Form.Field label='Australia' control='input' type='checkbox' checked='true' />
                             <Form.Field label='Africa' control='input' type='checkbox' checked='true' />
 
-                            <Image src='http://via.placeholder.com/300x1000'/>
+                            <Image src='http://via.placeholder.com/300x800'/>
 
                         </Form.Group>
                         <Form.Group className='projectgroupcenter' grouped>
@@ -228,7 +228,7 @@ export class ProjectOverview extends Component {
 
                         </Form.Group>
                         <Form.Group className='projectgroupside' grouped>
-                            <Image src='http://via.placeholder.com/300x1200'/>
+                            <Image src='http://via.placeholder.com/300x1000'/>
                         </Form.Group>
                     </Form.Group>
 
