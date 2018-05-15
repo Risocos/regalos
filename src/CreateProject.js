@@ -70,21 +70,21 @@ export class CreateProject extends Component {
 
     validate() {
         let isValid = true;
-        let message = [];
+        let messages = [];
         if (this.state.name === '') {
-            message.push("Name is empty");
+            messages.push("Name is empty");
             isValid = false;
         }
         if (this.state.desc === '') {
-            message.push("Description is empty");
+            messages.push("Description is empty");
             isValid = false;
         }
         if (this.state.plan === '') {
-            message.push("Project plan is empty");
+            messages.push("Project plan is empty");
             isValid = false;
         }
         if (this.state.target === 0) {
-            message.push("Target budget is empty");
+            messages.push("Target budget is empty");
             isValid = false;
         }
 
@@ -93,14 +93,14 @@ export class CreateProject extends Component {
         if (this.state.start >= this.state.end) {
             let startDate = this.state.start.format("DD-MMMM-YYYY");
             let endDate = this.state.end.format("DD-MMMM-YYYY");
-            message.push("Start date must be before end date. " +
+            messages.push("Start date must be before end date. " +
                 "Start: " + startDate + " End: " + endDate);
             isValid = false;
         }
 
         //Check if target budget is a number
         if (!this.isANumber(this.state.target)) {
-            message.push("Target budget is not a number, please insert numbers only. Example: '10.45'");
+            messages.push("Target budget is not a number, please insert numbers only. Example: '10.45'");
             isValid = false;
         }
 
@@ -108,7 +108,7 @@ export class CreateProject extends Component {
             <Message error>
                 <Message.Header>Oops! Something went wrong!</Message.Header>
                 <Message.List>
-                    {message.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
+                    {messages.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
                 </Message.List>
             </Message>
         );
@@ -141,20 +141,21 @@ export class CreateProject extends Component {
         if (!this.validate()) {
         }
         else {
-            const items = [ this.state.name,
-                            this.state.desc,
-                            this.state.plan,
-                            this.state.start.format("DD-MMMM-YYYY"),
-                            this.state.end.format("DD-MMMM-YYYY"),
-                            this.state.target,
-                            this.state.collabs,
+            const items = [
+                this.state.name,
+                this.state.desc,
+                this.state.plan,
+                this.state.start.format("DD-MMMM-YYYY"),
+                this.state.end.format("DD-MMMM-YYYY"),
+                this.state.target,
+                this.state.collabs,
             ];
             let message = <Message success>
                 <Message.Header>Project created</Message.Header>
-                    <Message.List>
-                        {items.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
-                    </Message.List>
-                </Message>;
+                <Message.List>
+                    {items.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
+                </Message.List>
+            </Message>;
 
             this.setState({
                 formMessage: message,
@@ -190,7 +191,7 @@ export class CreateProject extends Component {
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
                             <Image className='image' src={this.state.imagePreview} size='medium' rounded/>
-                            <input type='file' onChange={(e)=>this.handleImageChange(e)} />
+                            <input type='file' onChange={(e) => this.handleImageChange(e)}/>
                             <label>Start Date</label><DatePicker name='start' selected={this.state.start}
                                                                  onChange={this.handleStartDateChange}/>
                             <label>End Date</label><DatePicker name='end' selected={this.state.end}
