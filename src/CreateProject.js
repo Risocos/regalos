@@ -4,7 +4,6 @@ import "./CreateProject.css";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import {FileUploader} from './FileUploader';
 
 
 //Installed dependencies for this:
@@ -109,7 +108,7 @@ export class CreateProject extends Component {
             <Message error>
                 <Message.Header>Oops! Something went wrong!</Message.Header>
                 <Message.List>
-                    {message.map((value) => <Message.Item key={value}>{value}</Message.Item>)}
+                    {message.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
                 </Message.List>
             </Message>
         );
@@ -153,7 +152,7 @@ export class CreateProject extends Component {
             let message = <Message success>
                 <Message.Header>Project created</Message.Header>
                     <Message.List>
-                        {items.map((value) => <Message.Item key={value}>{value}</Message.Item>)}
+                        {items.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
                     </Message.List>
                 </Message>;
 
