@@ -20,7 +20,7 @@ export class CreateProject extends Component {
             name: '',
             desc: '',
             plan: '',
-            imagePath: '/white-image.png',
+            imagePath: '',
             start: moment(),
             end: moment(),
             target: 0,
@@ -120,10 +120,6 @@ export class CreateProject extends Component {
 
         return isValid;
 
-    }
-
-    handleFileSubmit(e) {
-        console.log("Handeling file upload: ", this.state.imagePath);
     }
 
     handleImageChange(e) {
