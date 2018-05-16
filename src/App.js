@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import './App.css';
 import {NavBar} from './NavBar';
-import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {Login} from "./Login";
 import {Register} from "./Register";
 import { CreateProject } from './CreateProject';
-import { NavBar } from './NavBar';
-import {Container} from "semantic-ui-react";
+import {Account} from "./account/Account";
 
 class App extends Component {
     render() {
@@ -15,23 +14,11 @@ class App extends Component {
                 <div>
                     <NavBar/>
 
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/about">About</Link>
-                        </li>
-                        <li>
-                            <Link to="/topics">Topics</Link>
-                        </li>
-                    </ul>
+                    <Route path="/login" component={Login}/>
+                    <Route path="/signup" component={Register} />
+                    <Route path="/projects/create" component={CreateProject} />
+                    <Route path="/profile" component={Account} />
 
-                    <hr/>
-
-                    <Route exact path="/" component={Home}/>
-                    <Route path="/about" component={About}/>
-                    <Route path="/topics" component={Topics}/>
                 </div>
             </Router>
         );
@@ -40,18 +27,7 @@ class App extends Component {
 
 export default App;
 
-const Home = () => (
-    <div>
-        <h2>Home</h2>
-    </div>
-);
-
-const About = () => (
-    <div>
-        <h2>About</h2>
-    </div>
-);
-
+/* Example for matching URL
 const Topics = ({match}) => (
     <div>
         <h2>Topics</h2>
@@ -80,4 +56,4 @@ const Topic = ({match}) => (
     <div>
         <h3>{match.params.topicId}</h3>
     </div>
-);
+); */
