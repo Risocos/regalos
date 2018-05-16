@@ -1,0 +1,13 @@
+.formgroup {
+    width: 33%;
+    padding: 20px;
+    align-content: center;
+}
+
+.image {
+    margin-bottom: 20px;
+}
+
+.message {
+    margin-top: 20px;
+}

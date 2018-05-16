@@ -2,6 +2,11 @@ import React, {Component} from 'react';
 import './App.css';
 import {NavBar} from './NavBar';
 import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
+import {Login} from "./Login";
+import {Register} from "./Register";
+import { CreateProject } from './CreateProject';
+import { NavBar } from './NavBar';
+import {Container} from "semantic-ui-react";
 
 class App extends Component {
     render() {
