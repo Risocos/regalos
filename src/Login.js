@@ -18,7 +18,7 @@ export class Login extends Component {
                   style={{height: '100%'}}
                   verticalAlign="middle">
                 <Grid.Column style={{maxWidth: 450}}>
-                    <div>
+                    <div className='header'>
                         <Header as='h2' textAlign='center'>
                             Log in
                         </Header>

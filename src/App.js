@@ -7,7 +7,7 @@ import {Register} from "./Register";
 class App extends Component {
     render() {
         return (
-            <Register></Register>
+            <Login></Login>
         );
     }
 }
