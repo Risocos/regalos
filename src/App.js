@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
+import {Account} from './account/Account';
 import './App.css';
-import {SingleProjectOverview} from './SingleProjectOverview';
+import { CreateProject } from './CreateProject';
+import { NavBar } from './NavBar';
+import {Container} from "semantic-ui-react";
 
 class App extends Component {
     render() {
         return (
             <div className="App">
-                <SingleProjectOverview />
+                <NavBar/>
+                <Container>
+                    <CreateProject />
+                </Container>
+                <Account />
             </div>
         );
     }
