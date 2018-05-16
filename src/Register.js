@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Checkbox, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
+import {Button, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
 
 export class Register extends Component {
 
