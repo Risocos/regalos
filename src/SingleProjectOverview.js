@@ -14,23 +14,31 @@ import {
 } from "semantic-ui-react";
 import "./SingleProjectOverview.css";
 
-const options = [
-    {key: 'm', text: 'Male', value: 'male'},
-    {key: 'f', text: 'Female', value: 'female'},
-]
-
 export class SingleProjectOverview extends Component {
-    state = {};
+    constructor(props) {
+        super(props);
+
+        this.state = {};
+
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
 
     handleOpen = () => this.setState({active: true});
     handleClose = () => this.setState({active: false});
-    handleChange = (e, {value}) => this.setState({value})
+    handleChange = (e, {value}) => this.setState({value});
 
     validate = () => {
         //TODO: Validate the donate form
-    }
+    };
 
     render() {
+        const options = [
+            {key: 'm', text: 'Male', value: 'male'},
+            {key: 'f', text: 'Female', value: 'female'},
+        ];
+
         const {active} = this.state;
         const {value} = this.state;
         //TODO: funtionality of filters
