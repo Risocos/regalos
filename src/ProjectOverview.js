@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Card, Grid, Image, Container, Header} from "semantic-ui-react";
+import {Form, Card, Grid, Header} from "semantic-ui-react";
 import "./ProjectOverview.css";
 
 const options = [
@@ -9,9 +9,7 @@ const options = [
 ];
 
 export class ProjectOverview extends Component {
-    constructor(props) {
-        super(props);
-    }
+
 
     render() {
         //TODO: Add navbar
@@ -30,11 +28,11 @@ export class ProjectOverview extends Component {
 
                                 <Form.Select options={options} placeholder='Filter'/>
 
-                                <Form.Field label='United States' control='input' type='checkbox' checked='true'/>
-                                <Form.Field label='Europe' control='input' type='checkbox' checked='true'/>
-                                <Form.Field label='Asia' control='input' type='checkbox' checked='true'/>
-                                <Form.Field label='Australia' control='input' type='checkbox' checked='true'/>
-                                <Form.Field label='Africa' control='input' type='checkbox' checked='true'/>
+                                <Form.Field label='United States' control='input' type='checkbox' defaultChecked='true'/>
+                                <Form.Field label='Europe' control='input' type='checkbox' defaultChecked='true'/>
+                                <Form.Field label='Asia' control='input' type='checkbox' defaultChecked='true'/>
+                                <Form.Field label='Australia' control='input' type='checkbox' defaultChecked='true'/>
+                                <Form.Field label='Africa' control='input' type='checkbox' defaultChecked='true'/>
 
                         </Grid.Column>
 
