@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import { Menu, Icon, Search } from 'semantic-ui-react';
+import React, {Component} from 'react';
+import {Menu, Icon, Search} from 'semantic-ui-react';
 import './NavBar.css';
+import {Link} from "react-router-dom";
 
 
 export class NavBar extends Component {
@@ -22,32 +23,37 @@ export class NavBar extends Component {
         this.setState({
             currentPage: nextPage,
         });
-        alert(nextPage + " button has been clicked!");
+        //alert(nextPage + " button has been clicked!");
     }
 
 
-
     leftMenu() {
-        if(this.state.loggedIn) {
+        if (this.state.loggedIn) {
             return (
                 <Menu.Menu>
                     <Menu.Item name='projects' onClick={this.handleClick}>
-                        <Icon name='calendar'/>
-                        Projects
+                        <Link to='/projects'>
+                            <Icon name='calendar'/>
+                            Projects
+                        </Link>
                     </Menu.Item>
                     <Menu.Item name='newproject' onClick={this.handleClick}>
-                        <Icon name='add to calendar'/>
-                        Create a project
+                        <Link to='/projects/create'>
+                            <Icon name='add to calendar'/>
+                            Create a project
+                        </Link>
                     </Menu.Item>
                 </Menu.Menu>
             );
         }
         else {
-            return(
+            return (
                 <Menu.Menu>
                     <Menu.Item name='projects' onClick={this.handleClick}>
-                        <Icon name='calendar' />
-                        Projects
+                        <Link to='/projects'>
+                            <Icon name='calendar'/>
+                            Projects
+                        </Link>
                     </Menu.Item>
                 </Menu.Menu>
             );
@@ -55,8 +61,8 @@ export class NavBar extends Component {
     }
 
     middleMenu() {
-        return(
-            <Menu.Menu >
+        return (
+            <Menu.Menu>
                 <Menu.Item name='search'>
                     <Search category/>
                 </Menu.Item>
@@ -65,15 +71,19 @@ export class NavBar extends Component {
     }
 
     rightMenu() {
-        if(this.state.loggedIn) {
+        if (this.state.loggedIn) {
             return (
                 <Menu.Menu position='right'>
                     <Menu.Item name='account' onClick={this.handleClick}>
-                        <Icon name='user circle' />
-                        Account
+                        <Link to='/profile'>
+                            <Icon name='user circle'/>
+                            Account
+                        </Link>
                     </Menu.Item>
                     <Menu.Item name='logout' onClick={this.toggleLoggedIn}>
-                        Logout
+                        <Link to='/'>
+                            Logout
+                        </Link>
                     </Menu.Item>
                 </Menu.Menu>
             )
@@ -82,10 +92,14 @@ export class NavBar extends Component {
             return (
                 <Menu.Menu position='right'>
                     <Menu.Item name='login' onClick={this.toggleLoggedIn}>
-                        Login
+                        <Link to='/login'>
+                            Login
+                        </Link>
                     </Menu.Item>
-                    <Menu.Item name='register' onClick={this.handleClick}>
+                    <Menu.Item link name='register' onClick={this.handleClick}>
+                        <Link to='/signup'>
                         Register
+                        </Link>
                     </Menu.Item>
                 </Menu.Menu>
             )

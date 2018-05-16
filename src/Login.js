@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Checkbox, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
+import {Link} from "react-router-dom";
 
 export class Login extends Component {
 
@@ -42,7 +43,7 @@ export class Login extends Component {
                         </Segment>
                     </Form>
                     <Message>
-                        New to us? <a href='#'>Sign Up</a>
+                        New to us? <Link to='/signup'>Sign Up</Link>
                     </Message>
                 </Grid.Column>
             </Grid>

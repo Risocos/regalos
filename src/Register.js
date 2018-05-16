@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
 import "./login.css"
+import {Link} from "react-router-dom";
 
 export class Register extends Component {
 
@@ -62,7 +63,7 @@ export class Register extends Component {
                         </Segment>
                     </Form>
                     <Message>
-                        Already have an account with us? <a href='#'>Log in</a>
+                        Already have an account with us? <Link to='/login'>Log in</Link>
                     </Message>
                 </Grid.Column>
             </Grid>
