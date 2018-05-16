@@ -6,6 +6,8 @@ import {Login} from "./Login";
 import {Register} from "./Register";
 import { CreateProject } from './CreateProject';
 import {Account} from "./account/Account";
+import {ProjectOverview} from './ProjectOverview'
+import {SingleProjectOverview} from "./SingleProjectOverview";
 
 class App extends Component {
     render() {
@@ -18,6 +20,8 @@ class App extends Component {
                     <Route path="/signup" component={Register} />
                     <Route path="/projects/create" component={CreateProject} />
                     <Route path="/profile" component={Account} />
+                    <Route path="/projects" component={ProjectOverview} />
+                    <Route path="/project/:projectId" component={SingleProjectOverview} />
 
                 </div>
             </Router>
