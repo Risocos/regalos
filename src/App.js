@@ -20,7 +20,7 @@ class App extends Component {
                     <Route path="/signup" component={Register} />
                     <Route path="/projects/create" component={CreateProject} />
                     <Route path="/profile" component={Account} />
-                    <Route path="/projects" component={ProjectOverview} />
+                    <Route exact path="/projects" component={ProjectOverview} />
                     <Route path="/project/:projectId" component={SingleProjectOverview} />
 
                 </div>
