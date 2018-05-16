@@ -18,9 +18,11 @@ export class Login extends Component {
                   style={{height: '100%'}}
                   verticalAlign="middle">
                 <Grid.Column style={{maxWidth: 450}}>
-                    <Header as='h2' textAlign='center'>
-                        Log in
-                    </Header>
+                    <div>
+                        <Header as='h2' textAlign='center'>
+                            Log in
+                        </Header>
+                    </div>
                     <Form size='large'>
                         <Segment>
                             <Form.Input

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
+import "./login.css"
 
 export class Register extends Component {
 
@@ -18,9 +19,11 @@ export class Register extends Component {
                   style={{height: '100%'}}
                   verticalAlign="middle">
                 <Grid.Column style={{maxWidth: 450}}>
-                    <Header as='h2' textAlign='center'>
-                        Register
-                    </Header>
+                    <div className='header'>
+                        <Header as='h2' textAlign='center'>
+                            Register
+                        </Header>
+                    </div>
                     <Form size='large'>
                         <Segment>
                             <Form.Input
