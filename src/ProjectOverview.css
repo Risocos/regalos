@@ -1,0 +1,22 @@
+.container {
+    width: 80%;
+    margin: 40px auto;
+    align-content: center;
+}
+
+.image {
+    margin-bottom: 20px;
+}
+
+.googlemaps {
+    overflow:hidden;
+    height:500px;
+    width:100%;
+    margin-top: 50px;
+}
+
+.gmap_canvas {
+    background:none!important;
+    height:500px;
+    width:100%;
+}
