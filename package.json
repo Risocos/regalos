@@ -4,9 +4,13 @@
   "homepage": "https://risocos.github.io/regalos",
   "private": true,
   "dependencies": {
+    "moment": "^2.22.1",
     "npm": "^6.0.0",
     "react": "^16.3.2",
+    "react-datepicker": "^1.4.1",
     "react-dom": "^16.3.2",
+    "react-facebook-login": "^4.0.1",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
     "semantic-ui-react": "^0.80.0"
   },
