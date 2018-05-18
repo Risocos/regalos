@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import {Button, Container, Grid, Header, Icon, Input, Item, Message, TextArea} from "semantic-ui-react";
+import {Button, Card, Container, Grid, Header, Icon, Input, Item, Message, TextArea} from "semantic-ui-react";
 import './Account.css';
+import {Link} from "react-router-dom";
 
 export class Account extends Component {
 
@@ -66,10 +67,108 @@ export class Account extends Component {
                         </Item.Group>
                     </Container>
                 </div>
-                <Container style={{margin: '80px'}}>
+                <Container style={{margin: '80px' }}>
                     <Header as='h1'>Projects</Header>
                     <Grid columns={3}>
+                        <Grid.Row>
+                            <Grid.Column>
+                                {/*Needs to be replaced with function that collects ID*/}
+                                <Link to='/project/1'>
+                                    <Card
+                                        image='http://via.placeholder.com/300x300'
+                                        header='Project Name'
+                                        meta='Target budget: $10000'
+                                        description='1Small project desciption of the project.'
+                                    />
+                                </Link>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Link to='/project/2'>
+                                    <Card
+                                        image='http://via.placeholder.com/300x300'
+                                        header='Project Name'
+                                        meta='Target budget: $10000'
+                                        description='2Small project desciption of the project.'
+                                    />
+                                </Link>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Link to='/project/3'>
+                                    <Card
+                                        image='http://via.placeholder.com/300x300'
+                                        header='Project Name'
+                                        meta='Target budget: $10000'
+                                        description='3Small project desciption of the project.'
+                                    />
+                                </Link>
+                            </Grid.Column>
+                        </Grid.Row>
 
+                        <Grid.Row>
+                            <Grid.Column>
+                                <Link to='/project/4'>
+                                    <Card
+                                        image='http://via.placeholder.com/300x300'
+                                        header='Project Name'
+                                        meta='Target budget: $10000'
+                                        description='4Small project desciption of the project.'
+                                    />
+                                </Link>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Link to='/project/5'>
+                                    <Card
+                                        image='http://via.placeholder.com/300x300'
+                                        header='Project Name'
+                                        meta='Target budget: $10000'
+                                        description='5Small project desciption of the project.'
+                                    />
+                                </Link>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Link to='/project/6'>
+                                    <Card
+                                        image='http://via.placeholder.com/300x300'
+                                        header='Project Name'
+                                        meta='Target budget: $10000'
+                                        description='6Small project desciption of the project.'
+                                    />
+                                </Link>
+                            </Grid.Column>
+                        </Grid.Row>
+
+                        <Grid.Row>
+                            <Grid.Column>
+                                <Link to='/project/7'>
+                                    <Card
+                                        image='http://via.placeholder.com/300x300'
+                                        header='Project Name'
+                                        meta='Target budget: $10000'
+                                        description='7Small project desciption of the project.'
+                                    />
+                                </Link>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Link to='/project/8'>
+                                    <Card
+                                        image='http://via.placeholder.com/300x300'
+                                        header='Project Name'
+                                        meta='Target budget: $10000'
+                                        description='8Small project desciption of the project.'
+                                    />
+                                </Link>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Link to='/project/9'>
+                                    <Card
+                                        image='http://via.placeholder.com/300x300'
+                                        header='Project Name'
+                                        meta='Target budget: $10000'
+                                        description='9Small project desciption of the project.'
+                                    />
+                                </Link>
+                            </Grid.Column>
+                        </Grid.Row>
                     </Grid>
                 </Container>
             </div>
