@@ -3,10 +3,12 @@ from flask import Flask, request, jsonify, make_response
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from jose import jwt
+from flask_cors import CORS
 import datetime
 from functools import wraps
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SECRET_KEY'] = '}Zz_n2=.B<yRp|KpK>,T:?KmS8a6?G0XES,kW0SIF=e}T)YEGh9k&&Xyni(~<5E'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////mnt/c/Users/antho/Documents/api_example/project.db'
@@ -54,17 +56,23 @@ projects = [
     {
         'id': 1,
         'title': 'Building House in Uganda',
+        'description': 'We are going to build houses for people in Uganda',
         'owner': 1,
+        'target': 10000,
     },
     {
         'id': 2,
         'title': 'Collecting money',
+        'description': 'We want to collect money for others',
         'owner': 1,
+        'target': 15000,
     },
     {
         'id': 3,
         'title': 'Recycle clothing',
+        'description': 'Donate your clothing, so we can recycle it!',
         'owner': 2,
+        'target': 'Clothing',
     },
 ]
 
@@ -280,7 +288,7 @@ def delete_user(current_user, user_id):
 ####################
 
 
-@app.route('/project', methods=['GET'])
+@app.route('/projects', methods=['GET'])
 def get_all_projects():
     # projects = Project.query.filter_by(user_id=current_user.id).all()
 

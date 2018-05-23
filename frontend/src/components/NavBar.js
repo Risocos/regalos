@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Menu, Icon, Search} from 'semantic-ui-react';
 import '../styling/NavBar.css';
-import {Link} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 
 
 export class NavBar extends Component {
@@ -32,10 +32,10 @@ export class NavBar extends Component {
             return (
                 <Menu.Menu>
                     <Menu.Item name='projects' onClick={this.handleClick}>
-                        <Link to='/projects'>
+                        <NavLink to='/projects'>
                             <Icon name='calendar'/>
                             Projects
-                        </Link>
+                        </NavLink>
                     </Menu.Item>
                     <Menu.Item name='newproject' onClick={this.handleClick}>
                         <Link to='/projects/create'>

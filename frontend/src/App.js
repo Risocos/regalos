@@ -4,8 +4,8 @@ import {NavBar} from './components/NavBar';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {Login} from "./components/Login";
 import {Register} from "./components/Register";
-import { CreateProject } from './components/CreateProject';
-import {Account} from "./account/Account";
+import {CreateProject} from './components/CreateProject';
+import {Account} from "./components/Account";
 import {ProjectOverview} from './components/ProjectOverview'
 import {SingleProjectOverview} from "./components/SingleProjectOverview";
 
@@ -14,7 +14,7 @@ class App extends Component {
         return (
             <Router>
                 <div>
-                    <NavBar/>
+
 
                     <Route path="/login" component={Login}/>
                     <Route path="/signup" component={Register} />
