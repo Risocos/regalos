@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Menu, Icon, Search} from 'semantic-ui-react';
-import './NavBar.css';
+import '../styling/NavBar.css';
 import {Link} from "react-router-dom";
 
 

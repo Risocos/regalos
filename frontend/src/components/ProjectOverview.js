@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Form, Card, Grid, Header} from "semantic-ui-react";
-import "./ProjectOverview.css";
+import {Form, Card, Grid, Header, Image} from "semantic-ui-react";
+import "../styling/ProjectOverview.css";
 import {Link} from "react-router-dom";
 
 
@@ -44,12 +44,14 @@ export class ProjectOverview extends Component {
                                     <Grid.Column>
                                         {/*Needs to be replaced with function that collects ID*/}
                                         <Link to='/project/1'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='1Small project desciption of the project.'
-                                            />
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
                                         </Link>
                                     </Grid.Column>
                                     <Grid.Column>

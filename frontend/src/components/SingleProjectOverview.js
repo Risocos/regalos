@@ -12,7 +12,7 @@ import {
     Input,
     Radio, TextArea, Checkbox, Container
 } from "semantic-ui-react";
-import "./SingleProjectOverview.css";
+import "../styling/SingleProjectOverview.css";
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
