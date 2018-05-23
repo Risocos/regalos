@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import './styling/App.css';
-import {NavBar} from './NavBar';
+import {NavBar} from './components/NavBar';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import {Login} from "./Login";
-import {Register} from "./Register";
-import { CreateProject } from './CreateProject';
+import {Login} from "./components/Login";
+import {Register} from "./components/Register";
+import { CreateProject } from './components/CreateProject';
 import {Account} from "./account/Account";
-import {ProjectOverview} from './ProjectOverview'
-import {SingleProjectOverview} from "./SingleProjectOverview";
+import {ProjectOverview} from './components/ProjectOverview'
+import {SingleProjectOverview} from "./components/SingleProjectOverview";
 
 class App extends Component {
     render() {
