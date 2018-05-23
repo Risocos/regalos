@@ -208,11 +208,11 @@ export class ProjectOverview extends Component {
                                 your favorite projects. Or make an account and set up your own project!
                                 Everything is possible.
                             </p>
-                            <p color='red'>
+                            <p><i>
                                 Please notice that we verify accounts that are to be trusted.
                                 It's your own responsibility to look out for your money, so please
                                 make sure the project you are donating to is verified.
-                            </p>
+                            </i></p>
                         </Grid.Column>
 
                     </Grid.Row>

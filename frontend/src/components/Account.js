@@ -1,5 +1,18 @@
 import React, {Component} from "react";
-import {Button, Card, Container, Grid, Header, Icon, Input, Item, Message, TextArea} from "semantic-ui-react";
+import {
+    Button,
+    Card,
+    Container,
+    Dropdown,
+    Grid,
+    Header,
+    Icon,
+    Input,
+    Item,
+    Menu,
+    Message,
+    TextArea
+} from "semantic-ui-react";
 import '../styling/Account.css';
 import {Link} from "react-router-dom";
 
@@ -15,6 +28,7 @@ export class Account extends Component {
             editMode: false,
             isDeleting: false,
             isSaving: false,
+            activeItem: 'account',
             user: {
                 id: 1,
                 email: 'johndoe@example.com',
@@ -29,9 +43,13 @@ export class Account extends Component {
                 'dolorum\n' +
                 'eos, error et nobis praesentium suscipit voluptatem\n' +
                 'voluptatibus.',
+
             }
         };
     }
+
+
+    handleItemClick = (e, {name}) => this.setState({activeItem: name})
 
     toggleEditMode() {
         this.setState({editMode: !this.state.editMode});
@@ -57,17 +75,41 @@ export class Account extends Component {
     }
 
     render() {
+        const {activeItem} = this.state
+
         return (
             <div>
                 <div className='account-header'>
                     {this.state.editMode && <Message>You are in edit mode</Message>}
-                    <Container text>
-                        <Item.Group>
-                            {(this.state.editMode) ? this.renderEditForm() : this.renderNormal()}
-                        </Item.Group>
-                    </Container>
+                    <Grid columns={4}>
+                        <Grid.Row>
+                            <Grid.Column>
+                                <Menu secondary vertical>
+                                    <Menu.Item name='account' active={activeItem === 'account'}
+                                               onClick={this.handleItemClick}/>
+                                    <Menu.Item name='settings' active={activeItem === 'settings'}
+                                               onClick={this.handleItemClick}/>
+                                    <Dropdown item text='Display Options'>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Header>Text Size</Dropdown.Header>
+                                            <Dropdown.Item>Small</Dropdown.Item>
+                                            <Dropdown.Item>Medium</Dropdown.Item>
+                                            <Dropdown.Item>Large</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Menu>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Container text>
+                                    <Item.Group>
+                                        {(this.state.editMode) ? this.renderEditForm() : this.renderNormal()}
+                                    </Item.Group>
+                                </Container>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 </div>
-                <Container style={{margin: '80px' }}>
+                <Container style={{margin: '80px'}}>
                     <Header as='h1'>Projects</Header>
                     <Grid columns={3}>
                         <Grid.Row>
@@ -176,8 +218,10 @@ export class Account extends Component {
     }
 
     renderNormal() {
+
         return (
             <Item>
+
                 <Item.Image size='small'
                             src={this.state.user.image}/>
                 <Item.Content>
@@ -212,11 +256,11 @@ export class Account extends Component {
         return (
             <Item>
                 <Item.Image size='small'
-                            src={this.state.user.image} />
+                            src={this.state.user.image}/>
                 <Item.Content>
-                    <Input name='username' defaultValue={this.state.user.username} onChange={this.valueChanged} />
+                    <Input name='username' defaultValue={this.state.user.username} onChange={this.valueChanged}/>
                     <Item.Description>
-                        <TextArea name='bio' autoHeight value={this.state.user.bio} />
+                        <TextArea name='bio' autoHeight value={this.state.user.bio}/>
                     </Item.Description>
                     <Item.Extra>
                         <Button circular color='twitter' icon='twitter'/>
@@ -234,10 +278,10 @@ export class Account extends Component {
         )
     }
 
-    valueChanged = (e, { name, value }) => {
+    valueChanged = (e, {name, value}) => {
         let u = this.state.user;
         u[name] = value;
-        this.setState({ user: u });
+        this.setState({user: u});
     }
 
 }
