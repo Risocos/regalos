@@ -1,19 +1,18 @@
 import React, {Component} from 'react'
 import {Card, Image} from 'semantic-ui-react'
 import {Link} from "react-router-dom";
+import '../styling/ProjectCard.css'
 
 export class ProjectCard extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            id: '',
-            name: '',
-            desc: '',
-            target: 0,
+            id: props.id,
+            name: props.name,
+            desc: props.desc,
+            target: props.target,
         };
-
-        this.setPropsToState()
     }
 
     setPropsToState() {
@@ -25,18 +24,24 @@ export class ProjectCard extends Component {
         })
     }
 
+    componentDidMount() {
+        this.setPropsToState();
+    }
+
     render() {
         return(
+            <div className="card">
             <Link to={'/project/' + this.state.id}>
                 <Card>
                     <Image src='http://via.placeholder.com/300x300'/>
-                    <Card.Content style={{height: "150px"}}>
-                        <Card.Header style={{padding: "10px"}}>{this.state.name}</Card.Header>
+                    <Card.Content className="card-content">
+                        <Card.Header className="card-header">{this.state.name}</Card.Header>
                         <Card.Meta>Target budget: ${this.state.target}</Card.Meta>
                         <Card.Description>{this.state.desc}</Card.Description>
                     </Card.Content>
                 </Card>
             </Link>
+            </div>
         )
     }
 }

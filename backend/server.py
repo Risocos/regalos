@@ -74,6 +74,13 @@ projects = [
         'owner': 2,
         'target': 'Clothing',
     },
+    {
+        'id': 4,
+        'title': 'Test Project 4',
+        'description': 'Donate for our project to create this project app',
+        'owner': 1,
+        'target': '5000',
+    },
 ]
 
 

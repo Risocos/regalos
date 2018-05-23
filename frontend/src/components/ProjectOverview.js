@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Form, Card, Grid, Header, Image} from "semantic-ui-react";
+import {Form, Grid, Header} from "semantic-ui-react";
 import "../styling/ProjectOverview.css";
-import {Link} from "react-router-dom";
 import axios from "axios";
 import {ProjectCard} from "./ProjectCard";
 
@@ -27,12 +26,15 @@ export class ProjectOverview extends Component {
         axios.get('http://127.0.0.1:5000/projects')
             .then((response) => {
                 response.data.projects.map((projectObject) => (
-                    projectList.push(this.createCardObject(projectObject)))
+                   projectList.push(this.createCardObject(projectObject)))
                 )
             .then(
                 this.setState({
                     projects: projectList,
                 }))
+            //    response.data.projects.map(object => (
+            //        console.log(this.createCardObject(object))
+            //    ))
             })
             .catch(function(error) {
                 console.log(error)
@@ -41,7 +43,12 @@ export class ProjectOverview extends Component {
 
     createCardObject(project) {
         return(
-            <ProjectCard name={project.name}/>
+            <ProjectCard
+                id={project.id}
+                name={project.title}
+                desc={project.description}
+                target={project.target}
+            />
         )
     }
 
