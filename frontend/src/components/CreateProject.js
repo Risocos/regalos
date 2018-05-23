@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Container, Form, Image, Message, Dropdown} from "semantic-ui-react";
-import "./CreateProject.css";
+import "../styling/CreateProject.css";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
