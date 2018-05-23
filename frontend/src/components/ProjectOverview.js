@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Card, Grid, Header, Image} from "semantic-ui-react";
+import {Form, Card, Grid, Header, Image, Pagination} from "semantic-ui-react";
 import "../styling/ProjectOverview.css";
 import {Link} from "react-router-dom";
 
@@ -29,7 +29,7 @@ export class ProjectOverview extends Component {
                         <Grid.Column>
 
                             <Form.Select options={options} placeholder='Filter'/>
-
+                            <p> </p>
                             <Form.Field label='United States' control='input' type='checkbox' defaultChecked='true'/>
                             <Form.Field label='Europe' control='input' type='checkbox' defaultChecked='true'/>
                             <Form.Field label='Asia' control='input' type='checkbox' defaultChecked='true'/>
@@ -56,22 +56,26 @@ export class ProjectOverview extends Component {
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Link to='/project/2'>
-                                        <Card
-                                            image='http://via.placeholder.com/300x300'
-                                            header='Project Name'
-                                            meta='Target budget: $10000'
-                                            description='2Small project desciption of the project.'
-                                        />
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
                                         </Link>
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Link to='/project/3'>
-                                        <Card
-                                            image='http://via.placeholder.com/300x300'
-                                            header='Project Name'
-                                            meta='Target budget: $10000'
-                                            description='3Small project desciption of the project.'
-                                        />
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
                                         </Link>
                                     </Grid.Column>
                                 </Grid.Row>
@@ -79,32 +83,38 @@ export class ProjectOverview extends Component {
                                 <Grid.Row>
                                     <Grid.Column>
                                         <Link to='/project/4'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='4Small project desciption of the project.'
-                                            />
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
                                         </Link>
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Link to='/project/5'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='5Small project desciption of the project.'
-                                            />
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
                                         </Link>
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Link to='/project/6'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='6Small project desciption of the project.'
-                                            />
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
                                         </Link>
                                     </Grid.Column>
                                 </Grid.Row>
@@ -112,53 +122,107 @@ export class ProjectOverview extends Component {
                                 <Grid.Row>
                                     <Grid.Column>
                                         <Link to='/project/7'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='7Small project desciption of the project.'
-                                            />
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
                                         </Link>
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Link to='/project/8'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='8Small project desciption of the project.'
-                                            />
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
                                         </Link>
                                     </Grid.Column>
                                     <Grid.Column>
                                         <Link to='/project/9'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='9Small project desciption of the project.'
-                                            />
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
+                                        </Link>
+                                    </Grid.Column>
+                                </Grid.Row>
+
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Link to='/project/7'>
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
+                                        </Link>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Link to='/project/8'>
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
+                                        </Link>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <Link to='/project/9'>
+                                            <Card>
+                                                <Image src='http://via.placeholder.com/300x300' />
+                                                <Card.Content style={{height: "150px"}}>
+                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
+                                                    <Card.Meta>Target budget: $10000</Card.Meta>
+                                                    <Card.Description>1Small project description of the project.</Card.Description>
+                                                </Card.Content>
+                                            </Card>
                                         </Link>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
-                        </Grid.Column>
 
+                        </Grid.Column>
                         <Grid.Column>
-                            <Header size="large">Info</Header>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                                dolor. Aenean massa strong. Cum sociis natoque penatibus et magnis dis parturient
-                                montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
-                                pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
-                                aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis
-                                vitae, justo. </p>
+                            <Header size="large">Information</Header>
+                            <p> Welcome to Regalos! On this website you will be able to see
+                                countless of different projects from different kinds of people.
+                                You can donate money, donate materials, and even apply to join
+                                a project. Take a look around the projectoverview, pick out
+                                your favorite projects. Or make an account and set up your own project!
+                                Everything is possible.
+                            </p>
+                            <p color='red'>
+                                Please notice that we verify accounts that are to be trusted.
+                                It's your own responsibility to look out for your money, so please
+                                make sure the project you are donating to is verified.
+                            </p>
                         </Grid.Column>
 
+                    </Grid.Row>
+                    <Grid.Row centered columns={3}>
+                        <Grid.Column ><Pagination defaultActivePage={1} totalPages={10} /></Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <div className='googlemaps'>
                             <div className="gmap_canvas">
-                                <iframe width="100%" height="500" id="gmap_canvas"
+                                <iframe title="maps" width="100%" height="500" id="gmap_canvas"
                                         src="https://maps.google.com/maps?q=university of san francisco&t=&z=13&ie=UTF8&iwloc=&output=embed"
                                         frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0"/>
                             </div>

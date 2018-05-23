@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Button, Card, Container, Grid, Header, Icon, Input, Item, Message, TextArea} from "semantic-ui-react";
-import './Account.css';
+import '../styling/Account.css';
 import {Link} from "react-router-dom";
 
 export class Account extends Component {
