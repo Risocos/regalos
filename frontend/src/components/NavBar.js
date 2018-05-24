@@ -22,7 +22,9 @@ export class NavBar extends Component {
 
 
     handleLogout() {
-        //TODO
+        sessionStorage.setItem("token", '');
+        sessionStorage.setItem("username", '');
+        sessionStorage.setItem("publicid", '');
     }
 
     handleClick(event, data) {
@@ -88,7 +90,7 @@ export class NavBar extends Component {
                         </Link>
                     </Menu.Item>
                     <Menu.Item name='logout' onClick={this.handleLogout}>
-                        <Link to='/'>
+                        <Link to='/login'>
                             Logout
                         </Link>
                     </Menu.Item>
@@ -105,7 +107,7 @@ export class NavBar extends Component {
                     </Menu.Item>
                     <Menu.Item link name='register' onClick={this.handleClick}>
                         <Link to='/signup'>
-                        Register
+                            Register
                         </Link>
                     </Menu.Item>
                 </Menu.Menu>

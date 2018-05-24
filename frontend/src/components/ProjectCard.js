@@ -31,7 +31,7 @@ export class ProjectCard extends Component {
     render() {
         return(
             <div className="card">
-            <Link to={'/project/' + this.state.id}>
+            <Link to={'/projects/' + this.state.id}>
                 <Card>
                     <Image src='http://via.placeholder.com/300x300'/>
                     <Card.Content className="card-content">

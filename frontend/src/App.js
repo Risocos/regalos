@@ -33,7 +33,7 @@ class App extends Component {
                         <Route path="/projects/create" component={CreateProject} />
                         <Route path="/profile" component={Account} />
                         <Route exact path="/projects" component={ProjectOverview} />
-                        <Route path="/project/:projectId" component={SingleProjectOverview}/>
+                        <Route path="/projects/:projectId" component={SingleProjectOverview}/>
 
                         {/* Uncomment dit als er een PageNotFound component is
                         <Route component={PageNotFound} />*/}

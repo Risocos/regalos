@@ -44,7 +44,7 @@ export class Login extends Component {
             this.setState({ redirect: true})
 
         }).catch(err => {
-            console.log(err);
+            this.setState({failedLogin: true})
         })
     };
 
@@ -57,22 +57,40 @@ export class Login extends Component {
     };
 
     render() {
-        const { redirect } = this.state
+        let fail = '';
+        const { redirect } = this.state;
+        const { failedLogin } = this.state;
+
+        //Redirect upon successful logon
         if(redirect) {
             return <Redirect to='/profile' />
         }
+
+        if(failedLogin){
+            fail = (
+                <Message error>
+                    <Message.Header style={{paddingTop: "0px"}}>Login unsuccesful</Message.Header>
+                    <Message.List style={{height: "20px"}}>
+                        <Message.Item>Email and/or password invalid</Message.Item>
+                    </Message.List>
+                </Message>
+            )
+        }
+
         return (
             <Grid textAlign="center"
                   style={{height: '100%'}}
                   verticalAlign="middle">
                 <Grid.Column style={{maxWidth: 450}}>
                     <div className='header'>
+                        {fail}
                         <Header as='h2' textAlign='center'>
                             Log in
                         </Header>
                     </div>
                     <Form size='large'>
                         <Segment>
+
                             <Form.Input
                                 fluid
                                 name="username"

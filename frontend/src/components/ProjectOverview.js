@@ -32,9 +32,6 @@ export class ProjectOverview extends Component {
                 this.setState({
                     projects: projectList,
                 }))
-            //    response.data.projects.map(object => (
-            //        console.log(this.createCardObject(object))
-            //    ))
             })
             .catch(function(error) {
                 console.log(error)
