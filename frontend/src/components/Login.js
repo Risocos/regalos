@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
 
 export class Login extends Component {
@@ -11,6 +11,7 @@ export class Login extends Component {
         this.state = {
             username: '',
             password: '',
+            redirect: false,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -32,9 +33,16 @@ export class Login extends Component {
                 password: password,
             }
         }).then(res => {
+            //Setting values into sessionStorage
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("username", res.data.user.username);
             sessionStorage.setItem("publicid", res.data.user.public_id);
+
+            //Setting NavBar to loggedIn mode
+            this.props.toggleLogin();
+
+            this.setState({ redirect: true})
+
         }).catch(err => {
             console.log(err);
         })
@@ -49,6 +57,10 @@ export class Login extends Component {
     };
 
     render() {
+        const { redirect } = this.state
+        if(redirect) {
+            return <Redirect to='/profile' />
+        }
         return (
             <Grid textAlign="center"
                   style={{height: '100%'}}

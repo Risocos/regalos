@@ -10,15 +10,25 @@ import {ProjectOverview} from './components/ProjectOverview'
 import {SingleProjectOverview} from "./components/SingleProjectOverview";
 
 class App extends Component {
+    constructor() {
+        super();
+
+        this.state = {
+            loggedIn: false,
+        }
+    }
+
+    toggleLoggedIn = () => this.setState({loggedIn: !this.state.loggedIn});
+
     render() {
         return (
             <Router>
                 <div>
-                    <NavBar/>
+                    <NavBar toggleLogin={this.toggleLoggedIn} />
 
                     <Switch>
                         <Route exact path="/" component={ProjectOverview} />
-                        <Route path="/login" component={Login} />
+                        <Route path="/login" render={props => <Login toggleLogin={this.toggleLoggedIn} />} />
                         <Route path="/signup" component={Register} />
                         <Route path="/projects/create" component={CreateProject} />
                         <Route path="/profile" component={Account} />

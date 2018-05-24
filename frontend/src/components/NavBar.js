@@ -16,7 +16,14 @@ export class NavBar extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    toggleLoggedIn = () => this.setState({loggedIn: !this.state.loggedIn});
+    componentWillReceiveProps() {
+        this.setState({loggedIn: !this.state.loggedIn});
+    }
+
+
+    handleLogout() {
+        //TODO
+    }
 
     handleClick(event, data) {
         let nextPage = data.name;
@@ -80,7 +87,7 @@ export class NavBar extends Component {
                             Account
                         </Link>
                     </Menu.Item>
-                    <Menu.Item name='logout' onClick={this.toggleLoggedIn}>
+                    <Menu.Item name='logout' onClick={this.handleLogout}>
                         <Link to='/'>
                             Logout
                         </Link>
