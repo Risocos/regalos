@@ -8,6 +8,8 @@ from backend.data import users
 from backend.v1.project import projects_api
 from backend.v1.user import users_api
 
+from flask_cors import CORS
+
 # from flask_sqlalchemy import SQLAlchemy
 
 apis = [
@@ -16,6 +18,7 @@ apis = [
 ]
 
 app = Flask(__name__)
+CORS(app)
 app.url_map.strict_slashes = False
 
 for api in apis:

@@ -1,20 +1,56 @@
 import React, {Component} from 'react';
-import {Form, Card, Grid, Header, Image} from "semantic-ui-react";
+import {Form, Grid, Header} from "semantic-ui-react";
 import "../styling/ProjectOverview.css";
-import {Link} from "react-router-dom";
+import axios from "axios";
+import {ProjectCard} from "./ProjectCard";
 
-
-const options = [
-    {key: 'f', text: 'Filter', value: 'filter'},
-    {key: 'p', text: 'Popularity', value: 'popularity'},
-    {key: 't', text: 'Targetbudget', value: 'targetbudget'},
-];
 
 export class ProjectOverview extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            //list of options used for filtering the projectview
+            filterOptions: [{key: 'f', text: 'Filter', value: 'filter'},
+                {key: 'p', text: 'Popularity', value: 'popularity'},
+                {key: 't', text: 'Targetbudget', value: 'targetbudget'},
+            ],
+            //the components to render
+            projects: []
+        };
+    }
+
+
+    componentDidMount() {
+        let projectList = this.state.projects;
+        axios.get('http://127.0.0.1:5000/projects')
+            .then((response) => {
+                response.data.projects.map((projectObject) => (
+                   projectList.push(this.createCardObject(projectObject)))
+                )
+            .then(
+                this.setState({
+                    projects: projectList,
+                }))
+            })
+            .catch(function(error) {
+                console.log(error)
+            });
+    }
+
+    createCardObject(project) {
+        return(
+            <ProjectCard
+                id={project.id}
+                name={project.title}
+                desc={project.description}
+                target={project.target}
+            />
+        )
+    }
 
 
     render() {
-        //TODO: Add navbar
 
         //TODO: funtionality of filters
 
@@ -28,7 +64,7 @@ export class ProjectOverview extends Component {
                     <Grid.Row>
                         <Grid.Column>
 
-                            <Form.Select options={options} placeholder='Filter'/>
+                            <Form.Select options={this.state.filterOptions} placeholder='Filter'/>
 
                             <Form.Field label='United States' control='input' type='checkbox' defaultChecked='true'/>
                             <Form.Field label='Europe' control='input' type='checkbox' defaultChecked='true'/>
@@ -40,107 +76,7 @@ export class ProjectOverview extends Component {
 
                         <Grid.Column width={10}>
                             <Grid columns={3}>
-                                <Grid.Row>
-                                    <Grid.Column>
-                                        {/*Needs to be replaced with function that collects ID*/}
-                                        <Link to='/project/1'>
-                                            <Card>
-                                                <Image src='http://via.placeholder.com/300x300' />
-                                                <Card.Content style={{height: "150px"}}>
-                                                    <Card.Header style={{padding: "10px"}}>Project Name</Card.Header>
-                                                    <Card.Meta>Target budget: $10000</Card.Meta>
-                                                    <Card.Description>1Small project description of the project.</Card.Description>
-                                                </Card.Content>
-                                            </Card>
-                                        </Link>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Link to='/project/2'>
-                                        <Card
-                                            image='http://via.placeholder.com/300x300'
-                                            header='Project Name'
-                                            meta='Target budget: $10000'
-                                            description='2Small project desciption of the project.'
-                                        />
-                                        </Link>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Link to='/project/3'>
-                                        <Card
-                                            image='http://via.placeholder.com/300x300'
-                                            header='Project Name'
-                                            meta='Target budget: $10000'
-                                            description='3Small project desciption of the project.'
-                                        />
-                                        </Link>
-                                    </Grid.Column>
-                                </Grid.Row>
-
-                                <Grid.Row>
-                                    <Grid.Column>
-                                        <Link to='/project/4'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='4Small project desciption of the project.'
-                                            />
-                                        </Link>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Link to='/project/5'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='5Small project desciption of the project.'
-                                            />
-                                        </Link>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Link to='/project/6'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='6Small project desciption of the project.'
-                                            />
-                                        </Link>
-                                    </Grid.Column>
-                                </Grid.Row>
-
-                                <Grid.Row>
-                                    <Grid.Column>
-                                        <Link to='/project/7'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='7Small project desciption of the project.'
-                                            />
-                                        </Link>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Link to='/project/8'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='8Small project desciption of the project.'
-                                            />
-                                        </Link>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                        <Link to='/project/9'>
-                                            <Card
-                                                image='http://via.placeholder.com/300x300'
-                                                header='Project Name'
-                                                meta='Target budget: $10000'
-                                                description='9Small project desciption of the project.'
-                                            />
-                                        </Link>
-                                    </Grid.Column>
-                                </Grid.Row>
+                                {this.state.projects}
                             </Grid>
                         </Grid.Column>
 

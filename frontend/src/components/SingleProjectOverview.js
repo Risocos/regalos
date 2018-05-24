@@ -13,16 +13,41 @@ import {
     Radio, TextArea, Checkbox, Container
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
+import axios from 'axios';
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            title: "",
+            target: "",
+            donators: 0,
+            achieved: 0,
+            description: "",
+            plan: "",
+            progress: "Project progress and something with photo albums or blog posts",
+        };
+    }
 
-        this.handleOpen = this.handleOpen.bind(this);
-        this.handleClose = this.handleClose.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+    componentDidMount() {
+
+        axios.get('http://127.0.0.1:5000' + this.props.location.pathname)
+            .then((response) =>
+                this.handleResponse(response)
+            )
+    }
+
+    handleResponse(response) {
+        let data = response.data;
+        this.setState({
+            title: data.title,
+            target: data.target,
+            donators: data.donators,
+            achieved: data.achieved,
+            description: data.description,
+            plan: data.plan,
+        })
     }
 
     handleOpen = () => this.setState({active: true});
@@ -47,6 +72,7 @@ export class SingleProjectOverview extends Component {
         return (
 
             <div className="container">
+                {/*Donation form*/}
                 <Dimmer
                     active={active}
                     onClickOutside={this.handleClose}
@@ -77,6 +103,7 @@ export class SingleProjectOverview extends Component {
                         </Form>
                     </Container>
                 </Dimmer>
+                {/*Donation form end*/}
 
                 <Grid columns='equal'>
                     <Grid.Row>
@@ -86,19 +113,19 @@ export class SingleProjectOverview extends Component {
                                 that?</p>
                         </Grid.Column>
 
-                        <Grid.Column width={10}>
-                            <Image src='http://via.placeholder.com/600x300' centered={true}/>
-                            <Header as='h2'>ProjectName</Header>
-                            <Header as='h3'>TargetBudget: $10000</Header>
+                        <Grid.Column textAlign="center" width={10}>
+                            <Image src='http://via.placeholder.com/1000x300' centered={true}/>
+                            <Header as='h1'>{this.state.title}</Header>
+                            <Header as='h3'>Target Budget: €{this.state.target}</Header>
                             <Statistic>
-                                <Statistic.Value>5,550</Statistic.Value>
+                                <Statistic.Value>{this.state.donators}</Statistic.Value>
                                 <Statistic.Label>Donators!</Statistic.Label>
                             </Statistic>
-                            <Progress percent={83} progress success>
-                                $8300
+
+                            <Progress percent={(this.state.achieved / this.state.target * 100).toFixed(2)} progress success>
+                                ${this.state.achieved}
                             </Progress>
-                            <p>Here will be the desciption of the project. It will be a max number of words to keep it
-                                small.</p>
+                            <p>{this.state.description}</p>
                             <Header> <Button size='massive' color='green' onClick={this.handleOpen}> Donate
                                 now! </Button> </Header>
                             <Button circular color='facebook' icon='facebook'/>
@@ -107,7 +134,7 @@ export class SingleProjectOverview extends Component {
                             <Button circular color='google plus' icon='google plus'/>
                             <Button circular color='instagram' icon='instagram'/>
                             <Header size='huge'>Project details</Header>
-                            <p>A very detailed description. and maybe something with photoalbum</p>
+                            <p>{this.state.plan}</p>
                             <Header size='huge'>Project progress</Header>
                             <p>Project progress and smething with photoalbum and being able to make posts.</p>
                         </Grid.Column>
