@@ -32,7 +32,9 @@ export class Login extends Component {
                 password: password,
             }
         }).then(res => {
-            console.log("authenticated");
+            sessionStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("username", res.data.user.username);
+            sessionStorage.setItem("publicid", res.data.user.public_id);
         }).catch(err => {
             console.log(err);
         })
