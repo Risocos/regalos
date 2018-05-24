@@ -39,8 +39,7 @@ export class SingleProjectOverview extends Component {
     }
 
     handleResponse(response) {
-        let data = response.data
-        console.log(data)
+        let data = response.data;
         this.setState({
             title: data.title,
             target: data.target,

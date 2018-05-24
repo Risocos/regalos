@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './styling/App.css';
 import {NavBar} from './components/NavBar';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Login} from "./components/Login";
 import {Register} from "./components/Register";
 import {CreateProject} from './components/CreateProject';
@@ -16,14 +16,18 @@ class App extends Component {
                 <div>
                     <NavBar/>
 
-                    <Route exact path="/" component={ProjectOverview} />
-                    <Route path="/login" component={Login}/>
-                    <Route path="/signup" component={Register} />
-                    <Route path="/projects/create" component={CreateProject} />
-                    <Route path="/profile" component={Account} />
-                    <Route exact path="/projects" component={ProjectOverview} />
-                    <Route path="/project/:projectId" component={SingleProjectOverview} />
+                    <Switch>
+                        <Route exact path="/" component={ProjectOverview} />
+                        <Route path="/login" component={Login} />
+                        <Route path="/signup" component={Register} />
+                        <Route path="/projects/create" component={CreateProject} />
+                        <Route path="/profile" component={Account} />
+                        <Route exact path="/projects" component={ProjectOverview} />
+                        <Route path="/project/:projectId" component={SingleProjectOverview}/>
 
+                        {/* Uncomment dit als er een PageNotFound component is
+                        <Route component={PageNotFound} />*/}
+                    </Switch>
                 </div>
             </Router>
         );

@@ -172,8 +172,6 @@ export class CreateProject extends Component {
             {key: 3, value: 'Jan', text: 'Jan'},
             {key: 4, value: 'Sander', text: 'Sander'}];
 
-        let {imagePreview} = this.state.imagePreview;
-
         return (
             <Container>
                 <div className='message'>

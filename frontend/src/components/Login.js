@@ -1,17 +1,50 @@
 import React, {Component} from 'react';
-import {Button, Checkbox, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
+import {Button, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
 import {Link} from "react-router-dom";
+import axios from 'axios';
 
 export class Login extends Component {
 
-    constructor() {
-        super();
-        this.onClickHandler = this.onClickHandler.bind(this);
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            username: '',
+            password: '',
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    onClickHandler(e) {
-        alert('Request sent, trying to authenticate');
-    }
+    /*
+    Source:
+    https://stackoverflow.com/questions/44072750/how-to-send-basic-auth-with-axios
+     */
+    handleSubmit = event => {
+        event.preventDefault();
+
+        const username = this.state.username;
+        const password = this.state.password;
+        axios.post('http://127.0.0.1:5000/login', {}, {
+            auth: {
+                username: username,
+                password: password,
+            }
+        }).then(res => {
+            console.log("authenticated");
+        }).catch(err => {
+            console.log(err);
+        })
+    };
+
+    handleChange(e) {
+        const value = e.target.value;
+        const name = e.target.name;
+        this.setState({
+            [name]: value,
+        });
+    };
 
     render() {
         return (
@@ -28,18 +61,22 @@ export class Login extends Component {
                         <Segment>
                             <Form.Input
                                 fluid
+                                name="username"
                                 icon='user'
                                 iconPosition='left'
                                 placeholder='E-mail address'
+                                onChange={this.handleChange}
                             />
                             <Form.Input
                                 fluid
+                                name="password"
                                 icon='lock'
                                 iconPosition='left'
                                 placeholder='Password'
                                 type='password'
+                                onChange={this.handleChange}
                             />
-                            <Button type='submit' fluid size='large' onClick={this.onClickHandler}>Log in</Button>
+                            <Button fluid size='large' onClick={this.handleSubmit}>Log in</Button>
                         </Segment>
                     </Form>
                     <Message>
