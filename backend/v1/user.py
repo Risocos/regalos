@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash
 from backend.auth import token_required, admin_required
 from backend.data import users
 
-users_api = Blueprint('UsersApi', __name__, url_prefix='/user')
+users_api = Blueprint('UsersApi', __name__, url_prefix='/users')
 
 
 ##############

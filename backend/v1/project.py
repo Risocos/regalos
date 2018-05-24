@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, request
 from backend.auth import token_required
 from backend.data import projects
 
-projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/project')
+projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
 
 
 ####################

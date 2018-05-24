@@ -32,7 +32,6 @@ app.config['SECRET_KEY'] = '}Zz_n2=.B<yRp|KpK>,T:?KmS8a6?G0XES,kW0SIF=e}T)YEGh9k
 def clear_trailing():
     rp = request.path
     if rp != '/' and rp.endswith('/'):
-        print(rp[:-1])
         return redirect(rp[:-1], 307)  # 307 so the client knows to preserve the request method
 
 
