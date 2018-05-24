@@ -35,8 +35,7 @@ export class Login extends Component {
         }).then(res => {
             //Setting values into sessionStorage
             sessionStorage.setItem("token", res.data.token);
-            sessionStorage.setItem("username", res.data.user.username);
-            sessionStorage.setItem("publicid", res.data.user.public_id);
+            sessionStorage.setItem("user", res.data.user);
 
             //Setting NavBar to loggedIn mode
             this.props.toggleLogin();

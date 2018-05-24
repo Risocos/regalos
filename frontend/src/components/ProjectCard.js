@@ -36,7 +36,7 @@ export class ProjectCard extends Component {
                     <Image src='http://via.placeholder.com/300x300'/>
                     <Card.Content className="card-content">
                         <Card.Header className="card-header">{this.state.name}</Card.Header>
-                        <Card.Meta>Target budget: ${this.state.target}</Card.Meta>
+                        <Card.Meta>Target budget: €{this.state.target}</Card.Meta>
                         <Card.Description>{this.state.desc}</Card.Description>
                     </Card.Content>
                 </Card>

@@ -116,7 +116,7 @@ export class SingleProjectOverview extends Component {
                         <Grid.Column textAlign="center" width={10}>
                             <Image src='http://via.placeholder.com/1000x300' centered={true}/>
                             <Header as='h1'>{this.state.title}</Header>
-                            <Header as='h3'>Target Budget: ${this.state.target}</Header>
+                            <Header as='h3'>Target Budget: €{this.state.target}</Header>
                             <Statistic>
                                 <Statistic.Value>{this.state.donators}</Statistic.Value>
                                 <Statistic.Label>Donators!</Statistic.Label>
