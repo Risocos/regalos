@@ -69,6 +69,8 @@ export class SingleProjectOverview extends Component {
         //TODO: funtionality of filters
         //TODO: Fill projectname, targetbudget etc with proper values
         //TODO: Posts, phoyoalbum, see what we can do
+
+        //TODO: Add paymentsystem to donate form
         return (
 
             <div className="container">
@@ -83,7 +85,7 @@ export class SingleProjectOverview extends Component {
                             <Form.Group widths='equal'>
                                 <Form.Field control={Input} label='First name' placeholder='First name'/>
                                 <Form.Field control={Input} label='Last name' placeholder='Last name'/>
-                                <Form.Field control={Select} label='Gender' options={options} placeholder='Gender'/>
+                                <Form.Field control={Input} label='Email' placeholder='Email'/>
                             </Form.Group>
                             <Form.Group inline>
                                 <label>Quantity</label>
@@ -97,7 +99,7 @@ export class SingleProjectOverview extends Component {
                                             checked={value === '3'}
                                             onChange={this.handleChange}/>
                             </Form.Group>
-                            <Form.Field control={TextArea} label='About' placeholder='Tell us more about you...'/>
+                            <Form.Field control={TextArea} label='Additional Information' placeholder='Anything else you want to share?'/>
                             <Form.Field control={Checkbox} label='I agree to the Terms and Conditions'/>
                             <Form.Field control={Button}>Submit</Form.Field>
                         </Form>
@@ -140,13 +142,19 @@ export class SingleProjectOverview extends Component {
                         </Grid.Column>
 
                         <Grid.Column>
-                            <Header size="large">Info</Header>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                                dolor. Aenean massa strong. Cum sociis natoque penatibus et magnis dis parturient
-                                montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
-                                pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
-                                aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis
-                                vitae, justo. </p>
+                            <Header size="large">Information</Header>
+                            <p> Welcome to Regalos! On this website you will be able to see
+                                countless of different projects from different kinds of people.
+                                You can donate money, donate materials, and even apply to join
+                                a project. Take a look around the projectoverview, pick out
+                                your favorite projects. Or make an account and set up your own project!
+                                Everything is possible.
+                            </p>
+                            <p><i>
+                                Please notice that we verify accounts that are to be trusted.
+                                It's your own responsibility to look out for your money, so please
+                                make sure the project you are donating to is verified.
+                            </i></p>
                         </Grid.Column>
                     </Grid.Row>
 
