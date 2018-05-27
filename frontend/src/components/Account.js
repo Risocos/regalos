@@ -1,20 +1,6 @@
 import React, {Component} from "react";
-import {
-    Button,
-    Card,
-    Container,
-    Dropdown,
-    Grid,
-    Header,
-    Icon,
-    Input,
-    Item,
-    Menu,
-    Message,
-    TextArea
-} from "semantic-ui-react";
+import {Button, Container, Grid, Header, Icon, Input, Item, Message, TextArea} from "semantic-ui-react";
 import '../styling/Account.css';
-import {Link} from "react-router-dom";
 
 export class Account extends Component {
 
@@ -28,7 +14,6 @@ export class Account extends Component {
             editMode: false,
             isDeleting: false,
             isSaving: false,
-            activeItem: 'account',
             user: {
                 id: 1,
                 email: 'johndoe@example.com',
@@ -43,13 +28,9 @@ export class Account extends Component {
                 'dolorum\n' +
                 'eos, error et nobis praesentium suscipit voluptatem\n' +
                 'voluptatibus.',
-
             }
         };
     }
-
-
-    handleItemClick = (e, {name}) => this.setState({activeItem: name})
 
     toggleEditMode() {
         this.setState({editMode: !this.state.editMode});
@@ -75,136 +56,20 @@ export class Account extends Component {
     }
 
     render() {
-        const {activeItem} = this.state
-
         return (
             <div>
                 <div className='account-header'>
                     {this.state.editMode && <Message>You are in edit mode</Message>}
-                    <Grid columns={4}>
-                        <Grid.Row>
-                            <Grid.Column>
-                                    <Menu secondary vertical>
-                                        <Menu.Item name='account' active={activeItem === 'account'}
-                                                   onClick={this.handleItemClick}/>
-                                        <Menu.Item name='settings' active={activeItem === 'settings'}
-                                                   onClick={this.handleItemClick}/>
-                                        <Menu.Item name='projects' active={activeItem === 'projects'}
-                                                   onClick={this.handleItemClick}/>
-                                    </Menu>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Container text>
-                                    <Item.Group>
-                                        {(this.state.editMode) ? this.renderEditForm() : this.renderNormal()}
-                                    </Item.Group>
-                                </Container>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
+                    <Container text>
+                        <Item.Group>
+                            {(this.state.editMode) ? this.renderEditForm() : this.renderNormal()}
+                        </Item.Group>
+                    </Container>
                 </div>
                 <Container style={{margin: '80px'}}>
                     <Header as='h1'>Projects</Header>
                     <Grid columns={3}>
-                        <Grid.Row>
-                            <Grid.Column>
-                                {/*Needs to be replaced with function that collects ID*/}
-                                <Link to='/project/1'>
-                                    <Card
-                                        image='http://via.placeholder.com/300x300'
-                                        header='Project Name'
-                                        meta='Target budget: $10000'
-                                        description='1Small project desciption of the project.'
-                                    />
-                                </Link>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Link to='/project/2'>
-                                    <Card
-                                        image='http://via.placeholder.com/300x300'
-                                        header='Project Name'
-                                        meta='Target budget: $10000'
-                                        description='2Small project desciption of the project.'
-                                    />
-                                </Link>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Link to='/project/3'>
-                                    <Card
-                                        image='http://via.placeholder.com/300x300'
-                                        header='Project Name'
-                                        meta='Target budget: $10000'
-                                        description='3Small project desciption of the project.'
-                                    />
-                                </Link>
-                            </Grid.Column>
-                        </Grid.Row>
 
-                        <Grid.Row>
-                            <Grid.Column>
-                                <Link to='/project/4'>
-                                    <Card
-                                        image='http://via.placeholder.com/300x300'
-                                        header='Project Name'
-                                        meta='Target budget: $10000'
-                                        description='4Small project desciption of the project.'
-                                    />
-                                </Link>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Link to='/project/5'>
-                                    <Card
-                                        image='http://via.placeholder.com/300x300'
-                                        header='Project Name'
-                                        meta='Target budget: $10000'
-                                        description='5Small project desciption of the project.'
-                                    />
-                                </Link>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Link to='/project/6'>
-                                    <Card
-                                        image='http://via.placeholder.com/300x300'
-                                        header='Project Name'
-                                        meta='Target budget: $10000'
-                                        description='6Small project desciption of the project.'
-                                    />
-                                </Link>
-                            </Grid.Column>
-                        </Grid.Row>
-
-                        <Grid.Row>
-                            <Grid.Column>
-                                <Link to='/project/7'>
-                                    <Card
-                                        image='http://via.placeholder.com/300x300'
-                                        header='Project Name'
-                                        meta='Target budget: $10000'
-                                        description='7Small project desciption of the project.'
-                                    />
-                                </Link>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Link to='/project/8'>
-                                    <Card
-                                        image='http://via.placeholder.com/300x300'
-                                        header='Project Name'
-                                        meta='Target budget: $10000'
-                                        description='8Small project desciption of the project.'
-                                    />
-                                </Link>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Link to='/project/9'>
-                                    <Card
-                                        image='http://via.placeholder.com/300x300'
-                                        header='Project Name'
-                                        meta='Target budget: $10000'
-                                        description='9Small project desciption of the project.'
-                                    />
-                                </Link>
-                            </Grid.Column>
-                        </Grid.Row>
                     </Grid>
                 </Container>
             </div>
@@ -212,10 +77,8 @@ export class Account extends Component {
     }
 
     renderNormal() {
-
         return (
             <Item>
-
                 <Item.Image size='small'
                             src={this.state.user.image}/>
                 <Item.Content>
@@ -250,11 +113,11 @@ export class Account extends Component {
         return (
             <Item>
                 <Item.Image size='small'
-                            src={this.state.user.image}/>
+                            src={this.state.user.image} />
                 <Item.Content>
-                    <Input name='username' defaultValue={this.state.user.username} onChange={this.valueChanged}/>
+                    <Input name='username' defaultValue={this.state.user.username} onChange={this.valueChanged} />
                     <Item.Description>
-                        <TextArea name='bio' autoHeight value={this.state.user.bio}/>
+                        <TextArea name='bio' autoHeight value={this.state.user.bio} />
                     </Item.Description>
                     <Item.Extra>
                         <Button circular color='twitter' icon='twitter'/>
@@ -272,10 +135,10 @@ export class Account extends Component {
         )
     }
 
-    valueChanged = (e, {name, value}) => {
+    valueChanged = (e, { name, value }) => {
         let u = this.state.user;
         u[name] = value;
-        this.setState({user: u});
+        this.setState({ user: u });
     }
 
 }

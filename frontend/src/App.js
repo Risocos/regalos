@@ -1,28 +1,43 @@
 import React, {Component} from 'react';
 import './styling/App.css';
 import {NavBar} from './components/NavBar';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Login} from "./components/Login";
 import {Register} from "./components/Register";
-import { CreateProject } from './components/CreateProject';
+import {CreateProject} from './components/CreateProject';
 import {Account} from "./components/Account";
 import {ProjectOverview} from './components/ProjectOverview'
 import {SingleProjectOverview} from "./components/SingleProjectOverview";
 
 class App extends Component {
+    constructor() {
+        super();
+
+        this.state = {
+            loggedIn: false,
+        }
+    }
+
+    toggleLoggedIn = () => this.setState({loggedIn: !this.state.loggedIn});
+
     render() {
         return (
             <Router>
                 <div>
-                    <NavBar/>
+                    <NavBar toggleLogin={this.toggleLoggedIn} />
 
-                    <Route path="/login" component={Login}/>
-                    <Route path="/signup" component={Register} />
-                    <Route path="/projects/create" component={CreateProject} />
-                    <Route path="/profile" component={Account} />
-                    <Route exact path="/projects" component={ProjectOverview} />
-                    <Route path="/project/:projectId" component={SingleProjectOverview} />
+                    <Switch>
+                        <Route exact path="/" component={ProjectOverview} />
+                        <Route path="/login" render={props => <Login toggleLogin={this.toggleLoggedIn} />} />
+                        <Route path="/signup" component={Register} />
+                        <Route path="/projects/create" component={CreateProject} />
+                        <Route path="/profile" component={Account} />
+                        <Route exact path="/projects" component={ProjectOverview} />
+                        <Route path="/projects/:projectId" component={SingleProjectOverview}/>
 
+                        {/* Uncomment dit als er een PageNotFound component is
+                        <Route component={PageNotFound} />*/}
+                    </Switch>
                 </div>
             </Router>
         );

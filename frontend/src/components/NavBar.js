@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Menu, Icon, Search} from 'semantic-ui-react';
 import '../styling/NavBar.css';
-import {Link} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 
 
 export class NavBar extends Component {
@@ -16,7 +16,16 @@ export class NavBar extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    toggleLoggedIn = () => this.setState({loggedIn: !this.state.loggedIn});
+    componentWillReceiveProps() {
+        this.setState({loggedIn: !this.state.loggedIn});
+    }
+
+
+    handleLogout() {
+        sessionStorage.setItem("token", '');
+        sessionStorage.setItem("username", '');
+        sessionStorage.setItem("publicid", '');
+    }
 
     handleClick(event, data) {
         let nextPage = data.name;
@@ -32,10 +41,10 @@ export class NavBar extends Component {
             return (
                 <Menu.Menu>
                     <Menu.Item name='projects' onClick={this.handleClick}>
-                        <Link to='/projects'>
+                        <NavLink to='/projects'>
                             <Icon name='calendar'/>
                             Projects
-                        </Link>
+                        </NavLink>
                     </Menu.Item>
                     <Menu.Item name='newproject' onClick={this.handleClick}>
                         <Link to='/projects/create'>
@@ -80,8 +89,8 @@ export class NavBar extends Component {
                             Account
                         </Link>
                     </Menu.Item>
-                    <Menu.Item name='logout' onClick={this.toggleLoggedIn}>
-                        <Link to='/'>
+                    <Menu.Item name='logout' onClick={this.handleLogout}>
+                        <Link to='/login'>
                             Logout
                         </Link>
                     </Menu.Item>
@@ -98,7 +107,7 @@ export class NavBar extends Component {
                     </Menu.Item>
                     <Menu.Item link name='register' onClick={this.handleClick}>
                         <Link to='/signup'>
-                        Register
+                            Register
                         </Link>
                     </Menu.Item>
                 </Menu.Menu>
