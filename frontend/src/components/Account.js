@@ -15,21 +15,24 @@ export class Account extends Component {
             isDeleting: false,
             isSaving: false,
             user: {
-                id: 1,
-                email: 'johndoe@example.com',
-                username: 'John Doe',
-                image: 'http://via.placeholder.com/400x500',
-                bio: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.\n' +
-                'Corporis,\n' +
-                'cupiditate\n' +
-                'dolore\n' +
-                'ex modi nihil nostrum odio perferendis praesentium sunt tenetur.\n' +
-                'Doloremque\n' +
-                'dolorum\n' +
-                'eos, error et nobis praesentium suscipit voluptatem\n' +
-                'voluptatibus.',
+                id: '',
+                email: '',
+                username: '',
+                firstname: '',
+                lastname: '',
+                image: '',
+                bio: '',
+                projects: '',
             }
         };
+    }
+
+    componentDidMount() {
+        const USER = sessionStorage.getItem("user");
+        /*
+        this.setState({
+            username: '',
+        })*/
     }
 
     toggleEditMode() {

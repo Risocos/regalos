@@ -27,7 +27,8 @@ export class Login extends Component {
 
         const username = this.state.username;
         const password = this.state.password;
-        axios.post('http://127.0.0.1:5000/login', {}, {
+        const api_path = this.props.basepath + '/login';
+        axios.post(api_path, {}, {
             auth: {
                 username: username,
                 password: password,
