@@ -23,8 +23,7 @@ export class NavBar extends Component {
 
     handleLogout() {
         sessionStorage.setItem("token", '');
-        sessionStorage.setItem("username", '');
-        sessionStorage.setItem("publicid", '');
+        sessionStorage.setItem("user", '');
     }
 
     handleClick(event, data) {

@@ -17,14 +17,26 @@ users = [
         'admin': True,
         # password: OneTwoThree123
         'password': 'sha256$N34hfMMN$a6bec8f319443512b9c0cf5a400c66933ab563a5d2ff5d34fd87dbc19f27d3f7',
+        'bio': 'No bio',
     },
     {
         'id': 2,
         'public_id': 'b9229d9b-cb28-4e12-baea-ead89ef0a494',
+        'firstname': 'Melle',
+        'lastname': 'Dijkstra',
+        'email': 'melle@dijkstra.nl',
         'username': 'melle',
         'admin': False,
         # password: 123456
         'password': 'sha256$xjKXjf0B$3efddd4395a0320e0ba6b6fddf14f793fe9dbe0170a7cdc657addda822dd65fd',
+        'bio': 'Ich bin melle, das kleine Krokodil\n' +
+               'Komm aus Ägypten, das liegt direkt am Nil\n' +
+               'Zuerst lag ich in einem Ei\n' +
+               'Dann schni-,schna-,schnappte ich mich frei\n\n' +
+               'Mi Ma Melle\n' +
+               'Mima Mima Mell\n' +
+               'Mi Ma Melle\n' +
+               'Mima Mima Mell',
     },
 ]
 

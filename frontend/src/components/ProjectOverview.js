@@ -16,14 +16,15 @@ export class ProjectOverview extends Component {
                 {key: 't', text: 'Targetbudget', value: 'targetbudget'},
             ],
             //the components to render
-            projects: []
+            projects: [],
         };
     }
 
 
     componentDidMount() {
         let projectList = this.state.projects;
-        axios.get('http://127.0.0.1:5000/projects')
+        const api_path = this.props.basepath + '/projects';
+        axios.get(api_path)
             .then((response) => {
                 response.data.projects.map((projectObject) => (
                    projectList.push(this.createCardObject(projectObject)))
