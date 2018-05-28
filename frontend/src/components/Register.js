@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
 import "../styling/login.css"
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
 
 export class Register extends Component {
@@ -10,9 +10,12 @@ export class Register extends Component {
         super();
 
         this.state = ({
-           username: '',
-           password: '',
-           email: '',
+            username: '',
+            password: '',
+            email: '',
+            temppass: '',
+            redirect: false,
+            error: '',
         });
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -27,26 +30,43 @@ export class Register extends Component {
         });
     }
 
+    validate(){
+        if(this.state.password===this.state.temppass) return true;
+        return false
+    }
+
     onSubmit = event => {
         event.preventDefault();
 
-        const USERNAME = this.state.username;
-        const EMAIL = this.state.email;
-        const PASSWORD = this.state.password;
-        const API_PATH = this.props.basepath + '/users/register';
+        if(this.validate()) {
+            const USERNAME = this.state.username;
+            const EMAIL = this.state.email;
+            const PASSWORD = this.state.password;
+            const API_PATH = this.props.basepath + '/users/register';
 
-        axios.post(API_PATH, {
-            username: USERNAME,
-            email: EMAIL,
-            password: PASSWORD,
-        }).then(res => {
-            console.log(res);
-        }).catch(err => {
-            console.log(err);
-        })
+            axios.post(API_PATH, {
+                username: USERNAME,
+                email: EMAIL,
+                password: PASSWORD,
+            }).then(res => {
+                this.setState({
+                    redirect: true,
+                })
+            }).catch(err => {
+                console.log(err);
+            })
+        }
+        else {
+            this.setState({
+                error: <Message negative>Passwords do not match</Message>,
+            })
+        }
     };
 
     render() {
+
+        if(this.state.redirect===true)
+            return <Redirect to='/login'/>;
         return (
             <Grid textAlign="center"
                   style={{height: '100%'}}
@@ -59,6 +79,7 @@ export class Register extends Component {
                     </div>
                     <Form size='large'>
                         <Segment>
+                            {this.state.error}
                             <Form.Input
                                 fluid
                                 icon='user'
@@ -88,6 +109,7 @@ export class Register extends Component {
                                 fluid
                                 icon='lock'
                                 iconPosition='left'
+                                name='temppass'
                                 placeholder='Re-enter password'
                                 type='password'
                             />
