@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Button, Container, Grid, Header, Icon, Input, Item, Message, TextArea} from "semantic-ui-react";
 import '../styling/Account.css';
+import axios from 'axios';
 
 export class Account extends Component {
 
@@ -10,26 +11,43 @@ export class Account extends Component {
         this.deleteAccount = this.deleteAccount.bind(this);
         this.saveUser = this.saveUser.bind(this);
         this.valueChanged = this.valueChanged.bind(this);
+
         this.state = {
             editMode: false,
             isDeleting: false,
             isSaving: false,
             user: {
-                id: 1,
-                email: 'johndoe@example.com',
-                username: 'John Doe',
-                image: 'http://via.placeholder.com/400x500',
-                bio: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.\n' +
-                'Corporis,\n' +
-                'cupiditate\n' +
-                'dolore\n' +
-                'ex modi nihil nostrum odio perferendis praesentium sunt tenetur.\n' +
-                'Doloremque\n' +
-                'dolorum\n' +
-                'eos, error et nobis praesentium suscipit voluptatem\n' +
-                'voluptatibus.',
+                id: '',
+                email: '',
+                username: '',
+                firstname: '',
+                lastname: '',
+                image: '',
+                bio: '',
+                projects: '',
             }
         };
+    }
+
+    componentDidMount() {
+        const USER = sessionStorage.getItem("user");
+        const API_PATH = this.props.basepath + "/users/profile";
+
+        axios.post(API_PATH, {id: USER}
+            ).then(res => {
+                const data = res.data.user;
+                this.setState({
+                    user: {
+                        email: data.email,
+                        firstname: data.firstname,
+                        lastname: data.lastname,
+                        image: 'http://via.placeholder.com/300x400',
+                        bio: data.bio,
+                        projects: '',
+                    }
+                });
+                console.log(this.state);
+            })
     }
 
     toggleEditMode() {
@@ -82,7 +100,7 @@ export class Account extends Component {
                 <Item.Image size='small'
                             src={this.state.user.image}/>
                 <Item.Content>
-                    <Item.Header as='h2'>{this.state.user.username}</Item.Header>
+                    <Item.Header as='h2' style={{paddingTop: "0px"}}>{this.state.user.firstname + ' ' + this.state.user.lastname}</Item.Header>
                     <Item.Description>
                         <div>
                             <p>{this.state.user.bio}</p>

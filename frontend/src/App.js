@@ -22,18 +22,19 @@ class App extends Component {
     toggleLoggedIn = () => this.setState({loggedIn: !this.state.loggedIn});
 
     render() {
+        const base = "http://127.0.0.1:5000";
         return (
             <Router>
                 <div>
                     <NavBar toggleLogin={this.toggleLoggedIn} />
 
                     <Switch>
-                        <Route exact path="/" component={ProjectOverview} />
-                        <Route path="/login" render={props => <Login toggleLogin={this.toggleLoggedIn} />} />
+                        <Route exact path="/" render={props => <ProjectOverview basepath={base}/> } />
+                        <Route path="/login" render={props => <Login basepath={base} toggleLogin={this.toggleLoggedIn} /> } />
                         <Route path="/signup" component={Register} />
                         <Route path="/projects/create" component={CreateProject} />
-                        <Route path="/profile" component={Account} />
-                        <Route exact path="/projects" component={ProjectOverview} />
+                        <Route path="/profile" render={props => <Account basepath={base}/> } />
+                        <Route exact path="/projects" render={props => <ProjectOverview basepath={base}/> } />
                         <Route path="/projects/:projectId" component={SingleProjectOverview}/>
 
                         <Route component={PageNotFound} />
