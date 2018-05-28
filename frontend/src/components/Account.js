@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Button, Container, Grid, Header, Icon, Input, Item, Message, TextArea} from "semantic-ui-react";
 import '../styling/Account.css';
+import axios from 'axios';
 
 export class Account extends Component {
 
@@ -29,6 +30,18 @@ export class Account extends Component {
 
     componentDidMount() {
         const USER = sessionStorage.getItem("user");
+        const API_PATH = this.props.basepath + "/users/profile";
+
+        axios.post(API_PATH, {id: USER},{
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        })
+            .then(res => {
+                console.log(res);
+            }).catch(err => {
+                console.log(err);
+        })
         /*
         this.setState({
             username: '',
