@@ -39,6 +39,7 @@ export class Register extends Component {
         event.preventDefault();
 
         if(this.validate()) {
+            console.log("goed")
             const USERNAME = this.state.username;
             const EMAIL = this.state.email;
             const PASSWORD = this.state.password;
@@ -112,6 +113,7 @@ export class Register extends Component {
                                 name='temppass'
                                 placeholder='Re-enter password'
                                 type='password'
+                                onChange={this.handleChange}
                             />
                             <Button type='submit' fluid size='large' onClick={this.onSubmit}>Register</Button>
                         </Segment>
