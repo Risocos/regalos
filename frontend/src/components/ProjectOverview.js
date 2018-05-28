@@ -23,8 +23,8 @@ export class ProjectOverview extends Component {
 
     componentDidMount() {
         let projectList = this.state.projects;
-        const api_path = this.props.basepath + '/projects';
-        axios.get(api_path)
+        const API_PATH = this.props.basepath + '/projects';
+        axios.get(API_PATH)
             .then((response) => {
                 response.data.projects.map((projectObject) => (
                    projectList.push(this.createCardObject(projectObject)))

@@ -2,17 +2,49 @@ import React, {Component} from 'react';
 import {Button, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
 import "../styling/login.css"
 import {Link} from "react-router-dom";
+import axios from 'axios';
 
 export class Register extends Component {
 
     constructor() {
         super();
-        this.onClickHandler = this.onClickHandler.bind(this);
+
+        this.state = ({
+           username: '',
+           password: '',
+           email: '',
+        });
+
+        this.onSubmit = this.onSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    onClickHandler(e) {
-        alert('Request sent, trying to authenticate');
+    handleChange(e) {
+        const value = e.target.value;
+        const name = e.target.name;
+        this.setState({
+            [name]: value,
+        });
     }
+
+    onSubmit = event => {
+        event.preventDefault();
+
+        const USERNAME = this.state.username;
+        const EMAIL = this.state.email;
+        const PASSWORD = this.state.password;
+        const API_PATH = this.props.basepath + '/users/register';
+
+        axios.post(API_PATH, {
+            username: USERNAME,
+            email: EMAIL,
+            password: PASSWORD,
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
+        })
+    };
 
     render() {
         return (
@@ -31,26 +63,26 @@ export class Register extends Component {
                                 fluid
                                 icon='user'
                                 iconPosition='left'
-                                placeholder='First name'
-                            />
-                            <Form.Input
-                                fluid
-                                icon='user'
-                                iconPosition='left'
-                                placeholder='last name'
+                                name='username'
+                                placeholder='Username'
+                                onChange={this.handleChange}
                             />
                             <Form.Input
                                 fluid
                                 icon='at'
                                 iconPosition='left'
+                                name='email'
                                 placeholder='E-mail address'
+                                onChange={this.handleChange}
                             />
                             <Form.Input
                                 fluid
                                 icon='lock'
                                 iconPosition='left'
+                                name='password'
                                 placeholder='Password'
                                 type='password'
+                                onChange={this.handleChange}
                             />
                             <Form.Input
                                 fluid
@@ -59,7 +91,7 @@ export class Register extends Component {
                                 placeholder='Re-enter password'
                                 type='password'
                             />
-                            <Button type='submit' fluid size='large' onClick={this.onClickHandler}>Register</Button>
+                            <Button type='submit' fluid size='large' onClick={this.onSubmit}>Register</Button>
                         </Segment>
                     </Form>
                     <Message>

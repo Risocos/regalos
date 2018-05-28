@@ -102,11 +102,9 @@ def get_one_user(current_user, user_id):
     return jsonify({'user': user})
 
 
-@users_api.route('/', methods=['POST'])
-@token_required
-@admin_required
-def create_user(current_user):
-    data = request.get_json()
+@users_api.route('/register', methods=['POST'])
+def create_user():
+    data = request.json
 
     if data is None or 'username' not in data or 'password' not in data:
         return jsonify({'message': 'Missing data to create user'}), 400

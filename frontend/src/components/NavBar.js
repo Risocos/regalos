@@ -14,6 +14,7 @@ export class NavBar extends Component {
         };
 
         this.handleClick = this.handleClick.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     componentWillReceiveProps() {
@@ -24,6 +25,8 @@ export class NavBar extends Component {
     handleLogout() {
         sessionStorage.setItem("token", '');
         sessionStorage.setItem("user", '');
+
+        this.setState({loggedIn: !this.state.loggedIn});
     }
 
     handleClick(event, data) {
