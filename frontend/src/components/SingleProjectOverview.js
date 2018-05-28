@@ -8,7 +8,6 @@ import {
     Grid,
     Dimmer,
     Form,
-    Select,
     Input,
     Radio, TextArea, Checkbox, Container
 } from "semantic-ui-react";
@@ -59,10 +58,6 @@ export class SingleProjectOverview extends Component {
     };
 
     render() {
-        const options = [
-            {key: 'm', text: 'Male', value: 'male'},
-            {key: 'f', text: 'Female', value: 'female'},
-        ];
 
         const {active} = this.state;
         const {value} = this.state;
@@ -83,23 +78,37 @@ export class SingleProjectOverview extends Component {
                     <Container>
                         <Form inverted>
                             <Form.Group widths='equal'>
-                                <Form.Field control={Input} label='First name' placeholder='First name'/>
-                                <Form.Field control={Input} label='Last name' placeholder='Last name'/>
                                 <Form.Field control={Input} label='Email' placeholder='Email'/>
                             </Form.Group>
                             <Form.Group inline>
-                                <label>Quantity</label>
-                                <Form.Field control={Radio} label='I want to donate money' value='1'
-                                            checked={value === '1'}
-                                            onChange={this.handleChange}/>
-                                <Form.Field control={Radio} label='I want to join the project' value='2'
-                                            checked={value === '2'}
-                                            onChange={this.handleChange}/>
-                                <Form.Field control={Radio} label='I want to donate materials to the project.' value='3'
+                                <label>How do you want to help us out?</label>
+                                <Form.Field>
+                                    <Radio
+                                        label='I want to donate money'
+                                        value='1'
+                                        checked={value === '1'}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Field>
+                                <Form.Field>
+                                    <Radio
+                                        label='I want to donate materials to the project'
+                                        value='2'
+                                        checked={value === '2'}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Field>
+                                    <Form.Field>
+                                        <Radio
+                                            label='I want to join this project'
+                                            value='3'
                                             checked={value === '3'}
-                                            onChange={this.handleChange}/>
+                                            onChange={this.handleChange}
+                                        />
+                                    </Form.Field>
                             </Form.Group>
-                            <Form.Field control={TextArea} label='Additional Information' placeholder='Anything else you want to share?'/>
+                            <Form.Field control={TextArea} label='Additional Information'
+                                        placeholder='Anything else you want to share?'/>
                             <Form.Field control={Checkbox} label='I agree to the Terms and Conditions'/>
                             <Form.Field control={Button}>Submit</Form.Field>
                         </Form>
@@ -124,7 +133,8 @@ export class SingleProjectOverview extends Component {
                                 <Statistic.Label>Donators!</Statistic.Label>
                             </Statistic>
 
-                            <Progress percent={(this.state.achieved / this.state.target * 100).toFixed(2)} progress success>
+                            <Progress percent={(this.state.achieved / this.state.target * 100).toFixed(2)} progress
+                                      success>
                                 ${this.state.achieved}
                             </Progress>
                             <p>{this.state.description}</p>
@@ -152,7 +162,7 @@ export class SingleProjectOverview extends Component {
                             </p>
                             <p><i>
                                 Please notice that we verify accounts that are to be trusted.
-                                It's your own responsibility to look out for your money, so please
+                                It is your own responsibility to look out for your money, so please
                                 make sure the project you are donating to is verified.
                             </i></p>
                         </Grid.Column>
