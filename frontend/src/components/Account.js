@@ -20,8 +20,6 @@ export class Account extends Component {
                 id: '',
                 email: '',
                 username: '',
-                firstname: '',
-                lastname: '',
                 image: '',
                 bio: '',
                 projects: '',
@@ -39,8 +37,7 @@ export class Account extends Component {
                 this.setState({
                     user: {
                         email: data.email,
-                        firstname: data.firstname,
-                        lastname: data.lastname,
+                        username: data.username,
                         image: 'http://via.placeholder.com/300x400',
                         bio: data.bio,
                         projects: '',
@@ -77,7 +74,7 @@ export class Account extends Component {
         return (
             <div>
                 <div className='account-header'>
-                    {this.state.editMode && <Message>You are in edit mode</Message>}
+                    {this.state.editMode && <Message warning>You are in edit mode</Message>}
                     <Container text>
                         <Item.Group>
                             {(this.state.editMode) ? this.renderEditForm() : this.renderNormal()}
@@ -100,7 +97,7 @@ export class Account extends Component {
                 <Item.Image size='small'
                             src={this.state.user.image}/>
                 <Item.Content>
-                    <Item.Header as='h2' style={{paddingTop: "0px"}}>{this.state.user.firstname + ' ' + this.state.user.lastname}</Item.Header>
+                    <Item.Header as='h2' style={{paddingTop: "0px"}}>{this.state.user.username}</Item.Header>
                     <Item.Description>
                         <div>
                             <p>{this.state.user.bio}</p>

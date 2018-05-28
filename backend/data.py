@@ -14,6 +14,9 @@ users = [
         'id': 1,
         'public_id': '705897b6-5478-4ba2-822a-c5e5833d4124',
         'username': 'admin',
+        'firstname': 'Sander',
+        'lastname': 'van Doorn',
+        'email': 'sander@vandoorn.nl',
         'admin': True,
         # password: OneTwoThree123
         'password': 'sha256$N34hfMMN$a6bec8f319443512b9c0cf5a400c66933ab563a5d2ff5d34fd87dbc19f27d3f7',
