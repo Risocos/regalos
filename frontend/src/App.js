@@ -8,6 +8,7 @@ import {CreateProject} from './components/CreateProject';
 import {Account} from "./components/Account";
 import {ProjectOverview} from './components/ProjectOverview'
 import {SingleProjectOverview} from "./components/SingleProjectOverview";
+import {PageNotFound} from "./components/PageNotFound";
 
 class App extends Component {
     constructor() {
@@ -36,8 +37,7 @@ class App extends Component {
                         <Route exact path="/projects" render={props => <ProjectOverview basepath={BASEPATH}/> } />
                         <Route path="/projects/:projectId" component={SingleProjectOverview}/>
 
-                        {/* Uncomment dit als er een PageNotFound component is
-                        <Route component={PageNotFound} />*/}
+                        <Route component={PageNotFound} />
                     </Switch>
                 </div>
             </Router>

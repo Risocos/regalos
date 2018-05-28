@@ -92,7 +92,7 @@ export class ProjectOverview extends Component {
                             </p>
                             <p><i>
                                 Please notice that we verify accounts that are to be trusted.
-                                It's your own responsibility to look out for your money, so please
+                                It is your own responsibility to look out for your money, so please
                                 make sure the project you are donating to is verified.
                             </i></p>
                         </Grid.Column>
