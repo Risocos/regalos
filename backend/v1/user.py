@@ -43,35 +43,37 @@ def get_all_users(current_user):
     return jsonify({'users': output})
 
 
-# @users_api.route('/profile', methods=['POST'])
-# @cross_origin()
-# def get_user_profile(user_id):
-#     # user = User.query.filter_by(public_id=public_id).first()
-#     user = None
-#
-#     for u in users:
-#         if u['id'] == user_id:
-#             user = u.copy()
-#             del user['password']
-#
-#     if not user:
-#         return jsonify({'message': 'No user found!'}), 404
-#
-#     # user_data = {
-#     #     'public_id': user.public_id,
-#     #     'name': user.name,
-#     #     'password': user.password,
-#     #     'admin': user.admin
-#     # }
-#
-#     # return jsonify({'user': user_data})
-#     return jsonify({'user': user})
-
 @users_api.route('/profile', methods=['POST'])
-@cross_origin('*')
+@cross_origin()
 def get_user_profile():
-    data = request.data
-    return jsonify({"Response": True})
+    # user = User.query.filter_by(public_id=public_id).first()
+    user_id = int(request.json['id'])
+    user = None
+
+    for u in users:
+        if u['id'] == user_id:
+            user = u.copy()
+            del user['password']
+
+    if not user:
+        return jsonify({'message': 'No user found!'}), 404
+
+    # user_data = {
+    #     'public_id': user.public_id,
+    #     'name': user.name,
+    #     'password': user.password,
+    #     'admin': user.admin
+    # }
+
+    # return jsonify({'user': user_data})
+    return jsonify({'user': user})
+
+# @users_api.route('/profile', methods=['POST'])
+# @cross_origin('*')
+# def get_user_profile():
+#     print(request.json, type(request.json), request.json['id'])
+#     # data = jsonify(request.da
+#     return jsonify(request.json)
 
 
 @users_api.route('/<int:user_id>', methods=['GET'])

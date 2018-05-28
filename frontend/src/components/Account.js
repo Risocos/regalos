@@ -11,6 +11,7 @@ export class Account extends Component {
         this.deleteAccount = this.deleteAccount.bind(this);
         this.saveUser = this.saveUser.bind(this);
         this.valueChanged = this.valueChanged.bind(this);
+
         this.state = {
             editMode: false,
             isDeleting: false,
@@ -32,20 +33,21 @@ export class Account extends Component {
         const USER = sessionStorage.getItem("user");
         const API_PATH = this.props.basepath + "/users/profile";
 
-        axios.post(API_PATH, {id: USER},{
-            headers: {
-                'Access-Control-Allow-Origin': '*'
-            }
-        })
-            .then(res => {
-                console.log(res);
-            }).catch(err => {
-                console.log(err);
-        })
-        /*
-        this.setState({
-            username: '',
-        })*/
+        axios.post(API_PATH, {id: USER}
+            ).then(res => {
+                const data = res.data.user;
+                this.setState({
+                    user: {
+                        email: data.email,
+                        firstname: data.firstname,
+                        lastname: data.lastname,
+                        image: 'http://via.placeholder.com/300x400',
+                        bio: data.bio,
+                        projects: '',
+                    }
+                });
+                console.log(this.state);
+            })
     }
 
     toggleEditMode() {
@@ -98,7 +100,7 @@ export class Account extends Component {
                 <Item.Image size='small'
                             src={this.state.user.image}/>
                 <Item.Content>
-                    <Item.Header as='h2'>{this.state.user.username}</Item.Header>
+                    <Item.Header as='h2' style={{paddingTop: "0px"}}>{this.state.user.firstname + ' ' + this.state.user.lastname}</Item.Header>
                     <Item.Description>
                         <div>
                             <p>{this.state.user.bio}</p>
