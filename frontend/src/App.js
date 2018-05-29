@@ -35,7 +35,7 @@ class App extends Component {
                         <Route exact path="/" render={props => <ProjectOverview basepath={BASEPATH}/> } />
                         <Route path="/login" render={props => <Login basepath={BASEPATH} toggleLogin={this.toggleLoggedIn} /> } />
                         <Route path="/signup" render={props => <Register basepath={BASEPATH} /> } />
-                        <Route path="/projects/create" component={CreateProject} />
+                        <Route exact path="/projects/create" render={props => <CreateProject basepath={BASEPATH} /> } />
                         <Route path="/profile" render={props => <Account basepath={BASEPATH}/> } />
                         <Route exact path="/projects" render={props => <ProjectOverview basepath={BASEPATH}/> } />
                         <Route path="/projects/:projectId" component={SingleProjectOverview}/>

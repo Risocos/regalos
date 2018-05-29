@@ -4,6 +4,7 @@ import "../styling/CreateProject.css";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
 
 
 //Installed dependencies for this:
@@ -22,7 +23,7 @@ export class CreateProject extends Component {
             imagePath: '',
             start: moment(),
             end: moment(),
-            target: 0,
+            target: '',
             collabs: [],
 
             //Utility variables
@@ -139,28 +140,40 @@ export class CreateProject extends Component {
     handleSubmit() {
         //TODO: handle submit with server
         if (!this.validate()) {
+            return
         }
-        else {
-            const items = [
-                this.state.name,
-                this.state.desc,
-                this.state.plan,
-                this.state.start.format("DD-MMMM-YYYY"),
-                this.state.end.format("DD-MMMM-YYYY"),
-                this.state.target,
-                this.state.collabs,
-            ];
-            let message = <Message success>
-                <Message.Header>Project created</Message.Header>
-                <Message.List>
-                    {items.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
-                </Message.List>
-            </Message>;
 
-            this.setState({
-                formMessage: message,
-            })
-        }
+        const API_PATH = this.props.basepath + '/projects/create';
+        const TOKEN = "Bearer " + sessionStorage.getItem("token");
+
+        let data = new FormData();
+        const BLOB = new Blob(this.state.collabs);
+        data.append("title", this.state.name);
+        data.append("description", this.state.description);
+        data.append("plan", this.state.plan);
+        data.append("image", this.state.uploadedFile);
+        data.append("startdate", this.state.start);
+        data.append("enddate", this.state.end);
+        data.append("target", this.state.target);
+        data.append("collaborators", BLOB);
+
+        axios.post(API_PATH, {data}, {
+            headers: {
+                Authorization: TOKEN,
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
+        });
+        let message = <Message success>
+            <Message.Header>Project created</Message.Header>
+        </Message>;
+
+        this.setState({
+            formMessage: message,
+        })
     }
 
     render() {
