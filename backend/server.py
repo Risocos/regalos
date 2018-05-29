@@ -1,6 +1,7 @@
 import datetime
+import os
 
-from flask import Flask, request, jsonify, redirect
+from flask import Flask, request, jsonify, redirect, send_from_directory
 from jose import jwt
 from werkzeug.security import check_password_hash
 
@@ -25,6 +26,8 @@ for api in apis:
     app.register_blueprint(api)
 
 app.config['ENV'] = 'development'
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+# app.config['SERVER_NAME'] = 'localhost'
 app.config['SECRET_KEY'] = '}Zz_n2=.B<yRp|KpK>,T:?KmS8a6?G0XES,kW0SIF=e}T)YEGh9k&&Xyni(~<5E'
 
 
@@ -76,5 +79,10 @@ def login():
     return jsonify(error_msg), 401, {'WWW-Authenticate': 'Basic realm="Login required!"'}
 
 
+@app.route('/uploads/<path:filename>')
+def serve_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000, host='localhost')

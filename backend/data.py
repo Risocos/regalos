@@ -58,7 +58,13 @@ projects = [
         'target': 10000,
         'donators': 18,
         'achieved': 4576,
+        'date_begin': '18-05-2018',
+        'date_end': '30-05-2018',
         'plan': 'Our plan is to build cheap, but properly sized houses for people in Uganda.',
+        'collaborators': [
+            1, 2
+        ],
+        'cover': None
     },
     {
         'id': 2,
@@ -68,7 +74,13 @@ projects = [
         'target': 15000,
         'donators': 77,
         'achieved': 8594,
+        'date_begin': '18-05-2018',
+        'date_end': '30-05-2018',
         'plan': 'We plan to collect money from door to door and use this app as payment method',
+        'collaborators': [
+            1, 2
+        ],
+        'cover': 'http://via.placeholder.com/350x150'
     },
     {
         'id': 3,
@@ -78,7 +90,13 @@ projects = [
         'target': 0,
         'donators': 76,
         'achieved': 0,
+        'date_begin': '18-05-2018',
+        'date_end': '30-05-2018',
         'plan': 'We want people to donate their clothing, so that we can send this to poor countries',
+        'collaborators': [
+            1, 2
+        ],
+        'cover': 'http://via.placeholder.com/350x150'
     },
     {
         'id': 4,
@@ -88,6 +106,12 @@ projects = [
         'target': 5000,
         'donators': 3,
         'achieved': 30,
+        'date_begin': '18-05-2018',
+        'date_end': '30-05-2018',
         'plan': 'Too bad we cannot afford our own hourly pay and Sander is addicted to coffee. Sad face.',
+        'collaborators': [
+            1, 2
+        ],
+        'cover': 'http://via.placeholder.com/350x150'
     },
 ]
