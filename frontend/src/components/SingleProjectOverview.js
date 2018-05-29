@@ -149,6 +149,10 @@ export class SingleProjectOverview extends Component {
                             <p>{this.state.plan}</p>
                             <Header size='huge'>Project progress</Header>
                             <p>Project progress and smething with photoalbum and being able to make posts.</p>
+
+                            <div>
+                                <Button negative>Report this project</Button>
+                            </div>
                         </Grid.Column>
 
                         <Grid.Column>
