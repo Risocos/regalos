@@ -9,6 +9,9 @@ import {Account} from "./components/Account";
 import {ProjectOverview} from './components/ProjectOverview'
 import {SingleProjectOverview} from "./components/SingleProjectOverview";
 import {PageNotFound} from "./components/PageNotFound";
+import {AdminPanel} from "./components/AdminPanel";
+import {UserPanel} from "./components/UserPanel";
+import {ProjectPanel} from "./components/ProjectPanel";
 
 class App extends Component {
     constructor() {
@@ -36,6 +39,9 @@ class App extends Component {
                         <Route path="/profile" render={props => <Account basepath={base}/> } />
                         <Route exact path="/projects" render={props => <ProjectOverview basepath={base}/> } />
                         <Route path="/projects/:projectId" component={SingleProjectOverview}/>
+                        <Route path="/adminpanel" component={AdminPanel}/>
+                        <Route path="/userpanel" component={UserPanel}/>
+                        <Route path="/projectpanel" component={ProjectPanel}/>
 
                         <Route component={PageNotFound} />
                     </Switch>
