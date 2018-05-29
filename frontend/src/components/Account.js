@@ -115,10 +115,11 @@ export class Account extends Component {
                                 <Button icon labelPosition='left' onClick={this.toggleEditMode}>
                                     <Icon name='pencil'/> Edit
                                 </Button>
-                                <Button color='red' icon labelPosition='left'
+                                <Button negative>Report user</Button>
+                                {/*<Button color='red' icon labelPosition='left'
                                         onClick={this.deleteAccount} loading={this.state.isDeleting}>
                                     <Icon name='trash'/> Delete
-                                </Button>
+                                </Button>*/}
                             </div>
                         </div>
                     </Item.Extra>
