@@ -25,19 +25,19 @@ class App extends Component {
     toggleLoggedIn = () => this.setState({loggedIn: !this.state.loggedIn});
 
     render() {
-        const base = "http://127.0.0.1:5000";
+        const BASEPATH = "http://127.0.0.1:5000";
         return (
             <Router>
                 <div>
                     <NavBar toggleLogin={this.toggleLoggedIn} />
 
                     <Switch>
-                        <Route exact path="/" render={props => <ProjectOverview basepath={base}/> } />
-                        <Route path="/login" render={props => <Login basepath={base} toggleLogin={this.toggleLoggedIn} /> } />
-                        <Route path="/signup" component={Register} />
-                        <Route path="/projects/create" component={CreateProject} />
-                        <Route path="/profile" render={props => <Account basepath={base}/> } />
-                        <Route exact path="/projects" render={props => <ProjectOverview basepath={base}/> } />
+                        <Route exact path="/" render={props => <ProjectOverview basepath={BASEPATH}/> } />
+                        <Route path="/login" render={props => <Login basepath={BASEPATH} toggleLogin={this.toggleLoggedIn} /> } />
+                        <Route path="/signup" render={props => <Register basepath={BASEPATH} /> } />
+                        <Route exact path="/projects/create" render={props => <CreateProject basepath={BASEPATH} /> } />
+                        <Route path="/profile" render={props => <Account basepath={BASEPATH}/> } />
+                        <Route exact path="/projects" render={props => <ProjectOverview basepath={BASEPATH}/> } />
                         <Route path="/projects/:projectId" component={SingleProjectOverview}/>
                         <Route path="/adminpanel" component={AdminPanel}/>
                         <Route path="/userpanel" component={UserPanel}/>

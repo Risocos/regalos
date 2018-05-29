@@ -33,13 +33,13 @@ export class Login extends Component {
     handleSubmit = event => {
         event.preventDefault();
 
-        const username = this.state.username;
-        const password = this.state.password;
-        const api_path = this.props.basepath + '/login';
-        axios.post(api_path, {}, {
+        const USERNAME = this.state.username;
+        const PASSWORD = this.state.password;
+        const API_PATH = this.props.basepath + '/login';
+        axios.post(API_PATH, {}, {
             auth: {
-                username: username,
-                password: password,
+                username: USERNAME,
+                password: PASSWORD,
             }
         }).then(res => {
             //Setting values into sessionStorage
