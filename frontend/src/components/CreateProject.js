@@ -143,21 +143,21 @@ export class CreateProject extends Component {
             return
         }
 
-        const API_PATH = this.props.basepath + '/projects/create';
+        const API_PATH = this.props.basepath + '/projects';
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
 
         let data = new FormData();
         const BLOB = new Blob(this.state.collabs);
         data.append("title", this.state.name);
-        data.append("description", this.state.description);
-        data.append("plan", this.state.plan);
-        data.append("image", this.state.uploadedFile);
-        data.append("startdate", this.state.start);
-        data.append("enddate", this.state.end);
+        data.append("short_description", this.state.description);
+        data.append("project_plan", this.state.plan);
+        data.append("cover", this.state.uploadedFile);
+        data.append("date_begin", this.state.start);
+        data.append("date_end", this.state.end);
         data.append("target", this.state.target);
-        data.append("collaborators", BLOB);
+        data.append("collaborators[]", BLOB);
 
-        axios.post(API_PATH, {data}, {
+        axios.post(API_PATH, data, {
             headers: {
                 Authorization: TOKEN,
                 'Content-Type': 'multipart/form-data'

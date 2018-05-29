@@ -69,7 +69,7 @@ def create_project(current_user):
         'date_begin',
         'date_end',
         'target',
-        'collaborators[]',
+        # 'collaborators[]',
     ]
 
     data = request.form  # form data is used instead request.json so files can be uploaded
@@ -103,7 +103,7 @@ def create_project(current_user):
         'donators': 0,
         'achieved': 0,
         'plan': data['project_plan'],
-        'collaborators': collabs,
+        # 'collaborators': collabs,
         'cover': cover
     }
 
