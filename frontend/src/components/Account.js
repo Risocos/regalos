@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Button, Container, Grid, Header, Icon, Input, Item, Message, TextArea} from "semantic-ui-react";
 import '../styling/Account.css';
 import axios from 'axios';
+import {ProjectCard} from "./ProjectCard";
 
 export class Account extends Component {
 
@@ -22,7 +23,7 @@ export class Account extends Component {
                 username: '',
                 image: '',
                 bio: '',
-                projects: '',
+                projects: [],
             }
         };
     }
@@ -45,7 +46,7 @@ export class Account extends Component {
                         username: data.username,
                         image: 'http://via.placeholder.com/300x400',
                         bio: data.bio,
-                        projects: '',
+                        projects: data.projects,
                     }
                 });
             })
@@ -74,7 +75,18 @@ export class Account extends Component {
         }, 2000); // request delay simulation
     }
 
+    listProject(project) {
+        return(
+            <ProjectCard
+                id={project.id}
+                name={project.title}
+                desc={project.description}
+                target={project.target}
+            />)
+    }
+
     render() {
+        let projects = this.state.user.projects;
         return (
             <div>
                 <div className='account-header'>
@@ -88,7 +100,7 @@ export class Account extends Component {
                 <Container style={{margin: '80px'}}>
                     <Header as='h1'>Projects</Header>
                     <Grid columns={3}>
-
+                        {this.state.user.projects.map(project => this.listProject(project))}
                     </Grid>
                 </Container>
             </div>
