@@ -15,7 +15,9 @@ export class UserPanel extends Component {
         this.state = ({
             users: [],
             redirect: false,
-            open: false,
+            confirm: {
+                open: false,
+            },
         });
     }
 
@@ -34,8 +36,8 @@ export class UserPanel extends Component {
         })
     }
 
-    open = () => this.setState({open: true});
-    close = () => this.setState({open: false});
+    showConfim = (user) => this.setState({confirm: {open: true, user: user}});
+    closeConfirm = () => this.setState({confirm: {open: false}});
 
     deleteUser(user) {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
@@ -45,7 +47,7 @@ export class UserPanel extends Component {
                 Authorization: TOKEN,
             }
         }).then(() => {
-            this.close();
+            this.closeConfirm();
             window.location.reload();
         })
     }
@@ -62,7 +64,7 @@ export class UserPanel extends Component {
         }
         const PROFILE = '/users/' + user.id;
         return (
-            <Table.Row>
+            <Table.Row key={user.id}>
                 <Table.Cell collapsing>
                 </Table.Cell>
                 <Table.Cell>{user.username}</Table.Cell>
@@ -76,13 +78,7 @@ export class UserPanel extends Component {
                             icon='remove user'
                             content="Delete user"
                             negative
-                            onClick={this.open}/>
-                    <Confirm
-                        open={this.state.open}
-                        content={"Do you want to delete the user: " + user.username}
-                        confirmButton="Delete user"
-                        onCancel={this.close}
-                        onConfirm={() => this.deleteUser(user.id)}/>
+                            onClick={() => this.showConfim(user)}/>
                 </Table.Cell>
             </Table.Row>
         )
@@ -124,6 +120,15 @@ export class UserPanel extends Component {
                                 </Table.Row>
                             </Table.Footer>
                         </Table>
+
+                        {'user' in this.state.confirm &&
+                        <Confirm
+                            open={this.state.confirm.open}
+                            content={"Do you want to delete the project: " + this.state.confirm.user.username}
+                            confirmButton="Delete project"
+                            onCancel={this.closeConfirm}
+                            onConfirm={() => this.deleteUser(this.state.confirm.user.id)}/>
+                        }
                     </Grid.Column>
                     <Grid.Column>
 
