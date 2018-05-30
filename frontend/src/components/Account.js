@@ -2,11 +2,12 @@ import React, {Component} from "react";
 import {Button, Container, Grid, Header, Icon, Input, Item, Message, TextArea} from "semantic-ui-react";
 import '../styling/Account.css';
 import axios from 'axios';
+import {ProjectCard} from "./ProjectCard";
 
 export class Account extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.toggleEditMode = this.toggleEditMode.bind(this);
         this.deleteAccount = this.deleteAccount.bind(this);
         this.saveUser = this.saveUser.bind(this);
@@ -22,16 +23,21 @@ export class Account extends Component {
                 username: '',
                 image: '',
                 bio: '',
-                projects: '',
+                projects: [],
             }
         };
     }
 
     componentDidMount() {
-        const USER = sessionStorage.getItem("user");
-        const API_PATH = this.props.basepath + "/users/profile";
+        const BASEPATH = "http://127.0.0.1:5000";
+        const TOKEN = "Bearer " + sessionStorage.getItem("token");
+        const API_PATH = BASEPATH + this.props.location.pathname;
 
-        axios.post(API_PATH, {id: USER}
+        axios.get(API_PATH, {
+                headers: {
+                    Authorization: TOKEN,
+                }
+            }
             ).then(res => {
                 const data = res.data.user;
                 this.setState({
@@ -40,10 +46,9 @@ export class Account extends Component {
                         username: data.username,
                         image: 'http://via.placeholder.com/300x400',
                         bio: data.bio,
-                        projects: '',
+                        projects: data.projects,
                     }
                 });
-                console.log(this.state);
             })
     }
 
@@ -70,7 +75,18 @@ export class Account extends Component {
         }, 2000); // request delay simulation
     }
 
+    listProject(project) {
+        return(
+            <ProjectCard
+                id={project.id}
+                name={project.title}
+                desc={project.description}
+                target={project.target}
+            />)
+    }
+
     render() {
+        let projects = this.state.user.projects;
         return (
             <div>
                 <div className='account-header'>
@@ -84,7 +100,7 @@ export class Account extends Component {
                 <Container style={{margin: '80px'}}>
                     <Header as='h1'>Projects</Header>
                     <Grid columns={3}>
-
+                        {this.state.user.projects.map(project => this.listProject(project))}
                     </Grid>
                 </Container>
             </div>

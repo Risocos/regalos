@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Menu, Icon, Search} from 'semantic-ui-react';
+import {Menu, Search} from 'semantic-ui-react';
 import '../styling/NavBar.css';
-import {Link, NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 
 export class NavBar extends Component {
@@ -21,11 +21,14 @@ export class NavBar extends Component {
         this.setState({loggedIn: !this.state.loggedIn});
     }
 
+    componentWillMount() {
+        if (sessionStorage.length !== 0) {
+            this.setState({loggedIn: !this.state.loggedIn});
+        }
+    }
 
     handleLogout() {
-        sessionStorage.setItem("token", '');
-        sessionStorage.setItem("user", '');
-
+        sessionStorage.clear();
         this.setState({loggedIn: !this.state.loggedIn});
     }
 
@@ -42,30 +45,27 @@ export class NavBar extends Component {
         if (this.state.loggedIn) {
             return (
                 <Menu.Menu>
-                    <Menu.Item name='projects' onClick={this.handleClick}>
-                        <NavLink to='/projects'>
-                            <Icon name='calendar'/>
-                            Projects
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item name='newproject' onClick={this.handleClick}>
-                        <Link to='/projects/create'>
-                            <Icon name='add to calendar'/>
-                            Create a project
-                        </Link>
-                    </Menu.Item>
+                    <Menu.Item as={Link}
+                               to='/projects'
+                               icon='calendar'
+                               name='projects'
+                               onClick={this.handleClick}/>
+                    <Menu.Item as={Link}
+                               to='/projects/create'
+                               icon='add to calendar'
+                               name='new project'
+                               onClick={this.handleClick}/>
                 </Menu.Menu>
             );
         }
         else {
             return (
                 <Menu.Menu>
-                    <Menu.Item name='projects' onClick={this.handleClick}>
-                        <Link to='/projects'>
-                            <Icon name='calendar'/>
-                            Projects
-                        </Link>
-                    </Menu.Item>
+                    <Menu.Item as={Link}
+                               to='/projects'
+                               icon='calendar'
+                               name='projects'
+                               onClick={this.handleClick}/>
                 </Menu.Menu>
             );
         }
@@ -83,35 +83,33 @@ export class NavBar extends Component {
 
     rightMenu() {
         if (this.state.loggedIn) {
+            const ACCOUNT_PATH = '/users/' + sessionStorage.getItem("user");
             return (
                 <Menu.Menu position='right'>
-                    <Menu.Item name='account' onClick={this.handleClick}>
-                        <Link to='/profile'>
-                            <Icon name='user circle'/>
-                            Account
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item name='logout' onClick={this.handleLogout}>
-                        <Link to='/login'>
-                            Logout
-                        </Link>
-                    </Menu.Item>
+                    <Menu.Item as={Link}
+                               to={ACCOUNT_PATH}
+                               icon='user circle'
+                               name='account'
+                               onClick={this.handleClick}
+                    />
+                    <Menu.Item as={Link}
+                               to='/login'
+                               name='logout'
+                               onClick={this.handleLogout}/>
                 </Menu.Menu>
             )
         }
         else {
             return (
                 <Menu.Menu position='right'>
-                    <Menu.Item name='login' onClick={this.toggleLoggedIn}>
-                        <Link to='/login'>
-                            Login
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item link name='register' onClick={this.handleClick}>
-                        <Link to='/signup'>
-                            Register
-                        </Link>
-                    </Menu.Item>
+                    <Menu.Item as={Link}
+                               to='/login'
+                               name='login'
+                               onClick={this.toggleLoggedIn}/>
+                    <Menu.Item as={Link}
+                               to='/signup'
+                               name='register'
+                               onClick={this.handleClick}/>
                 </Menu.Menu>
             )
         }

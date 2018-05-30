@@ -21,6 +21,7 @@ users = [
         # password: OneTwoThree123
         'password': 'sha256$N34hfMMN$a6bec8f319443512b9c0cf5a400c66933ab563a5d2ff5d34fd87dbc19f27d3f7',
         'bio': 'No bio',
+        'flagged': False,
     },
     {
         'id': 2,
@@ -40,6 +41,7 @@ users = [
                'Mima Mima Mell\n' +
                'Mi Ma Melle\n' +
                'Mima Mima Mell',
+        'flagged': True,
     },
 ]
 
