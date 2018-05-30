@@ -27,10 +27,10 @@ export class AdminPanel extends Component {
                         <Grid.Column>
                             <Header textAlign={"center"}> Welcome to the admin panel. </Header>
                             <div className={"adminbutton"}><Button size={"huge"} fluid><Link to='/userpanel'>User
-                                panel</Link></Button></div>
+                                management</Link></Button></div>
                             <p></p>
                             <div className={"adminbutton"}><Button size={"huge"} fluid><Link to='/projectpanel'>Project
-                                panel</Link></Button></div>
+                                management</Link></Button></div>
                         </Grid.Column>
                         <Grid.Column>
 

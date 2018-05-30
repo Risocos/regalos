@@ -21,11 +21,14 @@ export class NavBar extends Component {
         this.setState({loggedIn: !this.state.loggedIn});
     }
 
+    componentWillMount() {
+        if (sessionStorage.length !== 0) {
+            this.setState({loggedIn: !this.state.loggedIn});
+        }
+    }
 
     handleLogout() {
-        sessionStorage.setItem("token", '');
-        sessionStorage.setItem("user", '');
-
+        sessionStorage.clear();
         this.setState({loggedIn: !this.state.loggedIn});
     }
 

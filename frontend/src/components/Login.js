@@ -20,6 +20,7 @@ export class Login extends Component {
             username: '',
             password: '',
             redirect: false,
+            isAdmin: false,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -45,6 +46,10 @@ export class Login extends Component {
             //Setting values into sessionStorage
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("user", res.data.user.id);
+
+            if(res.data.user.admin) {
+                this.setState({isAdmin: true})
+            }
 
             //Setting NavBar to loggedIn mode
             this.props.toggleLogin();
@@ -72,9 +77,14 @@ export class Login extends Component {
     render() {
         let fail = '';
         const {redirect} = this.state;
+        const {isAdmin} = this.state
         const {failedLogin} = this.state;
         const {active} = this.state;
         const {value} = this.state;
+
+        if(isAdmin) {
+            return <Redirect to='/adminpanel'/>
+        }
 
         //Redirect upon successful logon
         if (redirect) {
