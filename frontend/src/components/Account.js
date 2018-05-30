@@ -86,7 +86,6 @@ export class Account extends Component {
     }
 
     render() {
-        let projects = this.state.user.projects;
         return (
             <div>
                 <div className='account-header'>
