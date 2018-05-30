@@ -1,10 +1,5 @@
 import React, {Component} from 'react';
-import {
-    Button,
-    Grid,
-    Header,
-    Table, Confirm
-} from "semantic-ui-react";
+import {Button, Confirm, Grid, Header, Table} from "semantic-ui-react";
 import "../styling/ProjectPanel.css";
 import {Link} from "react-router-dom";
 import axios from "axios/index";
@@ -15,7 +10,9 @@ export class ProjectPanel extends Component {
 
         this.state = {
             projects: [],
-            open: false,
+            confirm: {
+                open: false,
+            },
         }
     }
 
@@ -34,29 +31,34 @@ export class ProjectPanel extends Component {
         })
     }
 
-    deleteProject(project) {
-        console.log(project);
-        //const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        //const API_PATH = this.props.basepath + "/projects/" + project;
-        //axios.delete(API_PATH, {
-        //    headers: {
-        //        Authorization: TOKEN,
-        //    }
-        //}).then(() => {
-        //    this.close();
-            //window.location.reload();
-        //})
+    deleteProject(projectId) {
+        const TOKEN = "Bearer " + sessionStorage.getItem("token");
+        const API_PATH = this.props.basepath + "/projects/" + projectId;
+        axios.delete(API_PATH, {
+            headers: {
+                Authorization: TOKEN,
+            },
+            validateStatus: status => {
+                return (status >= 200 && status < 300) || [401, 403].includes(status);
+            }
+        }).then((response) => {
+            this.closeConfirm();
+            if (response.status === 200) {
+                window.location.reload();
+            } else if([401, 403].includes(response.status)) {
+                // todo: show message or automatically login used again
+                console.log('USER IS NOT AUTHENTICATED OR UNAUTHORIZED');
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
-    open = () => this.setState({open: true});
-    close = () => this.setState({open: false});
+    showConfirm = (project) => this.setState({confirm: {open: true, project: project}});
+    closeConfirm = () => this.setState({confirm: {open: false}});
 
-    listProject(project) {
-        let isFlagged = "No";
-
-        if (project.flagged) {
-            isFlagged = "Yes";
-        }
+    projectRow(project) {
+        let isFlagged = (project.flagged) ? "Yes" : "No";
 
         const PROJECT = '/projects/' + project.id;
         const startEndDate = project.startdate + ' to ' + project.enddate;
@@ -74,32 +76,24 @@ export class ProjectPanel extends Component {
                             icon='remove user'
                             content="Delete project"
                             negative
-                            onClick={this.open}/>
-                    <Confirm
-                        open={this.state.open}
-                        content={"Do you want to delete the project: " + project.title}
-                        confirmButton="Delete project"
-                        onCancel={this.close}
-                        onConfirm={() => this.deleteProject(project.id)}/>
+                            onClick={() => this.showConfirm(project)}/>
                 </Table.Cell>
             </Table.Row>
         )
     }
 
     render() {
-
         return (
             <Grid columns='equal'>
                 <Grid.Row>
                     <Grid.Column>
                         <div className={"backbutton"}><Button
-                                                            as={Link}
-                                                            to='/adminpanel'
-                                                            icon='left chevron'
-                                                            content="Back"/></div>
+                            as={Link}
+                            to='/adminpanel'
+                            icon='left chevron'
+                            content="Back"/></div>
                     </Grid.Column>
                     <Grid.Column width={12}>
-                        <p></p>
                         <Header textAlign={"center"}> Project management </Header>
                         <Table compact celled definition>
                             <Table.Header>
@@ -114,17 +108,18 @@ export class ProjectPanel extends Component {
                             </Table.Header>
 
                             <Table.Body>
-                                {this.state.projects.map(project => this.listProject(project))}
+                                {this.state.projects.map(project => this.projectRow(project))}
                             </Table.Body>
-
-                            <Table.Footer fullWidth>
-                                <Table.Row>
-                                    <Table.HeaderCell/>
-                                    <Table.HeaderCell colSpan='5'>
-                                    </Table.HeaderCell>
-                                </Table.Row>
-                            </Table.Footer>
                         </Table>
+
+                        {'project' in this.state.confirm &&
+                        <Confirm
+                            open={this.state.confirm.open}
+                            content={"Do you want to delete the project: " + this.state.confirm.project.title}
+                            confirmButton="Delete project"
+                            onCancel={this.closeConfirm}
+                            onConfirm={() => this.deleteProject(this.state.confirm.project.id)}/>
+                        }
 
                     </Grid.Column>
                     <Grid.Column>
@@ -132,7 +127,6 @@ export class ProjectPanel extends Component {
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
-
         )
     }
 
