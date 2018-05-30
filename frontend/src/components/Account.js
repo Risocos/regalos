@@ -48,7 +48,6 @@ export class Account extends Component {
                         projects: '',
                     }
                 });
-                console.log(this.state);
             })
     }
 

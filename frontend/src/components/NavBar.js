@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Menu, Icon, Search} from 'semantic-ui-react';
+import {Menu, Search} from 'semantic-ui-react';
 import '../styling/NavBar.css';
-import {Link, NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 
 export class NavBar extends Component {
