@@ -29,21 +29,24 @@ class App extends Component {
         return (
             <Router>
                 <div>
-                    <NavBar toggleLogin={this.toggleLoggedIn} />
+                    <NavBar toggleLogin={this.toggleLoggedIn}/>
 
                     <Switch>
-                        <Route exact path="/" render={props => <ProjectOverview basepath={BASEPATH}/> } />
-                        <Route path="/login" render={props => <Login basepath={BASEPATH} toggleLogin={this.toggleLoggedIn} /> } />
-                        <Route path="/signup" render={props => <Register basepath={BASEPATH} /> } />
-                        <Route exact path="/projects/create" render={props => <CreateProject basepath={BASEPATH} /> } />
-                        <Route path="/profile" render={props => <Account basepath={BASEPATH}/> } />
-                        <Route exact path="/projects" render={props => <ProjectOverview basepath={BASEPATH}/> } />
-                        <Route path="/projects/:projectId" component={SingleProjectOverview}/>
-                        <Route path="/adminpanel" component={AdminPanel}/>
-                        <Route path="/userpanel" component={UserPanel}/>
-                        <Route path="/projectpanel" component={ProjectPanel}/>
+                        <Route exact path="/" render={props => <ProjectOverview basepath={BASEPATH}/>}/>
 
-                        <Route component={PageNotFound} />
+                        <Route path="/login"  render={props => <Login basepath={BASEPATH} toggleLogin={this.toggleLoggedIn}/>}/>
+                        <Route path="/signup" render={props => <Register basepath={BASEPATH}/>}/>
+                        <Route path="/users/:userId" component={Account}/>
+
+                        <Route exact path="/projects/create" render={props => <CreateProject basepath={BASEPATH}/>}/>
+                        <Route exact path="/projects" render={props => <ProjectOverview basepath={BASEPATH}/>}/>
+                        <Route exact path="/projects/:projectId" component={SingleProjectOverview}/>
+
+                        <Route path="/adminpanel" component={AdminPanel}/>
+                        <Route exact path="/users" render={props => <UserPanel basepath={BASEPATH} />}/>
+                        <Route path="/projectpanel" render={props => <ProjectPanel basepath={BASEPATH}/>}/>
+
+                        <Route component={PageNotFound}/>
                     </Switch>
                 </div>
             </Router>

@@ -3,10 +3,10 @@ import {
     Button,
     Grid,
     Header,
-    Checkbox, Table, Icon
+    Checkbox, Table
 } from "semantic-ui-react";
 import "../styling/ProjectPanel.css";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export class ProjectPanel extends Component {
     constructor(props) {

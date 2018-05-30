@@ -77,10 +77,9 @@ export class Login extends Component {
     render() {
         let fail = '';
         const {redirect} = this.state;
-        const {isAdmin} = this.state
+        const {isAdmin} = this.state;
         const {failedLogin} = this.state;
         const {active} = this.state;
-        const {value} = this.state;
 
         if(isAdmin) {
             return <Redirect to='/adminpanel'/>
@@ -88,7 +87,8 @@ export class Login extends Component {
 
         //Redirect upon successful logon
         if (redirect) {
-            return <Redirect to='/profile'/>
+            const ACCOUNT_PATH = '/users/' + sessionStorage.getItem("user");
+            return <Redirect to={ACCOUNT_PATH}/>
         }
 
         if (failedLogin) {

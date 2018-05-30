@@ -2,15 +2,10 @@ import React, {Component} from 'react';
 import {
     Button,
     Grid,
-    Form,
     Header,
-    Segment,
-    Message,
-    Input,
-    Dimmer, Container
 } from "semantic-ui-react";
 import "../styling/AdminPanel.css";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export class AdminPanel extends Component {
 
@@ -26,11 +21,17 @@ export class AdminPanel extends Component {
                         </Grid.Column>
                         <Grid.Column>
                             <Header textAlign={"center"}> Welcome to the admin panel. </Header>
-                            <div className={"adminbutton"}><Button size={"huge"} fluid><Link to='/userpanel'>User
-                                management</Link></Button></div>
-                            <p></p>
-                            <div className={"adminbutton"}><Button size={"huge"} fluid><Link to='/projectpanel'>Project
-                                management</Link></Button></div>
+                            <div className={"adminbutton"}>
+                                <Link to='/users'>
+                                    <Button size={"huge"} fluid>User management</Button>
+                                </Link>
+                            </div>
+                            <p>{}</p>
+                            <div className={"adminbutton"}>
+                                <Link to='/projectpanel'>
+                                    <Button size={"huge"} fluid>Project management</Button>
+                                </Link>
+                            </div>
                         </Grid.Column>
                         <Grid.Column>
 

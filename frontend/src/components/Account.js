@@ -5,8 +5,8 @@ import axios from 'axios';
 
 export class Account extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.toggleEditMode = this.toggleEditMode.bind(this);
         this.deleteAccount = this.deleteAccount.bind(this);
         this.saveUser = this.saveUser.bind(this);
@@ -28,10 +28,15 @@ export class Account extends Component {
     }
 
     componentDidMount() {
-        const USER = sessionStorage.getItem("user");
-        const API_PATH = this.props.basepath + "/users/profile";
+        const BASEPATH = "http://127.0.0.1:5000";
+        const TOKEN = "Bearer " + sessionStorage.getItem("token");
+        const API_PATH = BASEPATH + this.props.location.pathname;
 
-        axios.post(API_PATH, {id: USER}
+        axios.get(API_PATH, {
+                headers: {
+                    Authorization: TOKEN,
+                }
+            }
             ).then(res => {
                 const data = res.data.user;
                 this.setState({

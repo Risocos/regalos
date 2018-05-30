@@ -86,10 +86,11 @@ export class NavBar extends Component {
 
     rightMenu() {
         if (this.state.loggedIn) {
+            const ACCOUNT_PATH = '/users/' + sessionStorage.getItem("user");
             return (
                 <Menu.Menu position='right'>
                     <Menu.Item name='account' onClick={this.handleClick}>
-                        <Link to='/profile'>
+                        <Link to={ACCOUNT_PATH}>
                             <Icon name='user circle'/>
                             Account
                         </Link>
