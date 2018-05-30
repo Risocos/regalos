@@ -45,30 +45,27 @@ export class NavBar extends Component {
         if (this.state.loggedIn) {
             return (
                 <Menu.Menu>
-                    <Menu.Item name='projects' onClick={this.handleClick}>
-                        <NavLink to='/projects'>
-                            <Icon name='calendar'/>
-                            Projects
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item name='newproject' onClick={this.handleClick}>
-                        <Link to='/projects/create'>
-                            <Icon name='add to calendar'/>
-                            Create a project
-                        </Link>
-                    </Menu.Item>
+                    <Menu.Item as={Link}
+                               to='/projects'
+                               icon='calendar'
+                               name='projects'
+                               onClick={this.handleClick}/>
+                    <Menu.Item as={Link}
+                               to='/projects/create'
+                               icon='add to calendar'
+                               name='new project'
+                               onClick={this.handleClick}/>
                 </Menu.Menu>
             );
         }
         else {
             return (
                 <Menu.Menu>
-                    <Menu.Item name='projects' onClick={this.handleClick}>
-                        <Link to='/projects'>
-                            <Icon name='calendar'/>
-                            Projects
-                        </Link>
-                    </Menu.Item>
+                    <Menu.Item as={Link}
+                               to='/projects'
+                               icon='calendar'
+                               name='projects'
+                               onClick={this.handleClick}/>
                 </Menu.Menu>
             );
         }
@@ -89,33 +86,30 @@ export class NavBar extends Component {
             const ACCOUNT_PATH = '/users/' + sessionStorage.getItem("user");
             return (
                 <Menu.Menu position='right'>
-                    <Menu.Item name='account' onClick={this.handleClick}>
-                        <Link to={ACCOUNT_PATH}>
-                            <Icon name='user circle'/>
-                            Account
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item name='logout' onClick={this.handleLogout}>
-                        <Link to='/login'>
-                            Logout
-                        </Link>
-                    </Menu.Item>
+                    <Menu.Item as={Link}
+                               to={ACCOUNT_PATH}
+                               icon='user circle'
+                               name='account'
+                               onClick={this.handleClick}
+                    />
+                    <Menu.Item as={Link}
+                               to='/login'
+                               name='logout'
+                               onClick={this.handleLogout}/>
                 </Menu.Menu>
             )
         }
         else {
             return (
                 <Menu.Menu position='right'>
-                    <Menu.Item name='login' onClick={this.toggleLoggedIn}>
-                        <Link to='/login'>
-                            Login
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item link name='register' onClick={this.handleClick}>
-                        <Link to='/signup'>
-                            Register
-                        </Link>
-                    </Menu.Item>
+                    <Menu.Item as={Link}
+                               to='/login'
+                               name='login'
+                               onClick={this.toggleLoggedIn}/>
+                    <Menu.Item as={Link}
+                               to='/signup'
+                               name='register'
+                               onClick={this.handleClick}/>
                 </Menu.Menu>
             )
         }
