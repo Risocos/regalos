@@ -51,9 +51,6 @@ export class Login extends Component {
                 this.setState({isAdmin: true})
             }
 
-            //Setting NavBar to loggedIn mode
-            this.props.toggleLogin();
-
             this.setState({redirect: true})
 
         }).catch(err => {
