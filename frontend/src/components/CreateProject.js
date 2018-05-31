@@ -155,7 +155,8 @@ export class CreateProject extends Component {
         data.append("date_begin", this.state.start);
         data.append("date_end", this.state.end);
         data.append("target", this.state.target);
-        data.append("collaborators[]", BLOB);
+        // TODO: don't use BLOB
+        // data.append("collaborators[]", BLOB);
 
         axios.post(API_PATH, data, {
             headers: {
