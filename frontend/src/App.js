@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
 import './styling/App.css';
 import {NavBar} from './components/NavBar';
-import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Link, Redirect, Route, Switch} from 'react-router-dom';
 import {Login} from "./components/Login";
 import {Register} from "./components/Register";
 import {CreateProject} from './components/CreateProject';
 import {Account} from "./components/Account";
 import {ProjectOverview} from './components/ProjectOverview'
 import {SingleProjectOverview} from "./components/SingleProjectOverview";
-import {PageNotFound} from "./components/PageNotFound";
+import {PageNotFound} from "./responsecodes/PageNotFound";
 import {AdminPanel} from "./components/AdminPanel";
 import {UserPanel} from "./components/UserPanel";
 import {ProjectPanel} from "./components/ProjectPanel";
 import {Icon, Menu, Segment, Sidebar} from "semantic-ui-react";
+import {ForbiddenAccess} from "./responsecodes/ForbiddenAccess";
 
 class App extends Component {
     constructor() {
@@ -31,6 +32,11 @@ class App extends Component {
         sessionStorage.clear();
         this.toggleSidemenu();
     }
+
+    isAuthenticated() {
+        return (!sessionStorage.getItem("token").length>0)
+    }
+
 
     render() {
         const BASEPATH = "http://127.0.0.1:5000";
@@ -61,22 +67,36 @@ class App extends Component {
                             <NavBar toggleSidebar={this.toggleSidemenu}/>
                             <Segment basic>
                                 <Switch>
-                                    <Route exact path="/" render={props => <ProjectOverview basepath={BASEPATH}/>}/>
+                                    <Route exact path="/"
+                                           render={props => <ProjectOverview basepath={BASEPATH}/>}/>
 
-                                    <Route path="/login" render={props => <Login basepath={BASEPATH}/>}/>
-                                    <Route path="/signup" render={props => <Register basepath={BASEPATH}/>}/>
-                                    <Route path="/users/:userId" component={Account}/>
+                                    <Route path="/login"
+                                           render={props => <Login basepath={BASEPATH}/>}/>
+                                    <Route path="/signup"
+                                           render={props => <Register basepath={BASEPATH}/>}/>
+                                    <Route path="/users/:userId"
+                                           component={Account}/>
+
 
                                     <Route exact path="/projects/create"
-                                           render={props => <CreateProject basepath={BASEPATH}/>}/>
+                                           render={() => (
+                                               this.isAuthenticated ? (<Redirect to='/login'/>) :
+                                                   (props => <CreateProject basepath={BASEPATH}/>)
+                                           )}/>
                                     <Route exact path="/projects"
                                            render={props => <ProjectOverview basepath={BASEPATH}/>}/>
-                                    <Route exact path="/projects/:projectId" component={SingleProjectOverview}/>
+                                    <Route exact path="/projects/:projectId"
+                                           component={SingleProjectOverview}/>
 
-                                    <Route path="/adminpanel" component={AdminPanel}/>
-                                    <Route exact path="/users" render={props => <UserPanel basepath={BASEPATH}/>}/>
-                                    <Route path="/projectpanel" render={props => <ProjectPanel basepath={BASEPATH}/>}/>
+                                    <Route path="/adminpanel"
+                                           component={AdminPanel}/>
+                                    <Route exact path="/users"
+                                           render={props => <UserPanel basepath={BASEPATH}/>}/>
+                                    <Route path="/projectpanel"
+                                           render={props => <ProjectPanel basepath={BASEPATH}/>}/>
 
+                                    <Route path="/403" component={ForbiddenAccess}/>
+                                    <Route path="/404" component={PageNotFound}/>
                                     <Route component={PageNotFound}/>
                                 </Switch>
                             </Segment>

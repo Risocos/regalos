@@ -125,10 +125,6 @@ export class Account extends Component {
                         <div style={{float: 'right'}}>
                             <div>
                                 <Button negative><Icon name='flag'/>Report user</Button>
-                                {/*<Button color='red' icon labelPosition='left'
-                                        onClick={this.deleteAccount} loading={this.state.isDeleting}>
-                                    <Icon name='trash'/> Delete
-                                </Button>*/}
                             </div>
                         </div>
                     </Item.Extra>

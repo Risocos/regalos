@@ -47,10 +47,11 @@ export class ProjectPanel extends Component {
                 window.location.reload();
             } else if([401, 403].includes(response.status)) {
                 // todo: show message or automatically login used again
-                console.log('USER IS NOT AUTHENTICATED OR UNAUTHORIZED');
+                const PATH = '/' + response.status;
+                window.location.href = PATH;
             }
-        }).catch((error) => {
-            console.log(error);
+        }).catch((err) => {
+                console.log(err)
         });
     }
 

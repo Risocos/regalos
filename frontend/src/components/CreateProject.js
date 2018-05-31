@@ -147,7 +147,6 @@ export class CreateProject extends Component {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
 
         let data = new FormData();
-        const BLOB = new Blob(this.state.collabs);
         data.append("title", this.state.name);
         data.append("short_description", this.state.description);
         data.append("project_plan", this.state.plan);
@@ -155,8 +154,6 @@ export class CreateProject extends Component {
         data.append("date_begin", this.state.start);
         data.append("date_end", this.state.end);
         data.append("target", this.state.target);
-        // TODO: don't use BLOB
-        // data.append("collaborators[]", BLOB);
 
         axios.post(API_PATH, data, {
             headers: {

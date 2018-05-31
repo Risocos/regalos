@@ -32,11 +32,15 @@ export class SingleProjectOverview extends Component {
     }
 
     componentDidMount() {
-
         axios.get('http://127.0.0.1:5000' + this.props.location.pathname)
-            .then((response) =>
-                this.handleResponse(response)
-            )
+            .then((response) => {
+                console.log(response);
+                this.handleResponse(response); }
+            ).catch(err => {
+                if(err.response.status===404) {
+                   this.props.history.push('/404')
+                }
+        })
     }
 
     handleResponse(response) {
