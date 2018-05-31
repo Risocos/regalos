@@ -99,5 +99,6 @@ projects = [
         'donators': 3,
         'achieved': 30,
         'plan': 'Too bad we cannot afford our own hourly pay and Sander is addicted to coffee. Sad face.',
+        'collaborators': 'Melle'
     },
 ]

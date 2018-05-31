@@ -46,6 +46,7 @@ export class ProjectOverview extends Component {
                 name={project.title}
                 desc={project.description}
                 target={project.target}
+                achieved={project.achieved}
             />
         )
     }

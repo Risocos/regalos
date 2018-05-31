@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Card, Image} from 'semantic-ui-react'
+import {Card, Image, Progress} from 'semantic-ui-react'
 import {Link} from "react-router-dom";
 import '../styling/ProjectCard.css'
 
@@ -12,6 +12,7 @@ export class ProjectCard extends Component {
             name: props.name,
             desc: props.desc,
             target: props.target,
+            achieved: props.achieved,
         };
     }
 
@@ -21,6 +22,7 @@ export class ProjectCard extends Component {
             name: this.props.name,
             desc: this.props.desc,
             target: this.props.target,
+            achieved: this.props.achieved,
         })
     }
 
@@ -37,6 +39,7 @@ export class ProjectCard extends Component {
                     <Card.Content className="card-content">
                         <Card.Header className="card-header">{this.state.name}</Card.Header>
                         <Card.Meta>Target budget: €{this.state.target}</Card.Meta>
+                        <Progress percent={(this.state.achieved / this.state.target * 100).toFixed(2)} progress success> </Progress>
                         <Card.Description>{this.state.desc}</Card.Description>
                     </Card.Content>
                 </Card>

@@ -25,6 +25,7 @@ export class SingleProjectOverview extends Component {
             achieved: 0,
             description: "",
             plan: "",
+            collaborators: "",
             progress: "Project progress and something with photo albums or blog posts",
         };
     }
@@ -46,6 +47,7 @@ export class SingleProjectOverview extends Component {
             achieved: data.achieved,
             description: data.description,
             plan: data.plan,
+            collaborators: data.collaborators,
         })
     }
 
@@ -146,6 +148,7 @@ export class SingleProjectOverview extends Component {
                             <Button circular color='google plus' icon='google plus'/>
                             <Button circular color='instagram' icon='instagram'/>
                             <Header size='huge'>Project details</Header>
+                            <Header as='h3'>Collaborators: {this.state.collaborators}</Header>
                             <p>{this.state.plan}</p>
                             <Header size='huge'>Project progress</Header>
                             <p>Project progress and smething with photoalbum and being able to make posts.</p>
