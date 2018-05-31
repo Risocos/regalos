@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Menu, Search} from 'semantic-ui-react';
+import {Button, Icon, Menu, Search} from 'semantic-ui-react';
 import '../styling/NavBar.css';
 import {Link} from "react-router-dom";
 
@@ -14,22 +14,6 @@ export class NavBar extends Component {
         };
 
         this.handleClick = this.handleClick.bind(this);
-        this.handleLogout = this.handleLogout.bind(this);
-    }
-
-    componentWillReceiveProps() {
-        this.setState({loggedIn: !this.state.loggedIn});
-    }
-
-    componentWillMount() {
-        if (sessionStorage.length !== 0) {
-            this.setState({loggedIn: !this.state.loggedIn});
-        }
-    }
-
-    handleLogout() {
-        sessionStorage.clear();
-        this.setState({loggedIn: !this.state.loggedIn});
     }
 
     handleClick(event, data) {
@@ -37,12 +21,11 @@ export class NavBar extends Component {
         this.setState({
             currentPage: nextPage,
         });
-        //alert(nextPage + " button has been clicked!");
     }
 
 
     leftMenu() {
-        if (this.state.loggedIn) {
+        if (sessionStorage.length!==0) {
             return (
                 <Menu.Menu>
                     <Menu.Item as={Link}
@@ -82,7 +65,7 @@ export class NavBar extends Component {
     }
 
     rightMenu() {
-        if (this.state.loggedIn) {
+        if (sessionStorage.length!==0) {
             const ACCOUNT_PATH = '/users/' + sessionStorage.getItem("user");
             return (
                 <Menu.Menu position='right'>
@@ -92,10 +75,7 @@ export class NavBar extends Component {
                                name='account'
                                onClick={this.handleClick}
                     />
-                    <Menu.Item as={Link}
-                               to='/login'
-                               name='logout'
-                               onClick={this.handleLogout}/>
+                    <Menu.Item onClick={this.props.toggleSidebar}><Icon name='sidebar'/></Menu.Item>
                 </Menu.Menu>
             )
         }
