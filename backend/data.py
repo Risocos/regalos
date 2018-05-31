@@ -57,12 +57,16 @@ projects = [
         'title': 'Building Houses',
         'description': 'We are going to build houses for people in Uganda',
         'owner': 1,
-        'startdate': '',
-        'enddate': '',
         'target': 10000,
         'donators': 18,
         'achieved': 4576,
+        'date_begin': 1527764457,
+        'date_end': 1527766457,
         'plan': 'Our plan is to build cheap, but properly sized houses for people in Uganda.',
+        'collaborators': [
+            1, 2
+        ],
+        'cover': None,
         'country': 'Uganda',
     },
     {
@@ -70,12 +74,16 @@ projects = [
         'title': 'Collecting money',
         'description': 'We want to collect money for others',
         'owner': 1,
-        'startdate': '',
-        'enddate': '',
         'target': 15000,
         'donators': 77,
         'achieved': 8594,
+        'date_begin': 1527764457,
+        'date_end': 1527766457,
         'plan': 'We plan to collect money from door to door and use this app as payment method',
+        'collaborators': [
+            1, 2
+        ],
+        'cover': 'http://via.placeholder.com/350x150',
         'country': 'Other',
     },
     {
@@ -83,12 +91,16 @@ projects = [
         'title': 'Recycle clothing',
         'description': 'Donate your clothing, so we can recycle it!',
         'owner': 2,
-        'startdate': '',
-        'enddate': '',
         'target': 0,
         'donators': 76,
         'achieved': 0,
+        'date_begin': 1527764457,
+        'date_end': 1527766457,
         'plan': 'We want people to donate their clothing, so that we can send this to poor countries',
+        'collaborators': [
+            1, 2
+        ],
+        'cover': 'http://via.placeholder.com/350x150',
         'country': 'Other',
     },
     {
@@ -96,13 +108,16 @@ projects = [
         'title': 'Project Regalos',
         'description': 'Donate for our project to create this project app',
         'owner': 1,
-        'startdate': '',
-        'enddate': '',
         'target': 5000,
         'donators': 3,
         'achieved': 30,
+        'date_begin': 1527764457,
+        'date_end': 1527766457,
         'plan': 'Too bad we cannot afford our own hourly pay and Sander is addicted to coffee. Sad face.',
-        'collaborators': 'Melle',
+        'collaborators': [
+            1, 2
+        ],
+        'cover': 'http://via.placeholder.com/350x150',
         'country': 'Netherlands',
     },
 ]

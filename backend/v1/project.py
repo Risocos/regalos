@@ -1,4 +1,8 @@
-from flask import Blueprint, jsonify, request
+import os
+import uuid
+
+from flask import Blueprint, jsonify, request, current_app, url_for
+from werkzeug.utils import secure_filename
 
 from backend.auth import token_required
 from backend.data import projects
@@ -11,6 +15,11 @@ projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
 #   PROJECTS API
 #
 ####################
+
+def allowed_file(filename):
+    ALLOWED_EXTS = {'jpg', 'png', 'jpeg', 'gif'}
+    return '.' in filename and filename.split('.', 1)[1].lower() in ALLOWED_EXTS
+
 
 @projects_api.route('/', methods=['GET'])
 def get_all_projects():
@@ -53,19 +62,51 @@ def get_one_project(project_id):
 @projects_api.route('/', methods=['POST'])
 @token_required
 def create_project(current_user):
-    data = request.get_json()
+    required_fields = [
+        'title',
+        'short_description',
+        'project_plan',
+        'date_begin',
+        'date_end',
+        'target',
+        # 'collaborators[]',
+    ]
 
-    if data is None or 'title' not in data:
+    data = request.form  # form data is used instead request.json so files can be uploaded
+
+    if data is not None:
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'message': 'Missing \'{0}\' field data to create project'.format(field)}), 400
+    else:
         return jsonify({'message': 'Missing data to create project'}), 400
 
     # new_project = Project(text=data['text'], complete=False, user_id=current_user.id)
     new_id = len(projects) + 1
+    collabs = [int(x) for x in data.getlist('collaborators[]')]
+    cover = None
+
+    if 'cover' in request.files and request.files['cover'] != '':
+        # a file is uploaded
+        file = request.files['cover']
+        if allowed_file(file.filename):
+            filename = secure_filename('{0}.{1}'.format(uuid.uuid4().hex, file.filename.split('.', 1)[1]))
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            cover = url_for('serve_file', filename=filename, _external=True)
 
     project = {
         'id': new_id,
         'title': data['title'],
-        'owner': current_user['id']
+        'description': data['short_description'],
+        'owner': current_user['id'],
+        'target': data['target'],
+        'donators': 0,
+        'achieved': 0,
+        'plan': data['project_plan'],
+        # 'collaborators': collabs,
+        'cover': cover
     }
+
     projects.append(project)
     # db.session.add(new_project)
     # db.session.commit()
