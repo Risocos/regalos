@@ -124,10 +124,7 @@ export class Account extends Component {
                         <Button circular color='google plus' icon='google plus'/>
                         <div style={{float: 'right'}}>
                             <div>
-                                <Button icon labelPosition='left' onClick={this.toggleEditMode}>
-                                    <Icon name='pencil'/> Edit
-                                </Button>
-                                <Button negative>Report user</Button>
+                                <Button negative><Icon name='flag'/>Report user</Button>
                                 {/*<Button color='red' icon labelPosition='left'
                                         onClick={this.deleteAccount} loading={this.state.isDeleting}>
                                     <Icon name='trash'/> Delete

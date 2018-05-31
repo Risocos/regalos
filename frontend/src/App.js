@@ -12,7 +12,7 @@ import {PageNotFound} from "./components/PageNotFound";
 import {AdminPanel} from "./components/AdminPanel";
 import {UserPanel} from "./components/UserPanel";
 import {ProjectPanel} from "./components/ProjectPanel";
-import {Menu, Segment, Sidebar} from "semantic-ui-react";
+import {Icon, Menu, Segment, Sidebar} from "semantic-ui-react";
 
 class App extends Component {
     constructor() {
@@ -34,17 +34,25 @@ class App extends Component {
 
     render() {
         const BASEPATH = "http://127.0.0.1:5000";
+        const USER = '/users/' + sessionStorage.getItem("user");
         return (
             <Router>
                 <Sidebar.Pushable as={Segment}>
                     <Sidebar as={Menu}
-                             animation='push'
+                             animation='overlay'
                              width='thin'
                              direction='right'
                              visible={this.state.visible}
                              icon='labeled'
                              vertical
                              inverted>
+                        <Menu.Item onClick={this.toggleSidemenu}><Icon name='arrow circle right'/></Menu.Item>
+                        <Menu.Item>
+                            <Menu.Menu>
+                                <Menu.Item as={Link} to={USER}><Icon name='user circle'/>Profile</Menu.Item>
+                                <Menu.Item as={Link} to='/settings'><Icon name='pencil'/>Edit settings</Menu.Item>
+                            </Menu.Menu>
+                        </Menu.Item>
                         <Menu.Item as={Link} to='/login' onClick={this.handleLogout}>Logout</Menu.Item>
                     </Sidebar>
                     <Sidebar.Pusher>

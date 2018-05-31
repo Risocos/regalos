@@ -66,15 +66,8 @@ export class NavBar extends Component {
 
     rightMenu() {
         if (sessionStorage.length!==0) {
-            const ACCOUNT_PATH = '/users/' + sessionStorage.getItem("user");
             return (
                 <Menu.Menu position='right'>
-                    <Menu.Item as={Link}
-                               to={ACCOUNT_PATH}
-                               icon='user circle'
-                               name='account'
-                               onClick={this.handleClick}
-                    />
                     <Menu.Item onClick={this.props.toggleSidebar}><Icon name='sidebar'/></Menu.Item>
                 </Menu.Menu>
             )
