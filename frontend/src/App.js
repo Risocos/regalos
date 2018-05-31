@@ -14,6 +14,7 @@ import {UserPanel} from "./components/UserPanel";
 import {ProjectPanel} from "./components/ProjectPanel";
 import {Icon, Menu, Segment, Sidebar} from "semantic-ui-react";
 import {ForbiddenAccess} from "./responsecodes/ForbiddenAccess";
+import {EditProfile} from "./components/EditProfile";
 
 class App extends Component {
     constructor() {
@@ -76,6 +77,8 @@ class App extends Component {
                                            render={props => <Register basepath={BASEPATH}/>}/>
                                     <Route path="/users/:userId"
                                            component={Account}/>
+                                    <Route path="/settings"
+                                           render={props => <EditProfile basepath={BASEPATH}/>}/>
 
 
                                     <Route exact path="/projects/create"
