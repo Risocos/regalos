@@ -77,7 +77,7 @@ export class Account extends Component {
 
     listProject(project) {
         return(
-            <ProjectCard
+            <ProjectCard key={project.id}
                 id={project.id}
                 name={project.title}
                 desc={project.description}
@@ -86,7 +86,6 @@ export class Account extends Component {
     }
 
     render() {
-        let projects = this.state.user.projects;
         return (
             <div>
                 <div className='account-header'>
