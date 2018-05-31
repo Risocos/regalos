@@ -85,7 +85,6 @@ def get_user_profile():
 
 @users_api.route('/<int:user_id>', methods=['GET'])
 @token_required
-@admin_required
 def get_one_user(current_user, user_id):
     # user = User.query.filter_by(public_id=public_id).first()
     user = None

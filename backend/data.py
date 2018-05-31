@@ -21,6 +21,7 @@ users = [
         # password: OneTwoThree123
         'password': 'sha256$N34hfMMN$a6bec8f319443512b9c0cf5a400c66933ab563a5d2ff5d34fd87dbc19f27d3f7',
         'bio': 'No bio',
+        'flagged': False,
     },
     {
         'id': 2,
@@ -40,6 +41,7 @@ users = [
                'Mima Mima Mell\n' +
                'Mi Ma Melle\n' +
                'Mima Mima Mell',
+        'flagged': True,
     },
 ]
 
@@ -52,7 +54,7 @@ users = [
 projects = [
     {
         'id': 1,
-        'title': 'Building House in Uganda',
+        'title': 'Building Houses',
         'description': 'We are going to build houses for people in Uganda',
         'owner': 1,
         'target': 10000,
@@ -64,7 +66,8 @@ projects = [
         'collaborators': [
             1, 2
         ],
-        'cover': None
+        'cover': None,
+        'country': 'Uganda',
     },
     {
         'id': 2,
@@ -80,7 +83,8 @@ projects = [
         'collaborators': [
             1, 2
         ],
-        'cover': 'http://via.placeholder.com/350x150'
+        'cover': 'http://via.placeholder.com/350x150',
+        'country': 'Other',
     },
     {
         'id': 3,
@@ -96,7 +100,8 @@ projects = [
         'collaborators': [
             1, 2
         ],
-        'cover': 'http://via.placeholder.com/350x150'
+        'cover': 'http://via.placeholder.com/350x150',
+        'country': 'Other',
     },
     {
         'id': 4,
@@ -112,6 +117,7 @@ projects = [
         'collaborators': [
             1, 2
         ],
-        'cover': 'http://via.placeholder.com/350x150'
+        'cover': 'http://via.placeholder.com/350x150',
+        'country': 'Netherlands',
     },
 ]

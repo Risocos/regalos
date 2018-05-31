@@ -28,11 +28,10 @@ export class ProjectOverview extends Component {
             .then((response) => {
                 response.data.projects.map((projectObject) => (
                    projectList.push(this.createCardObject(projectObject)))
-                )
-            .then(
+                );
                 this.setState({
                     projects: projectList,
-                }))
+                })
             })
             .catch(function(error) {
                 console.log(error)
@@ -41,11 +40,12 @@ export class ProjectOverview extends Component {
 
     createCardObject(project) {
         return(
-            <ProjectCard
+            <ProjectCard key={project.id}
                 id={project.id}
                 name={project.title}
-                desc={project.description}
                 target={project.target}
+                achieved={project.achieved}
+                country={project.country}
             />
         )
     }
