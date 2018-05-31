@@ -54,7 +54,7 @@ users = [
 projects = [
     {
         'id': 1,
-        'title': 'Building House in Uganda',
+        'title': 'Building Houses',
         'description': 'We are going to build houses for people in Uganda',
         'owner': 1,
         'startdate': '',
@@ -63,6 +63,7 @@ projects = [
         'donators': 18,
         'achieved': 4576,
         'plan': 'Our plan is to build cheap, but properly sized houses for people in Uganda.',
+        'country': 'Uganda',
     },
     {
         'id': 2,
@@ -75,6 +76,7 @@ projects = [
         'donators': 77,
         'achieved': 8594,
         'plan': 'We plan to collect money from door to door and use this app as payment method',
+        'country': 'Other',
     },
     {
         'id': 3,
@@ -87,6 +89,7 @@ projects = [
         'donators': 76,
         'achieved': 0,
         'plan': 'We want people to donate their clothing, so that we can send this to poor countries',
+        'country': 'Other',
     },
     {
         'id': 4,
@@ -99,6 +102,7 @@ projects = [
         'donators': 3,
         'achieved': 30,
         'plan': 'Too bad we cannot afford our own hourly pay and Sander is addicted to coffee. Sad face.',
-        'collaborators': 'Melle'
+        'collaborators': 'Melle',
+        'country': 'Netherlands',
     },
 ]

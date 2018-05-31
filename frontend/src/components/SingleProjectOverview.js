@@ -26,6 +26,7 @@ export class SingleProjectOverview extends Component {
             description: "",
             plan: "",
             collaborators: "",
+            country: "",
             progress: "Project progress and something with photo albums or blog posts",
         };
     }
@@ -48,6 +49,7 @@ export class SingleProjectOverview extends Component {
             description: data.description,
             plan: data.plan,
             collaborators: data.collaborators,
+            country: data.country,
         })
     }
 
@@ -64,7 +66,6 @@ export class SingleProjectOverview extends Component {
         const {active} = this.state;
         const {value} = this.state;
         //TODO: funtionality of filters
-        //TODO: Fill projectname, targetbudget etc with proper values
         //TODO: Posts, phoyoalbum, see what we can do
 
         //TODO: Add paymentsystem to donate form
@@ -129,6 +130,7 @@ export class SingleProjectOverview extends Component {
                         <Grid.Column textAlign="center" width={10}>
                             <Image src='http://via.placeholder.com/1000x300' centered={true}/>
                             <Header as='h1'>{this.state.title}</Header>
+                            <Header as='h3'> Country: {this.state.country}</Header>
                             <Header as='h3'>Target Budget: €{this.state.target}</Header>
                             <Statistic>
                                 <Statistic.Value>{this.state.donators}</Statistic.Value>

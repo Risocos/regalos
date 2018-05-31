@@ -44,9 +44,9 @@ export class ProjectOverview extends Component {
             <ProjectCard
                 id={project.id}
                 name={project.title}
-                desc={project.description}
                 target={project.target}
                 achieved={project.achieved}
+                country={project.country}
             />
         )
     }
