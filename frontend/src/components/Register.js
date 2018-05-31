@@ -83,6 +83,7 @@ export class Register extends Component {
                             {this.state.error}
                             <Form.Input
                                 fluid
+                                label='Username'
                                 icon='user'
                                 iconPosition='left'
                                 name='username'
@@ -91,6 +92,7 @@ export class Register extends Component {
                             />
                             <Form.Input
                                 fluid
+                                label='E-mail address'
                                 icon='at'
                                 iconPosition='left'
                                 name='email'
@@ -99,6 +101,7 @@ export class Register extends Component {
                             />
                             <Form.Input
                                 fluid
+                                label='Password'
                                 icon='lock'
                                 iconPosition='left'
                                 name='password'
@@ -108,6 +111,7 @@ export class Register extends Component {
                             />
                             <Form.Input
                                 fluid
+                                label='Re-enter Password'
                                 icon='lock'
                                 iconPosition='left'
                                 name='temppass'

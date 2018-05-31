@@ -136,6 +136,7 @@ export class Login extends Component {
 
                                 <Form.Input
                                     fluid
+                                    label = "Username"
                                     name="username"
                                     icon='user'
                                     iconPosition='left'
@@ -144,6 +145,7 @@ export class Login extends Component {
                                 />
                                 <Form.Input
                                     fluid
+                                    label = "Password"
                                     name="password"
                                     icon='lock'
                                     iconPosition='left'
