@@ -39,7 +39,6 @@ export class Register extends Component {
         event.preventDefault();
 
         if(this.validate()) {
-            console.log("goed")
             const USERNAME = this.state.username;
             const EMAIL = this.state.email;
             const PASSWORD = this.state.password;

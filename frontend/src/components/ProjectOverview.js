@@ -15,6 +15,11 @@ export class ProjectOverview extends Component {
                 {key: 'p', text: 'Popularity', value: 'popularity'},
                 {key: 't', text: 'Targetbudget', value: 'targetbudget'},
             ],
+
+            //Pagination
+            activePage: 1,
+            total: 0,
+
             //the components to render
             projects: [],
         };
@@ -27,31 +32,51 @@ export class ProjectOverview extends Component {
         axios.get(API_PATH)
             .then((response) => {
                 response.data.projects.map((projectObject) => (
-                   projectList.push(this.createCardObject(projectObject)))
+                    projectList.push(this.createCardObject(projectObject)))
                 );
                 this.setState({
                     projects: projectList,
                 })
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log(error)
             });
     }
 
     createCardObject(project) {
-        return(
+        return (
             <ProjectCard key={project.id}
-                id={project.id}
-                name={project.title}
-                target={project.target}
-                achieved={project.achieved}
-                country={project.country}
+                         id={project.id}
+                         name={project.title}
+                         target={project.target}
+                         achieved={project.achieved}
+                         country={project.country}
+                         cover={project.cover}
             />
         )
     }
 
+    renderCards() {
+        let cardsToRender = [];
+        if (this.state.activePage === 1) {
+            for (let i = 0; i < 12; i++) {
+                cardsToRender.push(this.state.projects[i])
+            }
+        }
+        else {
+            const MIN = (this.state.activePage - 1) * 12;
+            const MAX = MIN + 12;
+            for (let i = MIN; i < MAX; i++) {
+                cardsToRender.push(this.state.projects[i])
+            }
+        }
+        return cardsToRender;
+    }
+
+    handlePageChange = (e, {activePage}) => this.setState({activePage});
 
     render() {
+        const PAGES_REQUIRED = this.state.projects.length / 12;
 
         //TODO: funtionality of filters
 
@@ -77,7 +102,7 @@ export class ProjectOverview extends Component {
 
                         <Grid.Column width={10}>
                             <Grid columns={3}>
-                                {this.state.projects}
+                                {this.renderCards()}
                             </Grid>
 
                         </Grid.Column>
@@ -99,7 +124,11 @@ export class ProjectOverview extends Component {
 
                     </Grid.Row>
                     <Grid.Row centered columns={3}>
-                        <Grid.Column ><Pagination defaultActivePage={1} totalPages={10} /></Grid.Column>
+                        <Grid.Column>
+                            <Pagination activePage={this.state.activePage}
+                                        totalPages={PAGES_REQUIRED}
+                                        onPageChange={this.handlePageChange}/>
+                        </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <div className='googlemaps'>

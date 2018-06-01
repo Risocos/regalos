@@ -33,6 +33,11 @@ export class UserPanel extends Component {
             this.setState({
                 users: res.data.users,
             });
+        }).catch(err => {
+            if([401, 403].includes(err.response.status)) {
+                const PATH = '/' + err.response.status;
+                window.location.href = PATH;
+            }
         })
     }
 
@@ -50,6 +55,7 @@ export class UserPanel extends Component {
             this.closeConfirm();
             window.location.reload();
         })
+
     }
 
     listUser(user) {

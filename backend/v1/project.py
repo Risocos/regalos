@@ -4,7 +4,7 @@ import uuid
 from flask import Blueprint, jsonify, request, current_app, url_for
 from werkzeug.utils import secure_filename
 
-from backend.auth import token_required
+from backend.auth import token_required, admin_required
 from backend.data import projects
 
 projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
@@ -130,6 +130,7 @@ def create_project(current_user):
 
 @projects_api.route('/<int:project_id>', methods=['DELETE'])
 @token_required
+@admin_required
 def delete_project(current_user, project_id):
     # project = Project.query.filter_by(id=project_id, user_id=current_user.id).first()
 

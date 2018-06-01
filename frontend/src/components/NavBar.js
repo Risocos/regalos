@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Icon, Menu, Search} from 'semantic-ui-react';
+import {Icon, Menu, Search} from 'semantic-ui-react';
 import '../styling/NavBar.css';
 import {Link} from "react-router-dom";
 
@@ -12,15 +12,6 @@ export class NavBar extends Component {
             loggedIn: false,
             currentPage: 'home',
         };
-
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick(event, data) {
-        let nextPage = data.name;
-        this.setState({
-            currentPage: nextPage,
-        });
     }
 
 
@@ -32,12 +23,12 @@ export class NavBar extends Component {
                                to='/projects'
                                icon='calendar'
                                name='projects'
-                               onClick={this.handleClick}/>
+                    />
                     <Menu.Item as={Link}
                                to='/projects/create'
                                icon='add to calendar'
                                name='new project'
-                               onClick={this.handleClick}/>
+                    />
                 </Menu.Menu>
             );
         }
@@ -48,7 +39,7 @@ export class NavBar extends Component {
                                to='/projects'
                                icon='calendar'
                                name='projects'
-                               onClick={this.handleClick}/>
+                    />
                 </Menu.Menu>
             );
         }
@@ -78,11 +69,11 @@ export class NavBar extends Component {
                     <Menu.Item as={Link}
                                to='/login'
                                name='login'
-                               onClick={this.toggleLoggedIn}/>
+                     />
                     <Menu.Item as={Link}
                                to='/signup'
                                name='register'
-                               onClick={this.handleClick}/>
+                    />
                 </Menu.Menu>
             )
         }

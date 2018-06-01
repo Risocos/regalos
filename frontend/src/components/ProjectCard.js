@@ -13,6 +13,7 @@ export class ProjectCard extends Component {
             target: props.target,
             achieved: props.achieved,
             country: props.country,
+            cover: props.cover,
         };
     }
 
@@ -23,6 +24,7 @@ export class ProjectCard extends Component {
             target: this.props.target,
             achieved: this.props.achieved,
             country: this.props.country,
+            cover: this.props.cover,
         })
     }
 
@@ -35,7 +37,7 @@ export class ProjectCard extends Component {
             <div className="card">
             <Link to={'/projects/' + this.state.id}>
                 <Card>
-                    <Image src='http://via.placeholder.com/300x300'/>
+                    <Image src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/300x300'}/>
                     <Card.Content className="card-content">
                         <Card.Header className="card-header">{this.state.name}</Card.Header>
                         <Card.Meta>Country: {this.state.country}</Card.Meta>
