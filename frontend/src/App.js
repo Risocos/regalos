@@ -35,8 +35,7 @@ class App extends Component {
     }
 
     isAuthenticated() {
-        console.log("auth");
-        return (!sessionStorage.getItem("token")>0)
+        return (!sessionStorage.getItem("token").length>0)
     }
 
 
@@ -84,8 +83,8 @@ class App extends Component {
 
                                     <Route exact path="/projects/create"
                                            render={() => (
-                                               this.isAuthenticated() ? (<Redirect to='/login'/>) :
-                                                   (<CreateProject basepath={BASEPATH}/>)
+                                               this.isAuthenticated ? (<Redirect to='/login'/>) :
+                                                   (props => <CreateProject basepath={BASEPATH}/>)
                                            )}/>
                                     <Route exact path="/projects"
                                            render={props => <ProjectOverview basepath={BASEPATH}/>}/>
