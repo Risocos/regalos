@@ -32,40 +32,41 @@ export class ProjectOverview extends Component {
         axios.get(API_PATH)
             .then((response) => {
                 response.data.projects.map((projectObject) => (
-                   projectList.push(this.createCardObject(projectObject)))
+                    projectList.push(this.createCardObject(projectObject)))
                 );
                 this.setState({
                     projects: projectList,
                 })
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.log(error)
             });
     }
 
     createCardObject(project) {
-        return(
+        return (
             <ProjectCard key={project.id}
-                id={project.id}
-                name={project.title}
-                target={project.target}
-                achieved={project.achieved}
-                country={project.country}
+                         id={project.id}
+                         name={project.title}
+                         target={project.target}
+                         achieved={project.achieved}
+                         country={project.country}
+                         cover={project.cover}
             />
         )
     }
 
     renderCards() {
         let cardsToRender = [];
-        if(this.state.activePage===1) {
-            for(let i=0;i<12;i++) {
+        if (this.state.activePage === 1) {
+            for (let i = 0; i < 12; i++) {
                 cardsToRender.push(this.state.projects[i])
             }
         }
         else {
-            const MIN = (this.state.activePage-1)*12;
-            const MAX = MIN+12;
-            for(let i=MIN;i<MAX;i++) {
+            const MIN = (this.state.activePage - 1) * 12;
+            const MAX = MIN + 12;
+            for (let i = MIN; i < MAX; i++) {
                 cardsToRender.push(this.state.projects[i])
             }
         }
@@ -123,9 +124,11 @@ export class ProjectOverview extends Component {
 
                     </Grid.Row>
                     <Grid.Row centered columns={3}>
-                        <Grid.Column ><Pagination activePage={this.state.activePage}
-                                                  totalPages={PAGES_REQUIRED}
-                                                  onPageChange={this.handlePageChange}/></Grid.Column>
+                        <Grid.Column>
+                            <Pagination activePage={this.state.activePage}
+                                        totalPages={PAGES_REQUIRED}
+                                        onPageChange={this.handlePageChange}/>
+                        </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <div className='googlemaps'>
