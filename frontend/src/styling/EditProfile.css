@@ -1,0 +1,22 @@
+.smallcolumn {
+    width: 15%;
+    padding: 20px;
+}
+
+.mediumcolumn {
+    width: 30%;
+    padding: 20px;
+    align-content: center;
+}
+
+.bigcolumn {
+    width: 50%;
+}
+
+.image {
+    margin-bottom: 20px;
+}
+
+.message {
+    margin-top: 20px;
+}

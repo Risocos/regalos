@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {Container, Form, Image, Message, Dropdown} from "semantic-ui-react";
-import "./CreateProject.css";
+import "../styling/CreateProject.css";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
 
 
 //Installed dependencies for this:
@@ -22,7 +23,7 @@ export class CreateProject extends Component {
             imagePath: '',
             start: moment(),
             end: moment(),
-            target: 0,
+            target: '',
             collabs: [],
 
             //Utility variables
@@ -139,28 +140,38 @@ export class CreateProject extends Component {
     handleSubmit() {
         //TODO: handle submit with server
         if (!this.validate()) {
+            return
         }
-        else {
-            const items = [
-                this.state.name,
-                this.state.desc,
-                this.state.plan,
-                this.state.start.format("DD-MMMM-YYYY"),
-                this.state.end.format("DD-MMMM-YYYY"),
-                this.state.target,
-                this.state.collabs,
-            ];
-            let message = <Message success>
-                <Message.Header>Project created</Message.Header>
-                <Message.List>
-                    {items.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
-                </Message.List>
-            </Message>;
 
-            this.setState({
-                formMessage: message,
-            })
-        }
+        const API_PATH = this.props.basepath + '/projects';
+        const TOKEN = "Bearer " + sessionStorage.getItem("token");
+
+        let data = new FormData();
+        data.append("title", this.state.name);
+        data.append("short_description", this.state.description);
+        data.append("project_plan", this.state.plan);
+        data.append("cover", this.state.uploadedFile);
+        data.append("date_begin", this.state.start);
+        data.append("date_end", this.state.end);
+        data.append("target", this.state.target);
+
+        axios.post(API_PATH, data, {
+            headers: {
+                Authorization: TOKEN,
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
+        });
+        let message = <Message success>
+            <Message.Header>Project created</Message.Header>
+        </Message>;
+
+        this.setState({
+            formMessage: message,
+        })
     }
 
     render() {
@@ -171,8 +182,6 @@ export class CreateProject extends Component {
             {key: 2, value: 'Romy', text: 'Romy'},
             {key: 3, value: 'Jan', text: 'Jan'},
             {key: 4, value: 'Sander', text: 'Sander'}];
-
-        let {imagePreview} = this.state.imagePreview;
 
         return (
             <Container>

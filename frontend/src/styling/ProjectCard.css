@@ -1,0 +1,13 @@
+.card-content {
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    padding-top: 10px;
+}
+
+.card {
+    margin-bottom: 20px;
+    width: 33%;
+}
