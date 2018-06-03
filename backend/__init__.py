@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 
 from backend.config import Config
@@ -7,6 +8,8 @@ app = Flask(__name__)
 # load configuration for the Flask application
 app.config.from_object(Config())
 db = SQLAlchemy(app)
+# !!Should be after SQLAlchemy(app)!!
+ma = Marshmallow(app)
 
 app.url_map.strict_slashes = False
 

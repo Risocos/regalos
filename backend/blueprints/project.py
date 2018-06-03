@@ -1,13 +1,12 @@
 import os
 import uuid
-from datetime import datetime
 
 from flask import Blueprint, jsonify, request, current_app, url_for
 from werkzeug.utils import secure_filename
 
 from backend import db
 from backend.auth import token_required
-from backend.models import Project
+from backend.models import Project, User
 from backend.schemas import project_schema
 
 projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
@@ -26,8 +25,11 @@ def allowed_file(filename):
 
 @projects_api.route('/', methods=['GET'])
 def get_all_projects():
+    # retrieve the models
     projects = Project.query.all()
-    return jsonify({'projects': project_schema.dump(projects, many=True).data})
+    # parse them through a schema which converts is to a dict
+    result = project_schema.dump(projects, many=True)
+    return jsonify({'projects': result.data})  # convert dict to json and return that to client
 
 
 @projects_api.route('/<int:project_id>', methods=['GET'])
@@ -42,37 +44,13 @@ def get_one_project(project_id):
 
 @projects_api.route('/', methods=['POST'])
 @token_required
-def create_project(current_user):
-    required_fields = [
-        'title',
-        'short_description',
-        'project_plan',
-        'target_budget',
-        'start_date',
-        'end_date',
-        # 'collaborators[]',
-    ]
+def create_project(current_user: User):
+    data = request.form.to_dict()  # form data is used instead request.json so files can be uploaded
 
-    data = request.form  # form data is used instead request.json so files can be uploaded
-
-    if data is not None:
-        for field in required_fields:
-            if field not in data:
-                return jsonify({'message': 'Missing \'{0}\' field data to create project'.format(field)}), 400
-    else:
+    if not data:  # no data given
         return jsonify({'message': 'Missing data to create project'}), 400
 
-    new_project = Project(
-        title=data['title'],
-        short_description=data['short_description'],
-        project_plan=data['project_plan'],
-        target_budget=data['target_budget'],
-        start_date=datetime.strptime(data['start_date'], "%d-%m-%Y"),
-        end_date=datetime.strptime(data['end_date'], "%d-%m-%Y"),
-        latitude=data['latitude'],
-        longitude=data['longitude'],
-        owner=current_user
-    )
+    data['user_id'] = current_user.id
 
     if 'cover' in request.files and request.files['cover'] != '':
         # a file is uploaded
@@ -80,10 +58,19 @@ def create_project(current_user):
         if allowed_file(file.filename):
             filename = secure_filename('{0}.{1}'.format(uuid.uuid4().hex, file.filename.split('.', 1)[1]))
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            new_project.cover = url_for('serve_file', filename=filename, _external=True)
+            data['cover'] = url_for('serve_file', filename=filename, _external=True)
+
+    # load and validate
+    result = project_schema.load(data)
+
+    if len(result.errors) > 0:
+        return jsonify(result.errors), 422
+
+    new_project = result.data
 
     db.session.add(new_project)
     db.session.commit()
+    db.session.refresh(new_project)
 
     return jsonify({
         'message': "Project created!",
