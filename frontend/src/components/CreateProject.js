@@ -5,6 +5,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import {SERVER_URL} from "../constants";
 
 
 //Installed dependencies for this:
@@ -143,7 +144,7 @@ export class CreateProject extends Component {
             return
         }
 
-        const API_PATH = this.props.basepath + '/projects';
+        const API_PATH = SERVER_URL + '/projects';
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
 
         let data = new FormData();
