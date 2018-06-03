@@ -42,7 +42,7 @@ class Project(db.Model):
     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now(), nullable=False)
 
     # TODO: delete file when model is deleted
-    # @listen(User, 'delete')
+    # @listen(Project, 'delete')
     # def before_delete(self):
 
     def __repr__(self):

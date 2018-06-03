@@ -80,14 +80,15 @@ def create_project(current_user: User):
 
 @projects_api.route('/<int:project_id>', methods=['DELETE'])
 @token_required
-def delete_project(current_user, project_id):
-    project = Project.query.filter_by(id=project_id, user_id=current_user.id).first()
+def delete_project(current_user: User, project_id):
+    criteria = {'id': project_id}
 
-    # proji = None
-    # for i, p in enumerate(projects):
-    #     # check if this project belongs to the user or if user is an admin
-    #     if p['id'] == project_id and (p['owner'] == current_user['id'] or current_user['admin']):
-    #         proji = i
+    # check if user is an admin
+    if not current_user.admin:
+        # if not filter by the projects only from this user
+        criteria['user_id'] = current_user.id
+
+    project = Project.query.filter_by(**criteria).first()
 
     if project is None:
         return jsonify({'message': 'No project found!'}), 404

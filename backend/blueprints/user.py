@@ -28,23 +28,8 @@ def get_all_users(current_user: User):
     })
 
 
-@users_api.route('/profile', methods=['POST'])
-def get_user_profile():
-    user_id = int(request.json['id'])
-
-    user = User.query.filter_by(id=user_id).first()
-
-    if not user:
-        return jsonify({'message': 'No user found!'}), 404
-
-    return jsonify({
-        'user': user_schema.dump(user).data
-    })
-
-
 @users_api.route('/<int:user_id>', methods=['GET'])
-@token_required
-def get_one_user(current_user: User, user_id):
+def get_user_profile(user_id: int):
     user = User.query.filter_by(id=user_id).first()
 
     if not user:
@@ -57,33 +42,22 @@ def get_one_user(current_user: User, user_id):
 
 @users_api.route('/register', methods=['POST'])
 def create_user():
-    required_fields = [
-        'email',
-        'username',
-        'password',
-    ]
-
     data = request.json
 
-    if data is not None:
-        for field in required_fields:
-            if field not in data:
-                return jsonify({'message': 'Missing \'{0}\' field data to create user'.format(field)}), 400
-    else:
+    if data is None:
         return jsonify({'message': 'Missing data to create project'}), 400
 
-    hashed_password = generate_password_hash(data['password'], method='sha256')
+    result = user_schema.load(data)
 
-    new_user = User(
-        public_id=str(uuid.uuid4()),
-        email=data['email'],
-        username=data['username'],
-        password_hash=hashed_password
-    )
+    if len(result.errors) > 0:
+        return jsonify(result.errors), 422
+
+    new_user = result.data
 
     # save user to storage
     db.session.add(new_user)
     db.session.commit()
+    db.session.refresh(new_user)
 
     return jsonify({
         'message': 'New user created!',

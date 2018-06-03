@@ -1,6 +1,8 @@
+import uuid
 from datetime import datetime
 
 from marshmallow import fields, pre_load
+from werkzeug.security import generate_password_hash
 
 from backend import ma
 from backend.models import User, Project
@@ -32,9 +34,20 @@ class ProjectSchema(ma.ModelSchema):
 
 
 class UserSchema(ma.ModelSchema):
+    public_id = fields.String(required=True)
+    email = fields.Email(required=True)
+    password_hash = fields.String(required=True, load_only=True)
+    username = fields.String(required=True)
+
+    @pre_load
+    def setup_user(self, data):
+        data['public_id'] = str(uuid.uuid4())
+        data['password_hash'] = generate_password_hash(data['password'], method='sha256')
+        return data
+
     class Meta:
         model = User
-        exclude = ['password_hash', 'projects']
+        exclude = ['projects']
         ordered = True
 
 
