@@ -9,7 +9,7 @@ import {
     Dimmer,
     Form,
     Input,
-    Radio, TextArea, Checkbox, Container
+    Radio, TextArea, Checkbox, Container, Icon
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
@@ -55,6 +55,16 @@ export class SingleProjectOverview extends Component {
             collaborators: data.collaborators,
             country: data.country,
         })
+    }
+
+    returnProgress() {
+        let result = (this.state.achieved / this.state.target * 100).toFixed(2)
+        if (isNaN(result)) {
+            return 0;
+        }
+        else {
+            return result;
+        }
     }
 
     handleOpen = () => this.setState({active: true});
@@ -127,8 +137,17 @@ export class SingleProjectOverview extends Component {
                     <Grid.Row>
 
                         <Grid.Column>
-                            <p>Maybe recent updates, twitter messages about the project, photos, something like
-                                that?</p>
+                            <Header> <Button size='massive' color='green' onClick={this.handleOpen}> Donate
+                                now! </Button> </Header>
+                            <Button circular color='facebook' icon='facebook'/>
+                            <Button circular color='twitter' icon='twitter'/>
+                            <Button circular color='linkedin' icon='linkedin'/>
+                            <Button circular color='google plus' icon='google plus'/>
+                            <Button circular color='instagram' icon='instagram'/>
+
+                            <div className="reportProject">
+                                <Button negative><Icon name='flag'/>Report this project</Button>
+                            </div>
                         </Grid.Column>
 
                         <Grid.Column textAlign="center" width={10}>
@@ -141,27 +160,18 @@ export class SingleProjectOverview extends Component {
                                 <Statistic.Label>Donators!</Statistic.Label>
                             </Statistic>
 
-                            <Progress percent={(this.state.achieved / this.state.target * 100).toFixed(2)} progress
+                            <Progress percent={this.returnProgress()} progress
                                       success>
                                 ${this.state.achieved}
                             </Progress>
                             <p>{this.state.description}</p>
-                            <Header> <Button size='massive' color='green' onClick={this.handleOpen}> Donate
-                                now! </Button> </Header>
-                            <Button circular color='facebook' icon='facebook'/>
-                            <Button circular color='twitter' icon='twitter'/>
-                            <Button circular color='linkedin' icon='linkedin'/>
-                            <Button circular color='google plus' icon='google plus'/>
-                            <Button circular color='instagram' icon='instagram'/>
                             <Header size='huge'>Project details</Header>
                             <Header as='h3'>Collaborators: {this.state.collaborators}</Header>
                             <p>{this.state.plan}</p>
                             <Header size='huge'>Project progress</Header>
                             <p>Project progress and smething with photoalbum and being able to make posts.</p>
 
-                            <div>
-                                <Button negative>Report this project</Button>
-                            </div>
+
                         </Grid.Column>
 
                         <Grid.Column>
