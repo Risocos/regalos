@@ -35,7 +35,7 @@ class App extends Component {
     }
 
     isAuthenticated() {
-        return (!sessionStorage.getItem("token").length>0)
+        return (sessionStorage.getItem("token")===null)
     }
 
 
