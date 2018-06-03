@@ -32,6 +32,16 @@ export class ProjectCard extends Component {
         this.setPropsToState();
     }
 
+    returnProgress() {
+        let result = (this.state.achieved / this.state.target * 100).toFixed(2)
+        if (isNaN(result)) {
+            return 0;
+        }
+        else {
+            return result;
+        }
+    }
+
     render() {
         return(
             <div className="card">
@@ -42,7 +52,7 @@ export class ProjectCard extends Component {
                         <Card.Header className="card-header">{this.state.name}</Card.Header>
                         <Card.Meta>Country: {this.state.country}</Card.Meta>
                         <Card.Meta>Target budget: €{this.state.target}</Card.Meta>
-                        <Progress percent={(this.state.achieved / this.state.target * 100).toFixed(2)} progress success> </Progress>
+                        <Progress percent={this.returnProgress()} progress success> </Progress>
                     </Card.Content>
                 </Card>
             </Link>
