@@ -35,12 +35,11 @@ class App extends Component {
     }
 
     isAuthenticated() {
-        return (!sessionStorage.getItem("token").length>0)
+        return (sessionStorage.getItem("token")===null)
     }
 
 
     render() {
-        const BASEPATH = "http://127.0.0.1:5000";
         const USER = '/users/' + sessionStorage.getItem("user");
         return (
             <Router>
@@ -68,35 +67,25 @@ class App extends Component {
                             <NavBar toggleSidebar={this.toggleSidemenu}/>
                             <Segment basic>
                                 <Switch>
-                                    <Route exact path="/"
-                                           render={props => <ProjectOverview basepath={BASEPATH}/>}/>
+                                    <Route exact path="/" component={ProjectOverview}/>
 
-                                    <Route path="/login"
-                                           render={props => <Login basepath={BASEPATH}/>}/>
-                                    <Route path="/signup"
-                                           render={props => <Register basepath={BASEPATH}/>}/>
-                                    <Route path="/users/:userId"
-                                           component={Account}/>
-                                    <Route path="/settings"
-                                           render={props => <EditProfile basepath={BASEPATH}/>}/>
+                                    <Route path="/login" component={Login}/>
+                                    <Route path="/signup" component={Register}/>
+                                    <Route path="/users/:userId" component={Account}/>
+                                    <Route path="/settings" component={EditProfile}/>
 
 
                                     <Route exact path="/projects/create"
                                            render={() => (
-                                               this.isAuthenticated ? (<Redirect to='/login'/>) :
-                                                   (props => <CreateProject basepath={BASEPATH}/>)
+                                               this.isAuthenticated() ? (<Redirect to='/login'/>) :
+                                                   (<CreateProject />)
                                            )}/>
-                                    <Route exact path="/projects"
-                                           render={props => <ProjectOverview basepath={BASEPATH}/>}/>
-                                    <Route exact path="/projects/:projectId"
-                                           component={SingleProjectOverview}/>
+                                    <Route exact path="/projects" component={ProjectOverview}/>
+                                    <Route exact path="/projects/:projectId" component={SingleProjectOverview}/>
 
-                                    <Route path="/adminpanel"
-                                           component={AdminPanel}/>
-                                    <Route exact path="/users"
-                                           render={props => <UserPanel basepath={BASEPATH}/>}/>
-                                    <Route path="/projectpanel"
-                                           render={props => <ProjectPanel basepath={BASEPATH}/>}/>
+                                    <Route path="/adminpanel" component={AdminPanel}/>
+                                    <Route exact path="/users" component={UserPanel}/>
+                                    <Route path="/projectpanel" component={ProjectPanel}/>
 
                                     <Route path="/403" component={ForbiddenAccess}/>
                                     <Route path="/404" component={PageNotFound}/>

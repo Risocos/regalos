@@ -3,6 +3,7 @@ import {Button, Container, Grid, Header, Icon, Item} from "semantic-ui-react";
 import '../styling/Account.css';
 import axios from 'axios';
 import {ProjectCard} from "./ProjectCard";
+import {SERVER_URL} from "../constants";
 
 export class Account extends Component {
 
@@ -22,9 +23,8 @@ export class Account extends Component {
     }
 
     componentDidMount() {
-        const BASEPATH = "http://127.0.0.1:5000";
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = BASEPATH + this.props.location.pathname;
+        const API_PATH = SERVER_URL + this.props.location.pathname;
 
         axios.get(API_PATH, {
                 headers: {

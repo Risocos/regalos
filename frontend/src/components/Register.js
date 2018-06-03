@@ -3,6 +3,7 @@ import {Button, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
 import "../styling/login.css"
 import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
+import {SERVER_URL} from "../constants";
 
 export class Register extends Component {
 
@@ -42,7 +43,7 @@ export class Register extends Component {
             const USERNAME = this.state.username;
             const EMAIL = this.state.email;
             const PASSWORD = this.state.password;
-            const API_PATH = this.props.basepath + '/users/register';
+            const API_PATH = SERVER_URL + '/users/register';
 
             axios.post(API_PATH, {
                 username: USERNAME,

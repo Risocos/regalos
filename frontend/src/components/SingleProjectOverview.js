@@ -13,6 +13,7 @@ import {
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
+import {SERVER_URL} from "../constants";
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ export class SingleProjectOverview extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://127.0.0.1:5000' + this.props.location.pathname)
+        axios.get(SERVER_URL + this.props.location.pathname)
             .then((response) => {
                 console.log(response);
                 this.handleResponse(response); }
