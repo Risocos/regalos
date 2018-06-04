@@ -42,6 +42,9 @@ users = [
                'Mi Ma Melle\n' +
                'Mima Mima Mell',
         'flagged': True,
+        'twitter': 'https://twitter.com/DoornSander',
+        'linkedin': 'https://www.linkedin.com/in/sander-van-doorn-64b48b112/',
+        'google': ''
     },
 ]
 

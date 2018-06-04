@@ -17,6 +17,9 @@ export class Account extends Component {
                 username: '',
                 image: '',
                 bio: '',
+                twitter: '',
+                google: '',
+                linkedin: '',
                 projects: [],
             }
         };
@@ -39,6 +42,9 @@ export class Account extends Component {
                     username: data.username,
                     image: 'http://via.placeholder.com/300x400',
                     bio: data.bio,
+                    twitter: data.twitter,
+                    google: data.google,
+                    linkedin: data.linkedin,
                     projects: data.projects,
                 }
             });
@@ -53,6 +59,27 @@ export class Account extends Component {
                          desc={project.description}
                          target={project.target}
             />)
+    }
+
+    renderTwitter() {
+        if(this.state.user.twitter!=='') {
+        return(
+            <a href={this.state.user.twitter}><Button circular color='twitter' icon='twitter' /></a>
+        )}
+    }
+
+    renderGoogle() {
+        if(this.state.user.google!=='') {
+        return(
+            <a href={this.state.user.google}><Button circular color='google plus' icon='google plus'/></a>
+        )}
+    }
+
+    renderLinkedin() {
+        if(this.state.user.linkedin!=='') {
+        return(
+            <a href={this.state.user.linkedin}><Button circular color='linkedin' icon='linkedin'/></a>
+        )}
     }
 
     render() {
@@ -75,9 +102,9 @@ export class Account extends Component {
                                         </div>
                                     </Item.Description>
                                     <Item.Extra>
-                                        <Button circular color='twitter' icon='twitter'/>
-                                        <Button circular color='linkedin' icon='linkedin'/>
-                                        <Button circular color='google plus' icon='google plus'/>
+                                        {this.renderTwitter()}
+                                        {this.renderLinkedin()}
+                                        {this.renderGoogle()}
                                         <div style={{float: 'right'}}>
                                             <div>
                                                 <Button negative><Icon name='flag'/>Report user</Button>
