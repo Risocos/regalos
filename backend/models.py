@@ -20,15 +20,15 @@ class User(db.Model):
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(50))
-    short_description = db.Column(db.String(500))
-    project_plan = db.Column(db.Text)
+    title = db.Column(db.String(50), nullable=False)
+    short_description = db.Column(db.String(500), nullable=False)
+    project_plan = db.Column(db.Text, nullable=False)
     # category = db.Column(db.String(50))
     # progress can be calculated from the target and current budget
     # progress = db.Column(db.SmallInteger, nullable=False)  # in percentage
     target_budget = db.Column(db.Integer, nullable=False)
     current_budget = db.Column(db.Integer, default=0, nullable=False)
-    donators = db.Column(db.Integer)
+    donators = db.Column(db.Integer, default=0, nullable=False)
     start_date = db.Column(db.TIMESTAMP, nullable=False)
     end_date = db.Column(db.TIMESTAMP, nullable=False)
     cover = db.Column(db.String)
@@ -36,8 +36,12 @@ class Project(db.Model):
     # Google Maps
     latitude = db.Column(db.Float(10, 6))
     longitude = db.Column(db.Float(10, 6))
+    flag_count = db.Column(db.SmallInteger, nullable=False, default=0)
+
+    # relations & foreign keys
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    owner = db.relationship('User', backref=db.backref('projects', lazy=True))
+    owner = db.relationship('User',
+                            backref=db.backref('projects', lazy=True))  # backref makes it possible to do user.projects
 
     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now(), nullable=False)
 
