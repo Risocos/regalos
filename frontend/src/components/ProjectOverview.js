@@ -51,7 +51,7 @@ export class ProjectOverview extends Component {
                          name={project.title}
                          target={project.target_budget}
                          achieved={project.current_budget}
-                         country={project.country}
+                         country={project.country_id}
                          cover={project.cover}
             />
         )
