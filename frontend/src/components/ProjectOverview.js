@@ -3,7 +3,7 @@ import {Form, Grid, Header, Pagination} from "semantic-ui-react";
 import "../styling/ProjectOverview.css";
 import axios from "axios";
 import {ProjectCard} from "./ProjectCard";
-import {SERVER_URL} from "../constants";
+import {COUNTRIES, SERVER_URL} from "../constants";
 
 
 export class ProjectOverview extends Component {
@@ -12,7 +12,7 @@ export class ProjectOverview extends Component {
 
         this.state = {
             //list of options used for filtering the projectview
-            filterOptions: [{key: 'f', text: 'Filter', value: 'filter'},
+            filterOptions: [
                 {key: 'p', text: 'Popularity', value: 'popularity'},
                 {key: 't', text: 'Targetbudget', value: 'targetbudget'},
             ],
@@ -76,28 +76,51 @@ export class ProjectOverview extends Component {
 
     handlePageChange = (e, {activePage}) => this.setState({activePage});
 
+    handleCountryChange = (e, d) => this.setState({
+        filter: {country: d.value}
+    });
+
     render() {
         const PAGES_REQUIRED = this.state.projects.length / 12;
 
-        //TODO: funtionality of filters
+        //TODO: functionality of filters
+        let countries = [];
+        COUNTRIES.forEach(country => {
+            countries.push({
+                key: country.countryCode,
+                value: country.countryCode,
+                flag: country.countryCode,
+                text: country.name
+            });
+        });
+
+        const options = [
+            {key: 'target_budget', text: 'Target budget', value: 'target_budget'},
+            {key: 'current_budget', text: 'Current budget', value: 'current_budget'},
+        ];
 
         //TODO: Fix amounts of projects shown etc
 
         //TODO: Fix project on google maps map
+
         return (
             <div className="container">
 
                 <Grid columns='equal'>
                     <Grid.Row>
                         <Grid.Column>
-
+                            <Header as='h3'>Filters</Header>
+                            {/* TODO: put filters in own Component */}
                             <Form.Select options={this.state.filterOptions} placeholder='Filter'/>
 
-                            <Form.Field label='United States' control='input' type='checkbox' defaultChecked='true'/>
-                            <Form.Field label='Europe' control='input' type='checkbox' defaultChecked='true'/>
-                            <Form.Field label='Asia' control='input' type='checkbox' defaultChecked='true'/>
-                            <Form.Field label='Australia' control='input' type='checkbox' defaultChecked='true'/>
-                            <Form.Field label='Africa' control='input' type='checkbox' defaultChecked='true'/>
+                            <Form.Dropdown placeholder='Select a country' fluid search selection
+                                           options={countries} onChange={this.handleCountryChange}/>
+
+                            {/* TODO: should use a slider */}
+                            <Form.Input
+                                action={<Form.Dropdown button basic floating options={options} defaultValue='page'/>}
+                                placeholder='$...'
+                            />
 
                         </Grid.Column>
 
