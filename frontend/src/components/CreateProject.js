@@ -155,9 +155,12 @@ export class CreateProject extends Component {
         data.append("short_description", this.state.description);
         data.append("project_plan", this.state.plan);
         data.append("cover", this.state.uploadedFile);
-        data.append("date_begin", this.state.start);
-        data.append("date_end", this.state.end);
-        data.append("target", this.state.target);
+        data.append("start_date", this.state.start.unix().toString());
+        data.append("end_date", this.state.end.unix().toString());
+        this.state.collabs.forEach((collab) => {
+            data.append("collaborators[]", collab)
+        });
+        data.append("target_budget", this.state.target);
         data.append("country_id", this.state.country);
 
         axios.post(API_PATH, data, {

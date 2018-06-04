@@ -6,7 +6,7 @@ import {Login} from "./components/Login";
 import {Register} from "./components/Register";
 import {CreateProject} from './components/CreateProject';
 import {Account} from "./components/Account";
-import {ProjectOverview} from './components/ProjectOverview'
+import {ProjectOverview} from './components/ProjectOverview';
 import {SingleProjectOverview} from "./components/SingleProjectOverview";
 import {PageNotFound} from "./responsecodes/PageNotFound";
 import {AdminPanel} from "./components/AdminPanel";
