@@ -41,7 +41,7 @@ export class Account extends Component {
                     email: data.email,
                     username: data.username,
                     image: 'http://via.placeholder.com/300x400',
-                    bio: data.bio,
+                    bio: data.biography,
                     twitter: data.twitter,
                     google: data.google,
                     linkedin: data.linkedin,
@@ -57,26 +57,27 @@ export class Account extends Component {
                          id={project.id}
                          name={project.title}
                          desc={project.description}
-                         target={project.target}
+                         target={project.target_budget}
+                         achieved={project.current_budget}
             />)
     }
 
     renderTwitter() {
-        if(this.state.user.twitter!=='') {
+        if(this.state.user.twitter!=null) {
         return(
             <a href={this.state.user.twitter}><Button circular color='twitter' icon='twitter' /></a>
         )}
     }
 
     renderGoogle() {
-        if(this.state.user.google!=='') {
+        if(this.state.user.google!=null) {
         return(
             <a href={this.state.user.google}><Button circular color='google plus' icon='google plus'/></a>
         )}
     }
 
     renderLinkedin() {
-        if(this.state.user.linkedin!=='') {
+        if(this.state.user.linkedin!=null) {
         return(
             <a href={this.state.user.linkedin}><Button circular color='linkedin' icon='linkedin'/></a>
         )}
