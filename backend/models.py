@@ -6,12 +6,18 @@ class User(db.Model):
     public_id = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     username = db.Column(db.String(50), nullable=False)
+    password = None
     password_hash = db.Column(db.String(80), nullable=False)
     admin = db.Column(db.Boolean, default=False)
     biography = db.Column(db.String(100))
     avatar = db.Column(db.String)  # will be a filepath
     verified = db.Column(db.Boolean, default=False, nullable=False)
     flag_count = db.Column(db.SmallInteger, nullable=False, default=0)
+
+    twitter = db.Column(db.String, nullable=True)
+    linkedin = db.Column(db.String, nullable=True)
+    google = db.Column(db.String, nullable=True)
+
     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now(), nullable=False)
 
     def __repr__(self):

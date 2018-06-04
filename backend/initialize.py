@@ -260,6 +260,9 @@ users = [
         'password_hash': 'sha256$N34hfMMN$a6bec8f319443512b9c0cf5a400c66933ab563a5d2ff5d34fd87dbc19f27d3f7',
         'biography': None,
         'flag_count': 0,
+        'twitter': 'https://twitter.com/DoornSander',
+        'linkedin': 'https://www.linkedin.com/in/sander-van-doorn-64b48b112/',
+        'google': None
     },
     {
         'public_id': 'b9229d9b-cb28-4e12-baea-ead89ef0a494',
@@ -277,6 +280,9 @@ users = [
                      'Mi Ma Melle\n' +
                      'Mima Mima Mell',
         'flag_count': 20,  # bad boy ;)
+        'twitter': None,
+        'linkedin': None,
+        'google': None
     },
 ]
 

@@ -81,7 +81,7 @@ class UserSchema(ma.ModelSchema):
     class Meta:
         model = User
         load_only = ['password_hash']
-        dump_only = ['id', 'admin', 'date_created', 'verified', 'public_id', 'projects', 'flag_count']
+        dump_only = ['id', 'admin', 'date_created', 'verified', 'projects', 'flag_count']
         ordered = True
 
 

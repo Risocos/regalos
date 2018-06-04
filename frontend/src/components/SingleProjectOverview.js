@@ -14,6 +14,13 @@ import {
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
 import {SERVER_URL} from "../constants";
+import {
+    FacebookShareButton,
+    GooglePlusShareButton,
+    LinkedinShareButton,
+    TwitterShareButton,
+    WhatsappShareButton
+} from "react-share";
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
@@ -35,12 +42,13 @@ export class SingleProjectOverview extends Component {
     componentDidMount() {
         axios.get(SERVER_URL + this.props.location.pathname)
             .then((response) => {
-                console.log(response);
-                this.handleResponse(response); }
-            ).catch(err => {
-                if(err.response.status===404) {
-                   this.props.history.push('/404')
+                    console.log(response);
+                    this.handleResponse(response);
                 }
+            ).catch(err => {
+            if (err.response.status === 404) {
+                this.props.history.push('/404')
+            }
         })
     }
 
@@ -80,6 +88,10 @@ export class SingleProjectOverview extends Component {
 
         const {active} = this.state;
         const {value} = this.state;
+
+        const shareTitle = "Please help me by donating to my project: " + this.state.title;
+        const shareUrl = window.location.href;
+
         //TODO: funtionality of filters
         //TODO: Posts, phoyoalbum, see what we can do
 
@@ -116,14 +128,14 @@ export class SingleProjectOverview extends Component {
                                         onChange={this.handleChange}
                                     />
                                 </Form.Field>
-                                    <Form.Field>
-                                        <Radio
-                                            label='I want to join this project'
-                                            value='3'
-                                            checked={value === '3'}
-                                            onChange={this.handleChange}
-                                        />
-                                    </Form.Field>
+                                <Form.Field>
+                                    <Radio
+                                        label='I want to join this project'
+                                        value='3'
+                                        checked={value === '3'}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Field>
                             </Form.Group>
                             <Form.Field control={TextArea} label='Additional Information'
                                         placeholder='Anything else you want to share?'/>
@@ -140,11 +152,33 @@ export class SingleProjectOverview extends Component {
                         <Grid.Column>
                             <Header> <Button size='massive' color='green' onClick={this.handleOpen}> Donate
                                 now! </Button> </Header>
-                            <Button circular color='facebook' icon='facebook'/>
-                            <Button circular color='twitter' icon='twitter'/>
-                            <Button circular color='linkedin' icon='linkedin'/>
-                            <Button circular color='google plus' icon='google plus'/>
-                            <Button circular color='instagram' icon='instagram'/>
+
+                            {/*Some buttons do not work in local environment due to API not excepting portnumbers in the URL*/}
+                            <FacebookShareButton
+                                url={shareUrl}
+                                quote={shareTitle}
+                            ><Button circular color='facebook' icon='facebook'/></FacebookShareButton>
+
+                            <TwitterShareButton
+                                url={shareUrl}
+                                title={shareTitle}
+                            ><Button circular color='twitter' icon='twitter'/></TwitterShareButton>
+
+                            <LinkedinShareButton
+                                url={shareUrl}
+                                title={shareTitle}
+                                description={shareUrl}
+                            ><Button circular color='linkedin' icon='linkedin'/></LinkedinShareButton>
+
+                            <GooglePlusShareButton
+                                url={shareUrl}
+                                title={shareTitle}
+                            ><Button circular color='google plus' icon='google plus'/></GooglePlusShareButton>
+
+                            <WhatsappShareButton
+                                url={shareUrl}
+                                title={shareTitle}
+                            ><Button circular color='green' icon='whatsapp'/></WhatsappShareButton>
 
                             <div className="reportProject">
                                 <Button negative><Icon name='flag'/>Report this project</Button>
