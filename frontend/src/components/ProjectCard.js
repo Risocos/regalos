@@ -33,7 +33,7 @@ export class ProjectCard extends Component {
     }
 
     returnProgress() {
-        let result = (this.state.achieved / this.state.target * 100).toFixed(2)
+        let result = (this.state.achieved / this.state.target * 100).toFixed(2);
         if (isNaN(result)) {
             return 0;
         }

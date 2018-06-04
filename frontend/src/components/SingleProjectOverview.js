@@ -13,7 +13,7 @@ import {
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
-import {SERVER_URL} from "../constants";
+import {SERVER_URL, COUNTRIES} from "../constants";
 import {
     FacebookShareButton,
     GooglePlusShareButton,
@@ -40,34 +40,46 @@ export class SingleProjectOverview extends Component {
     }
 
     componentDidMount() {
-        axios.get(SERVER_URL + this.props.location.pathname)
+        const API_PATH = SERVER_URL + this.props.location.pathname;
+        axios.get(API_PATH)
             .then((response) => {
-                    console.log(response);
                     this.handleResponse(response);
                 }
             ).catch(err => {
             if (err.response.status === 404) {
-                this.props.history.push('/404')
+               this.props.history.push('/404')
             }
         })
     }
 
+    findCountry(cc) {
+        let name = '';
+        COUNTRIES.map((countryObject) => {
+            if(countryObject.countryCode===cc) {
+                name = countryObject.name;
+            }
+            return null;
+        });
+        return name;
+    }
+
     handleResponse(response) {
-        let data = response.data;
+        let data = response.data.project;
+        let country = this.findCountry(data.country_id);
         this.setState({
             title: data.title,
-            target: data.target,
+            target: data.target_budget,
             donators: data.donators,
-            achieved: data.achieved,
-            description: data.description,
-            plan: data.plan,
+            achieved: data.current_budget,
+            description: data.short_description,
+            plan: data.project_plan,
             collaborators: data.collaborators,
-            country: data.country,
+            country: country,
         })
     }
 
     returnProgress() {
-        let result = (this.state.achieved / this.state.target * 100).toFixed(2)
+        let result = (this.state.achieved / this.state.target * 100).toFixed(2);
         if (isNaN(result)) {
             return 0;
         }
