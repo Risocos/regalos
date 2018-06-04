@@ -3,9 +3,11 @@ from flask import Blueprint, jsonify, request, abort
 from backend import db
 from backend.auth import token_required, admin_required
 from backend.models import User
-from backend.schemas import user_schema
+from backend.schemas import UserSchema
 
 users_api = Blueprint('UsersApi', __name__, url_prefix='/users')
+
+user_schema = UserSchema()
 
 
 ##############
@@ -35,6 +37,7 @@ def find_user_or_404(user_id):
 @admin_required
 def get_all_users(current_user: User):
     users = User.query.all()
+    user_schema = UserSchema(exclude=['projects'])
     return jsonify({
         'users': user_schema.dump(users, many=True).data
     })
@@ -142,7 +145,6 @@ def report_user(current_user: User, user_id):
 
 @users_api.route('/forgot-password', methods=['POST'])
 def forgot_password():
-
     data = request.json
 
     if not data or 'email' not in data:

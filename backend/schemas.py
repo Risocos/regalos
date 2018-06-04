@@ -59,6 +59,7 @@ class UserSchema(ma.ModelSchema):
     password = fields.String(required=True)
     username = fields.String(required=True, validate=not_empty)
     biography = fields.String(validate=not_empty, allow_none=True)
+    projects = fields.Nested(ProjectSchema, many=True)
 
     min_pass_length = 8
 
