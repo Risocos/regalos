@@ -302,7 +302,7 @@ projects = [
         # 'collaborators': [
         #     1, 2
         # ],
-        'cover': None,
+        'filename': 'dummy1.jpg',
         'country': 'ug',
     },
     {
@@ -320,7 +320,7 @@ projects = [
         # 'collaborators': [
         #     1, 2
         # ],
-        'cover': 'http://via.placeholder.com/350x150',
+        'filename': 'dummy2.jpg',
         'country': None,
     },
     {
@@ -338,7 +338,7 @@ projects = [
         # 'collaborators': [
         #     1, 2
         # ],
-        'cover': 'http://via.placeholder.com/350x150',
+        'filename': 'dummy3.jpg',
         'country': 'us',
     },
     {
@@ -356,7 +356,7 @@ projects = [
         # 'collaborators': [
         #     1, 2
         # ],
-        'cover': 'http://via.placeholder.com/350x150',
+        'filename': None,
         'country': 'nl',
     },
 ]

@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 
+from flask import url_for
 from marshmallow import fields, pre_load, ValidationError, validates
 from werkzeug.security import generate_password_hash
 
@@ -27,6 +28,11 @@ class ProjectSchema(ma.ModelSchema):
     longitude = fields.Decimal(8, as_string=True, validate=not_empty)
     user_id = fields.Integer(required=True, load_only=True)
     country_id = fields.String(allow_none=False)
+    cover = fields.Method(method_name='generate_url')
+
+    def generate_url(self, project):
+        if project.filename:
+            return url_for('serve_project_file', filename=project.filename, _external=True)
 
     @pre_load
     def fix_dates(self, data):
@@ -49,7 +55,7 @@ class ProjectSchema(ma.ModelSchema):
         model = Project
         ordered = True
         exclude = ['country']
-        dump_only = ['id', 'flag_count', 'verified', 'cover', 'donators', 'current_budget', 'owner']
+        dump_only = ['id', 'flag_count', 'verified', 'donators', 'current_budget', 'owner']
 
 
 class UserSchema(ma.ModelSchema):
@@ -60,6 +66,11 @@ class UserSchema(ma.ModelSchema):
     username = fields.String(required=True, validate=not_empty)
     biography = fields.String(validate=not_empty, allow_none=True)
     projects = fields.Nested(ProjectSchema, many=True)
+    avatar = fields.Method(method_name='generate_url')
+
+    def generate_url(self, user):
+        if user.filename:
+            return url_for('serve_user_file', filename=user.filename, _external=True)
 
     min_pass_length = 8
 

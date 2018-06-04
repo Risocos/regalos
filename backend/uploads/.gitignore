@@ -1,2 +1,7 @@
 *
+# keep the folders
+!projects
+!users
+# include dummy images
+!projects/dummy*.jpg
 !.gitignore

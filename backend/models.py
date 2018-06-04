@@ -10,7 +10,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(80), nullable=False)
     admin = db.Column(db.Boolean, default=False)
     biography = db.Column(db.String(100))
-    avatar = db.Column(db.String)  # will be a filepath
+    filename = db.Column(db.String)
     verified = db.Column(db.Boolean, default=False, nullable=False)
     flag_count = db.Column(db.SmallInteger, nullable=False, default=0)
 
@@ -40,7 +40,7 @@ class Project(db.Model):
     donators = db.Column(db.Integer, default=0, nullable=False)
     start_date = db.Column(db.TIMESTAMP, nullable=False)
     end_date = db.Column(db.TIMESTAMP, nullable=False)
-    cover = db.Column(db.String)
+    filename = db.Column(db.String)
     verified = db.Column(db.Boolean, nullable=False, default=False)
     # Google Maps
     latitude = db.Column(db.Float(10, 6))
