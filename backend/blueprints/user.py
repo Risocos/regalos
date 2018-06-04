@@ -141,14 +141,14 @@ def report_user(current_user: User, user_id):
 
 
 @users_api.route('/forgot-password', methods=['POST'])
-def report_user(current_user: User):
+def forgot_password():
 
     data = request.json
 
     if not data or 'email' not in data:
         return jsonify({'message': 'Missing email field in data'}), 400
 
-    user = User.query.filter_by(email=data['email'])
+    user = User.query.filter_by(email=data['email']).first()
 
     if user is None:
         return jsonify({'message': 'User not found'}), 404

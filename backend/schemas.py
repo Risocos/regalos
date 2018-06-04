@@ -16,18 +16,22 @@ def not_empty(value):
 
 
 class ProjectSchema(ma.ModelSchema):
-    # title = fields.String(required=True)
-    start_date = fields.Date()
-    end_date = fields.Date()
+    # FIELDS
+    title = fields.String(required=True, validate=not_empty)
+    short_description = fields.String(required=True, validate=not_empty)
+    project_plan = fields.String(required=True, validate=not_empty)
+    start_date = fields.Date(required=True)
+    end_date = fields.Date(required=True)
     # 'as_string' needed, otherwise serialization crashes because of Decimal conversion to JSON
     latitude = fields.Decimal(8, as_string=True, validate=not_empty)
     longitude = fields.Decimal(8, as_string=True, validate=not_empty)
-    user_id = fields.Integer(required=True)
 
     @pre_load
     def fix_dates(self, data):
-        data['start_date'] = str(datetime.fromtimestamp(int(data['start_date'])))
-        data['end_date'] = str(datetime.fromtimestamp(int(data['end_date'])))
+        if 'start_date' in data:
+            data['start_date'] = str(datetime.fromtimestamp(int(data['start_date'])))
+        if 'end_date' in data:
+            data['end_date'] = str(datetime.fromtimestamp(int(data['end_date'])))
         return data
 
     # TODO: validate incoming file with schema
@@ -37,7 +41,7 @@ class ProjectSchema(ma.ModelSchema):
     class Meta:
         model = Project
         ordered = True
-        dump_only = ['flag_count']
+        dump_only = ['id', 'flag_count', 'verified', 'cover', 'donators', 'current_budget', 'owner']
 
 
 class UserSchema(ma.ModelSchema):
@@ -69,7 +73,7 @@ class UserSchema(ma.ModelSchema):
     class Meta:
         model = User
         load_only = ['password_hash']
-        dump_only = ['admin', 'date_created', 'verified', 'public_id', 'projects', 'flag_count']
+        dump_only = ['id', 'admin', 'date_created', 'verified', 'public_id', 'projects', 'flag_count']
         ordered = True
 
 
