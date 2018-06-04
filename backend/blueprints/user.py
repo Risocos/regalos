@@ -138,3 +138,24 @@ def report_user(current_user: User, user_id):
     db.session.commit()
 
     return jsonify({'message': 'User reported!'})
+
+
+@users_api.route('/forgot-password', methods=['POST'])
+def report_user(current_user: User):
+
+    data = request.json
+
+    if not data or 'email' not in data:
+        return jsonify({'message': 'Missing email field in data'}), 400
+
+    user = User.query.filter_by(email=data['email'])
+
+    if user is None:
+        return jsonify({'message': 'User not found'}), 404
+
+    # TODO: generate token
+    # TODO: send email with the token
+    # TODO: make endpoint to check token and set new password
+    # mail.send(user.email)
+
+    return jsonify({'message': 'Email sent to user'})
