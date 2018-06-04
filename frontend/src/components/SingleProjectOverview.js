@@ -16,10 +16,10 @@ import axios from 'axios';
 import {SERVER_URL} from "../constants";
 import {
     FacebookShareButton,
-    FacebookShareCount, GooglePlusIcon,
-    GooglePlusShareButton, LinkedinIcon,
-    LinkedinShareButton, TwitterIcon,
-    TwitterShareButton, WhatsappIcon, WhatsappShareButton
+    GooglePlusShareButton,
+    LinkedinShareButton,
+    TwitterShareButton,
+    WhatsappShareButton
 } from "react-share";
 
 export class SingleProjectOverview extends Component {
