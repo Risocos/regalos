@@ -3,7 +3,7 @@ from functools import wraps
 from flask import current_app, request, jsonify
 from jose import jwt
 
-from backend.data import users
+from backend.models import User
 
 
 def token_required(f):
@@ -28,11 +28,7 @@ def token_required(f):
 
         try:
             data = jwt.decode(token, current_app.config['SECRET_KEY'])
-            current_user = None
-            for u in users:
-                if u['public_id'] == data['public_id']:
-                    current_user = u
-            # current_user = User.query.filter_by(public_id=data['public_id']).first()
+            current_user = User.query.filter_by(public_id=data['public_id']).first()
             if current_user is None:
                 raise jwt.JWTError()
         except jwt.JWTError:
@@ -53,8 +49,8 @@ def admin_required(f):
     """
 
     @wraps(f)
-    def decorated(current_user=None, *args, **kwargs):
-        if current_user is None or not current_user['admin']:
+    def decorated(current_user: User = None, *args, **kwargs):
+        if current_user is None or not current_user.admin:
             return jsonify({'message': 'You do not have the privileges to do this!'}), 403
         return f(current_user, *args, **kwargs)
 
