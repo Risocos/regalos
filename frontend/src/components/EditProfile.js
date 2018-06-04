@@ -29,6 +29,7 @@ export class EditProfile extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handlePasswordUpdate = this.handlePasswordUpdate.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -55,11 +56,34 @@ export class EditProfile extends Component {
     }
 
     updatePassword() {
-        //TODO: Add PUT request when API supports it
+        const TOKEN = "Bearer " + sessionStorage.getItem("token");
+        const API_PATH = SERVER_URL + "/users/" + sessionStorage.getItem("user");
+
+        axios.patch(API_PATH, {
+            password: this.state.new
+        }, {
+            headers: {
+                Authorization: TOKEN,
+            }
+        }).then(res=>{/*TODO: give feedback to user*/}).catch(err=>console.log(err))
     }
 
     handleSubmit() {
-        //TODO: Add PUT request when API supports it
+        const TOKEN = "Bearer " + sessionStorage.getItem("token");
+        const API_PATH = SERVER_URL + "/users/" + sessionStorage.getItem("user");
+
+        axios.patch(API_PATH, {
+            firstname: this.state.firstname,
+            lastname: this.state.lastname,
+            biography: this.state.bio,
+            twitter: this.state.twitter,
+            google: this.state.google,
+            linkedin: this.state.linkedin,
+        }, {
+            headers: {
+                Authorization: TOKEN,
+            }
+        }).then(res=>console.log(res)).catch(err=>console.log(err))
     }
 
     handlePasswordUpdate() {
