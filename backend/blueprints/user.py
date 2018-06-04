@@ -127,3 +127,14 @@ def delete_user(current_user: User, user_id):
     return jsonify({
         'message': 'The user has been deleted!'
     })
+
+
+@users_api.route('/report/<int:user_id>', methods=['PUT'])
+@token_required
+def report_user(current_user: User, user_id):
+    user = find_user_or_404(user_id)
+
+    user.flag_count += 1
+    db.session.commit()
+
+    return jsonify({'message': 'User reported!'})

@@ -1,7 +1,7 @@
 import os
 import uuid
 
-from flask import Blueprint, jsonify, request, current_app, url_for
+from flask import Blueprint, jsonify, request, current_app, url_for, abort
 from werkzeug.utils import secure_filename
 
 from backend import db
@@ -17,6 +17,17 @@ projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
 #   PROJECTS API
 #
 ####################
+
+def find_project_or_404(project_id):
+    project = Project.query.filter_by(id=project_id).first()
+
+    if project is None:
+        response = jsonify({'message': 'No project found!'})
+        response.status_code = 404
+        abort(response)
+
+    return project
+
 
 def allowed_file(filename):
     ALLOWED_EXTS = {'jpg', 'png', 'jpeg', 'gif'}
@@ -34,11 +45,7 @@ def get_all_projects():
 
 @projects_api.route('/<int:project_id>', methods=['GET'])
 def get_one_project(project_id):
-    project = Project.query.filter_by(id=project_id).first()
-
-    if not project:
-        return jsonify({'message': 'No project found!'}), 404
-
+    project = find_project_or_404(project_id)
     return jsonify({"project": project_schema.dump(project).data})
 
 
@@ -97,3 +104,14 @@ def delete_project(current_user: User, project_id):
     db.session.commit()
 
     return jsonify({'message': 'Project deleted!'})
+
+
+@projects_api.route('/report/<int:project_id>', methods=['PUT'])
+@token_required
+def report_project(current_user: User, project_id):
+    project = find_project_or_404(project_id)
+
+    project.flag_count += 1
+    db.session.commit()
+
+    return jsonify({'message': 'Project reported!'})

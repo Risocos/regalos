@@ -52,23 +52,26 @@ class Project(db.Model):
     def __repr__(self):
         return '<Project {title} - {owner}>'.format(title=self.title, owner=self.owner)
 
+
+# reports = db.Table('user_reports',
+#                    db.Column('reporter_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+#                    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+#                    db.Column('reason', db.String(100)),
+#                    db.Column('report_date', db.TIMESTAMP, server_default=db.func.now()),
+#                    )
+#
+
 # class Contributor(db.Model):
 #     user_id = db.Column(db.Integer, primary_key=True)
 #     project_id = db.Column(db.Integer, primary_key=True)
 #
-#
-# class ReportLog(db.Model):
-#     report_id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer)
-#     report_date = db.Column(db.TIMESTAMP)
-#     report_reason = db.Column(db.String(100))
-#
+
 # class Donator(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 #     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now())
 #
-#
+
 # class Donation(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     donator_id = db.Column(db.Integer, db.ForeignKey())
@@ -76,3 +79,4 @@ class Project(db.Model):
 #     # TODO: how do we track material for a project?
 #     # amount_material =
 #     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now())
+#
