@@ -57,8 +57,6 @@ def create_project(current_user: User):
     if not data:  # no data given
         return jsonify({'message': 'Missing data to create project'}), 400
 
-    data['user_id'] = current_user.id
-
     if 'cover' in request.files and request.files['cover'] != '':
         # a file is uploaded
         file = request.files['cover']
@@ -66,6 +64,8 @@ def create_project(current_user: User):
             filename = secure_filename('{0}.{1}'.format(uuid.uuid4().hex, file.filename.split('.', 1)[1]))
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             data['cover'] = url_for('serve_file', filename=filename, _external=True)
+
+    data['user_id'] = current_user.id
 
     # load and validate
     result = project_schema.load(data)

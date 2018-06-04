@@ -5,7 +5,7 @@ from marshmallow import fields, pre_load, ValidationError, validates
 from werkzeug.security import generate_password_hash
 
 from backend import ma
-from backend.models import User, Project
+from backend.models import User, Project, Country
 
 
 # These schemas are used to specify the output and input of models living in the API
@@ -25,6 +25,8 @@ class ProjectSchema(ma.ModelSchema):
     # 'as_string' needed, otherwise serialization crashes because of Decimal conversion to JSON
     latitude = fields.Decimal(8, as_string=True, validate=not_empty)
     longitude = fields.Decimal(8, as_string=True, validate=not_empty)
+    user_id = fields.Integer(required=True, load_only=True)
+    country_id = fields.String(allow_none=False)
 
     @pre_load
     def fix_dates(self, data):
@@ -34,6 +36,11 @@ class ProjectSchema(ma.ModelSchema):
             data['end_date'] = str(datetime.fromtimestamp(int(data['end_date'])))
         return data
 
+    @validates('country_id')
+    def check_country(self, country_id):
+        if not country_id or Country.query.filter_by(id=country_id).first() is None:
+            raise ValidationError('This country does not exist')
+
     # TODO: validate incoming file with schema
     def validate_file(self):
         pass
@@ -41,6 +48,7 @@ class ProjectSchema(ma.ModelSchema):
     class Meta:
         model = Project
         ordered = True
+        exclude = ['country']
         dump_only = ['id', 'flag_count', 'verified', 'cover', 'donators', 'current_budget', 'owner']
 
 

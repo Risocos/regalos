@@ -18,14 +18,17 @@ class User(db.Model):
         return '<User {email} {username}>'.format(email=self.email, username=self.username)
 
 
+class Country(db.Model):
+    id = db.Column(db.String(10), primary_key=True)
+    name = db.Column(db.String, nullable=False)
+
+
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
     short_description = db.Column(db.String(500), nullable=False)
     project_plan = db.Column(db.Text, nullable=False)
     # category = db.Column(db.String(50))
-    # progress can be calculated from the target and current budget
-    # progress = db.Column(db.SmallInteger, nullable=False)  # in percentage
     target_budget = db.Column(db.Integer, nullable=False)
     current_budget = db.Column(db.Integer, default=0, nullable=False)
     donators = db.Column(db.Integer, default=0, nullable=False)
@@ -36,12 +39,15 @@ class Project(db.Model):
     # Google Maps
     latitude = db.Column(db.Float(10, 6))
     longitude = db.Column(db.Float(10, 6))
+
     flag_count = db.Column(db.SmallInteger, nullable=False, default=0)
 
     # relations & foreign keys
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     owner = db.relationship('User',
                             backref=db.backref('projects', lazy=True))  # backref makes it possible to do user.projects
+    country_id = db.Column(db.String(10), db.ForeignKey('country.id'), nullable=True)
+    country = db.relationship('Country', backref=db.backref('projects', lazy=True))
 
     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now(), nullable=False)
 
@@ -52,14 +58,19 @@ class Project(db.Model):
     def __repr__(self):
         return '<Project {title} - {owner}>'.format(title=self.title, owner=self.owner)
 
-
-# reports = db.Table('user_reports',
+# user_reports = db.Table('user_reports',
 #                    db.Column('reporter_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
 #                    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
 #                    db.Column('reason', db.String(100)),
 #                    db.Column('report_date', db.TIMESTAMP, server_default=db.func.now()),
 #                    )
-#
+
+# project_reports = db.Table('project_reports',
+#                    db.Column('reporter_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+#                    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
+#                    db.Column('reason', db.String(100)),
+#                    db.Column('report_date', db.TIMESTAMP, server_default=db.func.now()),
+#                    )
 
 # class Contributor(db.Model):
 #     user_id = db.Column(db.Integer, primary_key=True)
