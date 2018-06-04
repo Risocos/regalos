@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {Container, Form, Image, Message, Dropdown} from "semantic-ui-react";
+import {Container, Form, Image, Message, Dropdown, Button} from "semantic-ui-react";
 import "../styling/CreateProject.css";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import {SERVER_URL} from "../constants";
+import {COUNTRIES, SERVER_URL} from "../constants";
 
 
 //Installed dependencies for this:
@@ -26,6 +26,7 @@ export class CreateProject extends Component {
             end: moment(),
             target: '',
             collabs: [],
+            country: '',
 
             //Utility variables
             formMessage: [],
@@ -108,7 +109,7 @@ export class CreateProject extends Component {
 
         const errorMessage = (
             <Message error>
-                <Message.Header>Oops! Something went wrong!</Message.Header>
+                <Message.Header style={{padding: "0px"}}>Oops! Something went wrong!</Message.Header>
                 <Message.List>
                     {messages.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
                 </Message.List>
@@ -138,6 +139,8 @@ export class CreateProject extends Component {
         reader.readAsDataURL(file);
     }
 
+    handleCountryChange = (e, d) => this.setState({country: d.value});
+
     handleSubmit() {
         //TODO: handle submit with server
         if (!this.validate()) {
@@ -155,6 +158,7 @@ export class CreateProject extends Component {
         data.append("date_begin", this.state.start);
         data.append("date_end", this.state.end);
         data.append("target", this.state.target);
+        data.append("country_id", this.state.country);
 
         axios.post(API_PATH, data, {
             headers: {
@@ -167,7 +171,7 @@ export class CreateProject extends Component {
             console.log(err);
         });
         let message = <Message success>
-            <Message.Header>Project created</Message.Header>
+            <Message.Header style={{padding: "0px"}}>Project created</Message.Header>
         </Message>;
 
         this.setState({
@@ -183,6 +187,17 @@ export class CreateProject extends Component {
             {key: 2, value: 'Romy', text: 'Romy'},
             {key: 3, value: 'Jan', text: 'Jan'},
             {key: 4, value: 'Sander', text: 'Sander'}];
+
+        let countries = [];
+        COUNTRIES.map(country => {
+            countries.push({
+                key: country.countryCode,
+                value: country.countryCode,
+                flag: country.countryCode,
+                text: country.name
+            });
+            return null;
+        });
 
         return (
             <Container>
@@ -208,14 +223,19 @@ export class CreateProject extends Component {
                                                                onChange={this.handleEndDateChange}/>
                             <Form.Input fluid label='Target budget' name='target' placeholder='$0'
                                         onChange={this.handleInputChange}/>
+                            <Dropdown placeholder='Select a country' fluid search selection
+                                      options={countries} onChange={this.handleCountryChange}/>
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
                             <Dropdown placeholder='Collaborator name' fluid multiple search selection
                                       options={collaboratorsAvailable} onChange={this.handleCollabInputChange}/>
                         </Form.Group>
                     </Form.Group>
-                    <Form.Button content="Create Project" positive/>
-                    <Form.Button content="Cancel"/>
+                    <Button.Group>
+                        <Button>Cancel</Button>
+                        <Button.Or/>
+                        <Button positive onClick={this.handleSubmit}>Create Project</Button>
+                    </Button.Group>
                 </Form>
             </Container>
         )
