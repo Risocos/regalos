@@ -1,5 +1,21 @@
 from backend import db
 
+# Many-to-Many tables
+
+user_reports = db.Table('user_report', db.metadata,
+                        db.Column('reporter_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+                        db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+                        # db.Column('reason', db.String(100)),
+                        db.Column('report_date', db.TIMESTAMP, server_default=db.func.now()),
+                        )
+
+project_reports = db.Table('project_report', db.metadata,
+                           db.Column('reporter_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+                           db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
+                           # db.Column('reason', db.String(100), nullable=False),
+                           db.Column('report_date', db.TIMESTAMP, server_default=db.func.now()),
+                           )
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -19,6 +35,21 @@ class User(db.Model):
     google = db.Column(db.String, nullable=True)
 
     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now(), nullable=False)
+
+    # foreign keys and relations
+    given_reports = db.relation('User', secondary=user_reports,
+                                # when giving reports, the reporter_id is this users id
+                                primaryjoin=(user_reports.c.reporter_id == id),
+                                secondaryjoin=(user_reports.c.user_id == id),
+                                )
+
+    received_reports = db.relation('User', secondary=user_reports,
+                                   # when receiving reports the user_id is this users id
+                                   primaryjoin=(user_reports.c.user_id == id),
+                                   secondaryjoin=(user_reports.c.reporter_id == id),
+                                   )
+
+    project_reportings = db.relationship('Project', secondary=project_reports, backref='reportings')
 
     def __repr__(self):
         return '<User {email} {username}>'.format(email=self.email, username=self.username)
@@ -63,20 +94,6 @@ class Project(db.Model):
 
     def __repr__(self):
         return '<Project {title} - {owner}>'.format(title=self.title, owner=self.owner)
-
-# user_reports = db.Table('user_reports',
-#                    db.Column('reporter_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-#                    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-#                    db.Column('reason', db.String(100)),
-#                    db.Column('report_date', db.TIMESTAMP, server_default=db.func.now()),
-#                    )
-
-# project_reports = db.Table('project_reports',
-#                    db.Column('reporter_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-#                    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
-#                    db.Column('reason', db.String(100)),
-#                    db.Column('report_date', db.TIMESTAMP, server_default=db.func.now()),
-#                    )
 
 # class Contributor(db.Model):
 #     user_id = db.Column(db.Integer, primary_key=True)
