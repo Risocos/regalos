@@ -49,6 +49,7 @@ export class Login extends Component {
             sessionStorage.setItem("user", res.data.user.id);
 
             if(res.data.user.admin) {
+                sessionStorage.setItem("admin", "perhaps");
                 this.setState({isAdmin: true})
             }
 
