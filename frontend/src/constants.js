@@ -1,6 +1,8 @@
 /*All frontend wide constants can be defined here and import where needed*/
 
-export const SERVER_URL = "http://127.0.0.1:5000";
+export const IP_ADDRESS = "http://127.0.0.1";
+export const BACKEND_URL = IP_ADDRESS + ":5000";
+export const FRONTEND_URL = IP_ADDRESS + ":3000";
 
 export const COUNTRIES = [
   { name: 'Afghanistan', countryCode: 'af' },

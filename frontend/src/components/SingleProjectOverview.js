@@ -9,11 +9,11 @@ import {
     Dimmer,
     Form,
     Input,
-    Radio, TextArea, Checkbox, Container, Icon, Tab, TabPane
+    Radio, TextArea, Checkbox, Container, Icon, Tab
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
-import {SERVER_URL, COUNTRIES} from "../constants";
+import {BACKEND_URL, COUNTRIES} from "../constants";
 import {
     FacebookShareButton,
     GooglePlusShareButton,
@@ -43,7 +43,7 @@ export class SingleProjectOverview extends Component {
     }
 
     componentDidMount() {
-        const API_PATH = SERVER_URL + this.props.location.pathname;
+        const API_PATH = BACKEND_URL + this.props.location.pathname;
         axios.get(API_PATH)
             .then((response) => {
                     this.handleResponse(response);
@@ -89,7 +89,7 @@ export class SingleProjectOverview extends Component {
 
     handleReport() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = SERVER_URL + "/projects/report/" + this.state.id;
+        const API_PATH = BACKEND_URL + "/projects/report/" + this.state.id;
         console.log(TOKEN);
         axios.put(API_PATH, {}, {
             headers: {

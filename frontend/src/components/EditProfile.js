@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Button, Container, Divider, Form, Header, Image, Message} from "semantic-ui-react";
 import '../styling/EditProfile.css';
 import axios from 'axios';
-import {SERVER_URL} from "../constants";
+import {BACKEND_URL} from "../constants";
 
 
 export class EditProfile extends Component {
@@ -34,7 +34,7 @@ export class EditProfile extends Component {
 
     componentDidMount() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = SERVER_URL + "/users/" + sessionStorage.getItem("user");
+        const API_PATH = BACKEND_URL + "/users/" + sessionStorage.getItem("user");
         axios.get(API_PATH, {
             headers: {
                 Authorization: TOKEN,
@@ -57,7 +57,7 @@ export class EditProfile extends Component {
 
     updatePassword() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = SERVER_URL + "/users/" + sessionStorage.getItem("user");
+        const API_PATH = BACKEND_URL + "/users/" + sessionStorage.getItem("user");
 
         axios.patch(API_PATH, {
             password: this.state.new
@@ -70,7 +70,7 @@ export class EditProfile extends Component {
 
     handleSubmit() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = SERVER_URL + "/users/" + sessionStorage.getItem("user");
+        const API_PATH = BACKEND_URL + "/users/" + sessionStorage.getItem("user");
 
         axios.patch(API_PATH, {
             firstname: this.state.firstname,

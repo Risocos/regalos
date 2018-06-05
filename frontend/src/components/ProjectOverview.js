@@ -3,7 +3,7 @@ import {Form, Grid, Header, Pagination} from "semantic-ui-react";
 import "../styling/ProjectOverview.css";
 import axios from "axios";
 import {ProjectCard} from "./ProjectCard";
-import {COUNTRIES, SERVER_URL} from "../constants";
+import {COUNTRIES, BACKEND_URL} from "../constants";
 
 
 export class ProjectOverview extends Component {
@@ -29,7 +29,7 @@ export class ProjectOverview extends Component {
 
     componentDidMount() {
         let projectList = this.state.projects;
-        const API_PATH = SERVER_URL + '/projects';
+        const API_PATH = BACKEND_URL + '/projects';
         axios.get(API_PATH)
             .then((response) => {
                 response.data.projects.map((projectObject) => (

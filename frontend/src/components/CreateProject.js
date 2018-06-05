@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import {COUNTRIES, SERVER_URL} from "../constants";
+import {COUNTRIES, BACKEND_URL} from "../constants";
 
 
 //Installed dependencies for this:
@@ -147,7 +147,7 @@ export class CreateProject extends Component {
             return
         }
 
-        const API_PATH = SERVER_URL + '/projects';
+        const API_PATH = BACKEND_URL + '/projects';
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
 
         let data = new FormData();
@@ -237,7 +237,7 @@ export class CreateProject extends Component {
                     <Button.Group>
                         <Button>Cancel</Button>
                         <Button.Or/>
-                        <Button positive onClick={this.handleSubmit}>Create Project</Button>
+                        <Button positive>Create Project</Button>
                     </Button.Group>
                 </Form>
             </Container>

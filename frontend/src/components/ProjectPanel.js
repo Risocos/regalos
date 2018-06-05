@@ -3,7 +3,7 @@ import {Button, Confirm, Grid, Header, Table} from "semantic-ui-react";
 import "../styling/ProjectPanel.css";
 import {Link} from "react-router-dom";
 import axios from "axios/index";
-import {SERVER_URL} from "../constants";
+import {BACKEND_URL} from "../constants";
 
 export class ProjectPanel extends Component {
     constructor(props) {
@@ -19,7 +19,7 @@ export class ProjectPanel extends Component {
 
     componentDidMount() {
         const TOKEN = sessionStorage.getItem("token");
-        const API_PATH = SERVER_URL + '/projects';
+        const API_PATH = BACKEND_URL + '/projects';
 
         axios.get(API_PATH, {
             headers: {
@@ -34,7 +34,7 @@ export class ProjectPanel extends Component {
 
     deleteProject(projectId) {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = SERVER_URL + "/projects/" + projectId;
+        const API_PATH = BACKEND_URL + "/projects/" + projectId;
         axios.delete(API_PATH, {
             headers: {
                 Authorization: TOKEN,

@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
-import {SERVER_URL} from "../constants";
+import {BACKEND_URL} from "../constants";
 
 export class Login extends Component {
     constructor(props) {
@@ -37,7 +37,7 @@ export class Login extends Component {
 
         const USERNAME = this.state.username;
         const PASSWORD = this.state.password;
-        const API_PATH = SERVER_URL + '/login';
+        const API_PATH = BACKEND_URL + '/login';
         axios.post(API_PATH, {}, {
             auth: {
                 username: USERNAME,
