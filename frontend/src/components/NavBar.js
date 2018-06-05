@@ -32,7 +32,7 @@ export class NavBar extends Component {
             params: {
                 q: this.state.value,
             }
-        }).then(res=> {
+        }).then(res => {
             let queryResultsProjects = [];
             let queryResultsUsers = [];
 
@@ -44,12 +44,13 @@ export class NavBar extends Component {
                 })
             });
             res.data.users.forEach(user => {
-               queryResultsUsers.push({
-                   key: user.id,
-                   title: user.username,
-                   category: "users",
-               })
+                queryResultsUsers.push({
+                    key: user.id,
+                    title: user.username,
+                    category: "users",
+                })
             });
+
 
             this.setState({
                 isLoading: false,
@@ -63,8 +64,8 @@ export class NavBar extends Component {
                         results: queryResultsUsers,
                     }
                 },
-                });
-        }).catch(err=> {
+            })
+        }).catch(err => {
             console.log(err)
         })
     };
@@ -75,7 +76,7 @@ export class NavBar extends Component {
     };
 
     leftMenu() {
-        if (sessionStorage.length!==0) {
+        if (sessionStorage.length !== 0) {
             return (
                 <Menu.Menu>
                     <Menu.Item as={Link}
@@ -109,6 +110,7 @@ export class NavBar extends Component {
             <Menu.Menu>
                 <Menu.Item name='search'>
                     <Search
+                        className="heightfix"
                         category
                         loading={this.state.isLoading}
                         onResultSelect={this.handleResultSelect}
@@ -123,7 +125,7 @@ export class NavBar extends Component {
     }
 
     rightMenu() {
-        if (sessionStorage.length!==0) {
+        if (sessionStorage.length !== 0) {
             return (
                 <Menu.Menu position='right'>
                     <Menu.Item onClick={this.props.toggleSidebar}><Icon name='sidebar'/></Menu.Item>
@@ -136,7 +138,7 @@ export class NavBar extends Component {
                     <Menu.Item as={Link}
                                to='/login'
                                name='login'
-                     />
+                    />
                     <Menu.Item as={Link}
                                to='/signup'
                                name='register'

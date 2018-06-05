@@ -53,6 +53,7 @@ export class ProjectOverview extends Component {
                          achieved={project.current_budget}
                          country={project.country_id}
                          cover={project.cover}
+                         className="card"
             />
         )
     }
