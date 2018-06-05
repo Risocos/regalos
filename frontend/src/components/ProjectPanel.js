@@ -60,7 +60,7 @@ export class ProjectPanel extends Component {
     closeConfirm = () => this.setState({confirm: {open: false}});
 
     projectRow(project) {
-        let isFlagged = (project.flagged) ? "Yes" : "No";
+        let isFlagged = (project.flag_count>20) ? "Yes" : "No";
 
         const PROJECT = '/projects/' + project.id;
         const startEndDate = project.startdate + ' to ' + project.enddate;

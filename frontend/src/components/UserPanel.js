@@ -66,7 +66,7 @@ export class UserPanel extends Component {
         if (user.admin) {
             isAdmin = "Yes";
         }
-        if (user.flagged) {
+        if (user.flag_count>20) {
             isFlagged = "Yes";
         }
         const PROFILE = '/users/' + user.id;

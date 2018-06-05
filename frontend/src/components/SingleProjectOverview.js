@@ -9,7 +9,7 @@ import {
     Dimmer,
     Form,
     Input,
-    Radio, TextArea, Checkbox, Container, Icon
+    Radio, TextArea, Checkbox, Container, Icon, Tab, TabPane
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
@@ -27,6 +27,7 @@ export class SingleProjectOverview extends Component {
         super(props);
 
         this.state = {
+            id: "",
             title: "",
             target: "",
             donators: 0,
@@ -37,6 +38,8 @@ export class SingleProjectOverview extends Component {
             country: "",
             progress: "Project progress and something with photo albums or blog posts",
         };
+
+        this.handleReport = this.handleReport.bind(this);
     }
 
     componentDidMount() {
@@ -47,7 +50,7 @@ export class SingleProjectOverview extends Component {
                 }
             ).catch(err => {
             if (err.response.status === 404) {
-               this.props.history.push('/404')
+                this.props.history.push('/404')
             }
         })
     }
@@ -55,7 +58,7 @@ export class SingleProjectOverview extends Component {
     findCountry(cc) {
         let name = '';
         COUNTRIES.map((countryObject) => {
-            if(countryObject.countryCode===cc) {
+            if (countryObject.countryCode === cc) {
                 name = countryObject.name;
             }
             return null;
@@ -63,10 +66,12 @@ export class SingleProjectOverview extends Component {
         return name;
     }
 
+    /*Event handlers*/
     handleResponse(response) {
         let data = response.data.project;
         let country = this.findCountry(data.country_id);
         this.setState({
+            id: data.id,
             title: data.title,
             target: data.target_budget,
             donators: data.donators,
@@ -78,6 +83,26 @@ export class SingleProjectOverview extends Component {
         })
     }
 
+    handleOpen = () => this.setState({active: true});
+    handleClose = () => this.setState({active: false});
+    handleChange = (e, {value}) => this.setState({value});
+
+    handleReport() {
+        const TOKEN = "Bearer " + sessionStorage.getItem("token");
+        const API_PATH = SERVER_URL + "/projects/report/" + this.state.id;
+        console.log(TOKEN);
+        axios.put(API_PATH, {}, {
+            headers: {
+                Authorization: TOKEN,
+            }
+        }).then(res => console.log(res)).catch(err => console.log(err))
+    }
+
+    validate = () => {
+        //TODO: Validate the donate form
+    };
+
+    /*All methods that return parts of the view*/
     returnProgress() {
         let result = (this.state.achieved / this.state.target * 100).toFixed(2);
         if (isNaN(result)) {
@@ -88,19 +113,55 @@ export class SingleProjectOverview extends Component {
         }
     }
 
-    handleOpen = () => this.setState({active: true});
-    handleClose = () => this.setState({active: false});
-    handleChange = (e, {value}) => this.setState({value});
+    returnDetailsTab() {
+        return (
+            <Tab.Pane>
+                <Header as='h3'> Country: {this.state.country}</Header>
+                <Header size='huge'>Project plan</Header>
+                <p>{this.state.plan}</p>
+            </Tab.Pane>
+        )
+    }
 
-    validate = () => {
-        //TODO: Validate the donate form
-    };
+    returnProgressTab() {
+        return (
+            <Tab.Pane>
+                <Header size='huge'>Project progress</Header>
+                <p>Project progress and something with photo album and being able to make posts.</p>
+            </Tab.Pane>
+        )
+    }
+
+    returnDonatorsTab() {
+        return(
+            <Tab.Pane>
+                <Header size='huge'>Donators</Header>
+                {/*Add donators content here*/}
+            </Tab.Pane>
+        )
+
+    }
+
+    returnCollaboratosTab() {
+        return (
+            <Tab.Pane>
+                <Header size='huge'>Collaborators</Header>
+                <p>{this.state.collaborators}</p>
+            </Tab.Pane>
+        )
+    }
 
     render() {
 
         const {active} = this.state;
         const {value} = this.state;
 
+        const panes = [
+            {menuItem: 'Details', render: () => this.returnDetailsTab()},
+            {menuItem: 'Progress', render: () => this.returnProgressTab()},
+            {menuItem: 'Donators', render: () => this.returnDonatorsTab()},
+            {menuItem: 'Collaborators', render: () => this.returnCollaboratosTab()}
+        ];
         const shareTitle = "Please help me by donating to my project: " + this.state.title;
         const shareUrl = window.location.href;
 
@@ -193,14 +254,14 @@ export class SingleProjectOverview extends Component {
                             ><Button circular color='green' icon='whatsapp'/></WhatsappShareButton>
 
                             <div className="reportProject">
-                                <Button negative><Icon name='flag'/>Report this project</Button>
+                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report this
+                                    project</Button>
                             </div>
                         </Grid.Column>
 
                         <Grid.Column textAlign="center" width={10}>
                             <Image src='http://via.placeholder.com/1000x300' centered={true}/>
                             <Header as='h1'>{this.state.title}</Header>
-                            <Header as='h3'> Country: {this.state.country}</Header>
                             <Header as='h3'>Target Budget: €{this.state.target}</Header>
                             <Statistic>
                                 <Statistic.Value>{this.state.donators}</Statistic.Value>
@@ -211,13 +272,16 @@ export class SingleProjectOverview extends Component {
                                       success>
                                 ${this.state.achieved}
                             </Progress>
-                            <p>{this.state.description}</p>
-                            <Header size='huge'>Project details</Header>
-                            <Header as='h3'>Collaborators: {this.state.collaborators}</Header>
-                            <p>{this.state.plan}</p>
-                            <Header size='huge'>Project progress</Header>
-                            <p>Project progress and smething with photoalbum and being able to make posts.</p>
 
+                            {/*WORKING ON TABS TO CLEAN UP PAGE*/}
+                            {/*<p>{this.state.description}</p>*/}
+                            {/*<Header size='huge'>Project details</Header>*/}
+                            {/*<Header as='h3'>Collaborators: {this.state.collaborators}</Header>*/}
+                            {/*<p>{this.state.plan}</p>*/}
+                            {/*<Header size='huge'>Project progress</Header>*/}
+                            {/*<p>Project progress and smething with photoalbum and being able to make posts.</p>*/}
+
+                            <Tab renderActiveOnly panes={panes}/>
 
                         </Grid.Column>
 
