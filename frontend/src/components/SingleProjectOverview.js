@@ -37,6 +37,13 @@ export class SingleProjectOverview extends Component {
             collaborators: "",
             country: "",
             progress: "Project progress and something with photo albums or blog posts",
+
+            //Donateform state
+            anonymous: false,
+            radio: '0',
+            terms: false,
+            amount: 0,
+            item: '',
         };
 
         this.handleReport = this.handleReport.bind(this);
@@ -85,7 +92,11 @@ export class SingleProjectOverview extends Component {
 
     handleOpen = () => this.setState({active: true});
     handleClose = () => this.setState({active: false});
-    handleChange = (e, {value}) => this.setState({value});
+    handleChange = (e, {value}) => this.setState({radio: value});
+    toggleAnonymous = () => this.setState({anonymous: !this.state.anonymous, radio: '1'});
+    handleAmount = (e, d) => this.setState({amount: d.value});
+    handleItem = (e, d) => this.setState({item: d.value});
+    handleTerms = () => this.setState({terms: !this.state.terms});
 
     handleReport() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
@@ -98,9 +109,9 @@ export class SingleProjectOverview extends Component {
         }).then(res => console.log(res)).catch(err => console.log(err))
     }
 
-    validate = () => {
-        //TODO: Validate the donate form
-    };
+    handleSubmit() {
+        //TODO: handle submit
+    }
 
     /*All methods that return parts of the view*/
     returnProgress() {
@@ -133,13 +144,12 @@ export class SingleProjectOverview extends Component {
     }
 
     returnDonatorsTab() {
-        return(
+        return (
             <Tab.Pane>
                 <Header size='huge'>Donators</Header>
                 {/*Add donators content here*/}
             </Tab.Pane>
         )
-
     }
 
     returnCollaboratosTab() {
@@ -165,12 +175,11 @@ export class SingleProjectOverview extends Component {
         const shareTitle = "Please help me by donating to my project: " + this.state.title;
         const shareUrl = window.location.href;
 
-        //TODO: funtionality of filters
-        //TODO: Posts, phoyoalbum, see what we can do
+        //TODO: functionality of filters
+        //TODO: Posts, photo album, see what we can do
 
-        //TODO: Add paymentsystem to donate form
+        //TODO: Add payment system to donate form
         return (
-
             <div className="container">
                 {/*Donation form*/}
                 <Dimmer
@@ -181,39 +190,73 @@ export class SingleProjectOverview extends Component {
                     <Container>
                         <Form inverted>
                             <Form.Group widths='equal'>
-                                <Form.Field control={Input} label='Email' placeholder='Email'/>
+                                <Form.Group className='leftcolumn' grouped>
+                                    <Form.Field control={Input}
+                                                label='Email'
+                                                placeholder='Email'
+                                                disabled={this.state.anonymous}/>
+                                    <Form.Field control={Input}
+                                                label='Firstname'
+                                                placeholder='Firstname'
+                                                disabled={this.state.anonymous}/>
+                                    <Form.Field control={Input}
+                                                label='Lastname'
+                                                placeholder='Lastname'
+                                                disabled={this.state.anonymous}/>
+                                    <Form.Field control={Checkbox}
+                                                label='I want to donate anonymous'
+                                                onChange={this.toggleAnonymous}/>
+                                </Form.Group>
+
+                                <Form.Group className='middlecolumn' grouped>
+                                    <label className='label'>How do you want to help us out?</label>
+                                    <Form.Field>
+                                        <Radio
+                                            label='I want to donate money'
+                                            value='1'
+                                            checked={this.state.radio === '1'}
+                                            onChange={this.handleChange}
+                                        />
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <Radio
+                                            label='I want to donate materials to the project'
+                                            value='2'
+                                            disabled={this.state.anonymous}
+                                            checked={this.state.radio === '2'}
+                                            onChange={this.handleChange}
+                                        />
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <Radio
+                                            label='I want to join this project'
+                                            value='3'
+                                            disabled={this.state.anonymous}
+                                            checked={this.state.radio === '3'}
+                                            onChange={this.handleChange}
+                                        />
+                                    </Form.Field>
+                                </Form.Group>
+                                <Form.Group className='rightcolumn' grouped>
+                                    <Form.Field control={Input}
+                                                label='How much would you like to donate?'
+                                                disabled={this.state.radio !== '1'}
+                                                placeholder='e.g. 50'
+                                                onChange={this.handleAmount}/>
+                                    <Form.Field control={TextArea}
+                                                label='What kind of materials would you like to donate?'
+                                                placeholder='e.g. Clothes'
+                                                disabled={value !== '2'}
+                                                onChange={this.handleItem}/>
+                                </Form.Group>
                             </Form.Group>
-                            <Form.Group inline>
-                                <label>How do you want to help us out?</label>
-                                <Form.Field>
-                                    <Radio
-                                        label='I want to donate money'
-                                        value='1'
-                                        checked={value === '1'}
-                                        onChange={this.handleChange}
-                                    />
-                                </Form.Field>
-                                <Form.Field>
-                                    <Radio
-                                        label='I want to donate materials to the project'
-                                        value='2'
-                                        checked={value === '2'}
-                                        onChange={this.handleChange}
-                                    />
-                                </Form.Field>
-                                <Form.Field>
-                                    <Radio
-                                        label='I want to join this project'
-                                        value='3'
-                                        checked={value === '3'}
-                                        onChange={this.handleChange}
-                                    />
-                                </Form.Field>
-                            </Form.Group>
-                            <Form.Field control={TextArea} label='Additional Information'
-                                        placeholder='Anything else you want to share?'/>
-                            <Form.Field control={Checkbox} label='I agree to the Terms and Conditions'/>
-                            <Form.Field control={Button}>Submit</Form.Field>
+                            <Form.Field control={Checkbox}
+                                        onChange={this.handleTerms}
+                                        label='I agree to the Terms and Conditions'/>
+                            <Button
+                                disabled={!this.state.terms}
+                                onClick={this.handleSubmit}
+                                positive><Icon name='paypal'/>Donate!</Button>
                         </Form>
                     </Container>
                 </Dimmer>
