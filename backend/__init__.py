@@ -17,8 +17,9 @@ app.url_map.strict_slashes = False
 from .blueprints.main import main_api
 from .blueprints.project import projects_api
 from .blueprints.user import users_api
+from .blueprints.paypal import paypal_api
 
-for api in [projects_api, users_api, main_api]:
+for api in [projects_api, users_api, main_api, paypal_api]:
     app.register_blueprint(api)
 
 from . import errors
