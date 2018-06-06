@@ -57,6 +57,17 @@ def create_payment():
                     'currency': 'EUR',
                 },
                 'description': "Regalos Project Donation.",
+                'item_list': {
+                    'items': [
+                        {
+                            'name': 'Project Donation',
+                            'description': 'Donation to <project_name>',
+                            'price': '%.2f' % amount,
+                            'currency': 'EUR',
+                            'quantity': '1',
+                        }
+                    ]
+                }
             }
         ]
     })
