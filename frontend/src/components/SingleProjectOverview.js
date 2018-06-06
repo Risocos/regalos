@@ -47,6 +47,7 @@ export class SingleProjectOverview extends Component {
         };
 
         this.handleReport = this.handleReport.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
@@ -71,6 +72,19 @@ export class SingleProjectOverview extends Component {
             return null;
         });
         return name;
+    }
+
+    isANumber(string) {
+        return !isNaN(parseFloat(string)) && isFinite(string);
+    }
+
+    validateForm() {
+        let isValid = true;
+        if (!this.isANumber(this.state.amount)) {
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     /*Event handlers*/
@@ -110,7 +124,21 @@ export class SingleProjectOverview extends Component {
     }
 
     handleSubmit() {
-        //TODO: handle submit
+        if(!this.validateForm())
+            return;
+
+        const TOKEN = sessionStorage.getItem("token");
+        const API_PATH = BACKEND_URL + '/paypal/create-payment';
+
+        axios.post(API_PATH, {
+            amount: this.state.amount,
+        }, {
+            headers: {
+                Authorization: TOKEN,
+            }
+        }).then(res=>{
+            window.location.href = res.data.approval_url;
+        }).catch(err=>console.log(err))
     }
 
     /*All methods that return parts of the view*/
@@ -166,12 +194,15 @@ export class SingleProjectOverview extends Component {
         const {active} = this.state;
         const {value} = this.state;
 
+        //Constants used for rendering the tabs at the bottom of the page
         const panes = [
             {menuItem: 'Details', render: () => this.returnDetailsTab()},
             {menuItem: 'Progress', render: () => this.returnProgressTab()},
             {menuItem: 'Donators', render: () => this.returnDonatorsTab()},
             {menuItem: 'Collaborators', render: () => this.returnCollaboratosTab()}
         ];
+
+        //Constants used for sharing the project
         const shareTitle = "Please help me by donating to my project: " + this.state.title;
         const shareUrl = window.location.href;
 
