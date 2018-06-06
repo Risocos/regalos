@@ -81,6 +81,7 @@ export class ProjectOverview extends Component {
         filter: {country: d.value}
     });
 
+
     render() {
         const PAGES_REQUIRED = this.state.projects.length / 12;
 

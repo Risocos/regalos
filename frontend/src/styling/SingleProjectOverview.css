@@ -12,3 +12,16 @@
     align-content: center;
     margin-top: 50px;
 }
+
+.googlemaps {
+    overflow:hidden;
+    height:500px;
+    width:100%;
+    margin-top: 50px;
+}
+
+.gmap_canvas {
+    background:none!important;
+    height:500px;
+    width:100%;
+}
