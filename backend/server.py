@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from flask import request, redirect, send_from_directory, jsonify
 from flask_cors import CORS
@@ -48,9 +49,14 @@ def login():
     return jsonify(error_msg), 401, {'WWW-Authenticate': 'Basic realm="Login required!"'}
 
 
-@app.route('/uploads/<path:filename>')
-def serve_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+@app.route('/uploads/projects/<path:filename>')
+def serve_project_file(filename):
+    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'projects'), filename)
+
+
+@app.route('/uploads/users/<path:filename>')
+def serve_user_file(filename):
+    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'users'), filename)
 
 
 if __name__ == '__main__':
