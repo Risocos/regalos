@@ -302,7 +302,7 @@ projects = [
         # 'collaborators': [
         #     1, 2
         # ],
-        'cover': None,
+        'filename': 'dummy1.jpg',
         'country': 'ug',
     },
     {
@@ -320,7 +320,7 @@ projects = [
         # 'collaborators': [
         #     1, 2
         # ],
-        'cover': 'http://via.placeholder.com/350x150',
+        'filename': 'dummy2.jpg',
         'country': None,
     },
     {
@@ -338,7 +338,7 @@ projects = [
         # 'collaborators': [
         #     1, 2
         # ],
-        'cover': 'http://via.placeholder.com/350x150',
+        'filename': 'dummy3.jpg',
         'country': 'us',
     },
     {
@@ -356,9 +356,30 @@ projects = [
         # 'collaborators': [
         #     1, 2
         # ],
-        'cover': 'http://via.placeholder.com/350x150',
+        'filename': None,
         'country': 'nl',
     },
+]
+
+user_reportings = [
+    {
+        'reporter_id': users[0]['public_id'],
+        'user_id': users[1]['public_id'],
+        # 'reason': 'This user is not trustworthy, he swears in chats...'
+    }
+]
+
+project_reportings = [
+    {
+        'reporter_id': users[0]['public_id'],
+        'project_title': projects[2]['title'],
+        # 'reason': 'This project is not real, it\'s fake and they are trying to rob money'
+    },
+    {
+        'reporter_id': users[1]['public_id'],
+        'project_title': projects[2]['title'],
+        # 'reason': 'I don\'t think this project is trustworthy'
+    }
 ]
 
 
@@ -390,6 +411,20 @@ def populate():
         p.owner = owner
         p.country = country
         db.session.add(p)
+
+    for reporting in user_reportings:
+        # the user who is reporting another user
+        reporter = User.query.filter_by(public_id=reporting['reporter_id']).first()  # type: User
+        # the user being reported
+        user = User.query.filter_by(public_id=reporting['user_id']).first()  # type: User
+        reporter.given_reports.append(user)
+
+    for reporting in project_reportings:
+        # the user who is reporting another user
+        reporter = User.query.filter_by(public_id=reporting['reporter_id']).first()  # type: User
+        # the project being reported
+        project = Project.query.filter_by(title=reporting['project_title']).first()  # type: Project
+        reporter.project_reportings.append(project)
 
     db.session.commit()
 

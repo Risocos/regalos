@@ -49,6 +49,12 @@ def get_one_project(project_id):
     return jsonify({"project": project_schema.dump(project).data})
 
 
+def save_file(file):
+    filename = secure_filename('{0}.{1}'.format(uuid.uuid4().hex, file.filename.split('.', 1)[1]))
+    file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], 'projects', filename))
+    return filename
+
+
 @projects_api.route('/', methods=['POST'])
 @token_required
 def create_project(current_user: User):
@@ -57,13 +63,11 @@ def create_project(current_user: User):
     if not data:  # no data given
         return jsonify({'message': 'Missing data to create project'}), 400
 
+    # check if file is uploaded
     if 'cover' in request.files and request.files['cover'] != '':
-        # a file is uploaded
         file = request.files['cover']
         if allowed_file(file.filename):
-            filename = secure_filename('{0}.{1}'.format(uuid.uuid4().hex, file.filename.split('.', 1)[1]))
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            data['cover'] = url_for('serve_file', filename=filename, _external=True)
+            data['filename'] = save_file(file)
 
     data['user_id'] = current_user.id
 
