@@ -105,8 +105,11 @@ class Donation(db.Model):
         SUCCESS = 2  # when payment is successful redirected to success
         CANCELLED = 3  # when payment is redirected to cancel url
 
+        def __str__(self):
+            return '{0}'.format(self.name)
+
     id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Integer, nullable=False)
+    amount = db.Column(db.Float, nullable=False)
 
     # foreign keys
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)

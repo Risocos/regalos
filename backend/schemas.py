@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from flask import url_for
-from marshmallow import fields, pre_load, ValidationError, validates
+from marshmallow import fields, pre_load, ValidationError, validates, post_load
 from werkzeug.security import generate_password_hash
 
 from backend import ma
@@ -97,16 +97,40 @@ class UserSchema(ma.ModelSchema):
         ordered = True
 
 
-class DonationSchema(ma.ModelSchema):
-    return_url = fields.Url(required=True)
-    cancel_url = fields.Url(required=True)
-    amount = fields.Decimal(places=2, required=True)
-    project_id = fields.Integer(required=True)
+def project_exists(project_id):
+    if Project.query.filter_by(id=project_id).first() is None:
+        raise ValidationError('No project found for given project identifier')
 
-    @validates('project_id')
-    def project_exists(self, project_id):
-        if Project.query.filter_by(id=project_id).first() is None:
-            raise ValidationError('No project found for given project identifier')
+
+def validate_amount(amount):
+    try:
+        amount = float(amount)
+        if not (amount > 0.01):
+            raise ValidationError('You need to donate more than 0.01')
+    except ValueError:
+        raise ValidationError('Invalid amount given')
+
+
+class PaymentSchema(ma.Schema):
+    # return_url = fields.Url(required=True)
+    # cancel_url = fields.Url(required=True)
+    amount = fields.Decimal(places=2, required=True, validate=validate_amount, as_string=True)
+    project_id = fields.Integer(required=True, validate=project_exists)
+    donator_id = fields.Integer(required=False)  # can be anonymous
+
+    @validates('donator_id')
+    def user_exists(self, user_id):
+        if user_id is not None:
+            if User.query.filter_by(id=user_id).first() is None:
+                raise ValidationError('This user does not exists')
+
+
+class DonationSchema(ma.ModelSchema):
+    amount = fields.Decimal(places=2, required=True, validate=validate_amount, as_string=True)
+    project_id = fields.Integer(required=True, validate=project_exists)
+    paypal_payment_id = fields.String(required=True)
+    status = fields.String()
+    donator_id = fields.Integer()
 
     class Meta:
         model = Donation
@@ -114,4 +138,5 @@ class DonationSchema(ma.ModelSchema):
 
 user_schema = UserSchema()
 project_schema = ProjectSchema()
+payment_schema = PaymentSchema()
 donation_schema = DonationSchema()
