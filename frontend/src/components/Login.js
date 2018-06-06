@@ -135,7 +135,7 @@ export class Login extends Component {
 
                                 <Form.Input
                                     fluid
-                                    label = "Username"
+                                    label = "E-mail address"
                                     name="username"
                                     icon='user'
                                     iconPosition='left'

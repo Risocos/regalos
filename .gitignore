@@ -24,6 +24,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+#local configuration
+frontend/src/APIkeys.js
+
 #
 # BACKEND
 #

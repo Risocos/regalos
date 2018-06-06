@@ -81,6 +81,7 @@ export class ProjectOverview extends Component {
         filter: {country: d.value}
     });
 
+
     render() {
         const PAGES_REQUIRED = this.state.projects.length / 12;
 
@@ -112,16 +113,20 @@ export class ProjectOverview extends Component {
                         <Grid.Column>
                             <Header as='h3'>Filters</Header>
                             {/* TODO: put filters in own Component */}
-                            <Form.Select options={this.state.filterOptions} placeholder='Filter'/>
-
-                            <Form.Dropdown placeholder='Select a country' fluid search selection
-                                           options={countries} onChange={this.handleCountryChange}/>
+                            <label>Pick a filter:</label><Form.Dropdown placeholder='Filter' fluid search selection
+                                                                        options={this.state.filterOptions}/>
+                            {/*<p> </p>*/}
+                            {/* TODO: Option to not choose a country */}
+                            <label>Pick a country:</label><Form.Dropdown placeholder='Select a country' fluid search
+                                                                         selection
+                                                                         options={countries}
+                                                                         onChange={this.handleCountryChange}/>
 
                             {/* TODO: should use a slider */}
-                            <Form.Input
-                                action={<Form.Dropdown button basic floating options={options} defaultValue='page'/>}
-                                placeholder='$...'
-                            />
+                            {/*<Form.Input*/}
+                            {/*action={<Form.Dropdown button basic floating options={options} defaultValue='page'/>}*/}
+                            {/*placeholder='$...'*/}
+                            {/*/>*/}
 
                         </Grid.Column>
 

@@ -226,7 +226,7 @@ export class CreateProject extends Component {
                                                                onChange={this.handleEndDateChange}/>
                             <Form.Input fluid label='Target budget' name='target' placeholder='$0'
                                         onChange={this.handleInputChange}/>
-                            <Dropdown placeholder='Select a country' fluid search selection
+                            <label>Country</label><Dropdown placeholder='Select a country' fluid search selection
                                       options={countries} onChange={this.handleCountryChange}/>
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
