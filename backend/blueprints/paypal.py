@@ -2,6 +2,8 @@ import paypalrestsdk
 from flask import Blueprint, jsonify, request, current_app as app
 from paypalrestsdk import Payment, ResourceNotFound
 
+from backend.schemas import donation_schema
+
 paypal_api = Blueprint('PayPalApi', __name__, url_prefix='/paypal')
 
 
@@ -19,19 +21,11 @@ def setup_paypal():
 def create_payment():
     data = request.json
 
-    required_fields = [
-        'amount',
-        'return_url',
-        'cancel_url',
-    ]
-
     if not data:
         return jsonify({'message': 'No data given'}), 400
 
-    # TODO: put these validation rules in a marshmallow schema
-    for field in required_fields:
-        if field not in data:
-            return jsonify({'message': "Field '{field}' is not given".format(field=field)}), 422
+    # load and validate
+    result = donation_schema.load(data)
 
     try:
         amount = float(data['amount'])
@@ -39,6 +33,16 @@ def create_payment():
             return jsonify({'message': "You need to donate more than 0.01"}), 422
     except ValueError:
         return jsonify({'message': "Invalid amount given"}), 422
+
+    if len(result.errors) > 0:
+        return jsonify({'errors': result.errors}), 422
+
+    new_donation = result.data
+
+    return jsonify({
+        'message': "Payment created!",
+        'project': donation_schema.dump(new_donation).data
+    })
 
     payment = Payment({
         'intent': 'sale',
@@ -90,6 +94,7 @@ def create_payment():
 
 @paypal_api.route('/success')
 def success():
+    # TODO: set donation to success
     if 'paymentId' in request.args:
         try:
             payment = Payment.find(request.args['paymentId'])  # type: Payment
@@ -99,6 +104,8 @@ def success():
             msg = 'Error finding payment details'
     else:
         msg = 'No paymentId received'
+
+    # TODO: redirect user to actual redirect url
     return jsonify({
         'message': 'Your payment is successful!',
         'status': msg,
@@ -108,6 +115,8 @@ def success():
 
 @paypal_api.route('/cancel')
 def cancel():
+    # TODO: set donation to cancelled
+    # TODO: redirect to cancel page
     return jsonify({
         'message': 'You cancelled your payment, whyyyyyyy? those people need it!',
         'args': request.args

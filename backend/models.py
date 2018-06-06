@@ -1,3 +1,5 @@
+import enum
+
 from backend import db
 
 # Many-to-Many tables
@@ -95,22 +97,30 @@ class Project(db.Model):
     def __repr__(self):
         return '<Project {title} - {owner}>'.format(title=self.title, owner=self.owner)
 
+
+class Donation(db.Model):
+    # status of the paypal payment
+    class Status(enum.Enum):
+        PENDING = 1  # when payment is created
+        SUCCESS = 2  # when payment is successful redirected to success
+        CANCELLED = 3  # when payment is redirected to cancel url
+
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Integer, nullable=False)
+
+    # foreign keys
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    project = db.relationship('Project')
+    donator_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # can be null for anonymous payments
+    donator = db.relationship('User')
+    paypal_payment_id = db.Column(db.String, nullable=False)
+    status = db.Column(db.Enum(Status), default=Status.PENDING)
+
+    # TODO: how do we track material for a project?
+    # amount_material =
+    date_created = db.Column(db.TIMESTAMP, server_default=db.func.now())
+
 # class Contributor(db.Model):
 #     user_id = db.Column(db.Integer, primary_key=True)
 #     project_id = db.Column(db.Integer, primary_key=True)
-#
-
-# class Donator(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-#     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now())
-#
-
-# class Donation(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     donator_id = db.Column(db.Integer, db.ForeignKey())
-#     payment = db.Column(db.Integer)
-#     # TODO: how do we track material for a project?
-#     # amount_material =
-#     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now())
 #

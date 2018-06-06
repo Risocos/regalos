@@ -6,7 +6,7 @@ from marshmallow import fields, pre_load, ValidationError, validates
 from werkzeug.security import generate_password_hash
 
 from backend import ma
-from backend.models import User, Project, Country
+from backend.models import User, Project, Country, Donation
 
 
 # These schemas are used to specify the output and input of models living in the API
@@ -97,5 +97,21 @@ class UserSchema(ma.ModelSchema):
         ordered = True
 
 
+class DonationSchema(ma.ModelSchema):
+    return_url = fields.Url(required=True)
+    cancel_url = fields.Url(required=True)
+    amount = fields.Decimal(places=2, required=True)
+    project_id = fields.Integer(required=True)
+
+    @validates('project_id')
+    def project_exists(self, project_id):
+        if Project.query.filter_by(id=project_id).first() is None:
+            raise ValidationError('No project found for given project identifier')
+
+    class Meta:
+        model = Donation
+
+
 user_schema = UserSchema()
 project_schema = ProjectSchema()
+donation_schema = DonationSchema()
