@@ -13,7 +13,7 @@ import {
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
-import {BACKEND_URL, COUNTRIES} from "../constants";
+import {BACKEND_URL, COUNTRIES, FRONTEND_URL} from "../constants";
 import {
     FacebookShareButton,
     GooglePlusShareButton,
@@ -129,9 +129,13 @@ export class SingleProjectOverview extends Component {
 
         const TOKEN = sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + '/paypal/create-payment';
+        const RETURN_URL = window.location.href;
+        const CANCEL_URL = FRONTEND_URL + '/projects';
 
         axios.post(API_PATH, {
             amount: this.state.amount,
+            return_url: RETURN_URL,
+            cancel_url: CANCEL_URL,
         }, {
             headers: {
                 Authorization: TOKEN,
