@@ -21,6 +21,7 @@ import {
     TwitterShareButton,
     WhatsappShareButton
 } from "react-share";
+import {MAPS_KEY} from "../APIkeys";
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
@@ -45,6 +46,7 @@ export class SingleProjectOverview extends Component {
             amount: 0,
             item: '',
         };
+
 
         this.handleReport = this.handleReport.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -85,6 +87,25 @@ export class SingleProjectOverview extends Component {
         }
 
         return isValid;
+    }
+
+    getMaps() {
+        let src = "";
+        if (this.state.country === "") {
+            return null;
+        }
+        else {
+            src = "https://www.google.com/maps/embed/v1/place?key="+ MAPS_KEY +"&q=" + this.state.country;
+            return (
+                <div className='googlemaps'>
+                    <div className="gmap_canvas">
+                        <iframe title="maps" width="100%" height="500" id="gmap_canvas"
+                                src={src}
+                                frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0"/>
+                    </div>
+                </div>
+            )
+        }
     }
 
     /*Event handlers*/
@@ -162,6 +183,7 @@ export class SingleProjectOverview extends Component {
                 <Header as='h3'> Country: {this.state.country}</Header>
                 <Header size='huge'>Project plan</Header>
                 <p>{this.state.plan}</p>
+                {this.getMaps()}
             </Tab.Pane>
         )
     }
