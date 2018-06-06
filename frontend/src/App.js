@@ -35,9 +35,22 @@ class App extends Component {
     }
 
     isAuthenticated() {
-        return (sessionStorage.getItem("token")===null)
+        return (sessionStorage.getItem("token") === null)
     }
 
+    renderAdminButtons() {
+        if (sessionStorage.getItem("admin") === 'perhaps') {
+            return (
+                <Menu.Item>
+                    <Menu.Menu>
+                        <Menu.Item as={Link} to='/users'><Icon name='users'/>User Management</Menu.Item>
+                        <Menu.Item as={Link} to='/projectpanel'><Icon name='calendar alternate outline'/>Project
+                            Management</Menu.Item>
+                    </Menu.Menu>
+                </Menu.Item>
+            )
+        }
+    }
 
     render() {
         const USER = '/users/' + sessionStorage.getItem("user");
@@ -59,6 +72,7 @@ class App extends Component {
                                 <Menu.Item as={Link} to='/settings'><Icon name='pencil'/>Edit settings</Menu.Item>
                             </Menu.Menu>
                         </Menu.Item>
+                        {this.renderAdminButtons()}
                         <Menu.Item as={Link} to='/login' onClick={this.handleLogout}>Logout</Menu.Item>
                     </Sidebar>
                     <Sidebar.Pusher>
@@ -78,7 +92,7 @@ class App extends Component {
                                     <Route exact path="/projects/create"
                                            render={() => (
                                                this.isAuthenticated() ? (<Redirect to='/login'/>) :
-                                                   (<CreateProject />)
+                                                   (<CreateProject/>)
                                            )}/>
                                     <Route exact path="/projects" component={ProjectOverview}/>
                                     <Route exact path="/projects/:projectId" component={SingleProjectOverview}/>

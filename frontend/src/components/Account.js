@@ -3,7 +3,7 @@ import {Button, Container, Grid, Header, Icon, Item} from "semantic-ui-react";
 import '../styling/Account.css';
 import axios from 'axios';
 import {ProjectCard} from "./ProjectCard";
-import {SERVER_URL} from "../constants";
+import {BACKEND_URL} from "../constants";
 
 export class Account extends Component {
 
@@ -23,11 +23,13 @@ export class Account extends Component {
                 projects: [],
             }
         };
+
+        this.handleReport = this.handleReport.bind(this);
     }
 
     componentDidMount() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = SERVER_URL + this.props.location.pathname;
+        const API_PATH = BACKEND_URL + this.props.location.pathname;
 
         axios.get(API_PATH, {
                 headers: {
@@ -38,6 +40,7 @@ export class Account extends Component {
             const data = res.data.user;
             this.setState({
                 user: {
+                    id: data.id,
                     email: data.email,
                     username: data.username,
                     image: 'http://via.placeholder.com/300x400',
@@ -49,6 +52,17 @@ export class Account extends Component {
                 }
             });
         })
+    }
+
+    handleReport() {
+        const TOKEN = "Bearer " + sessionStorage.getItem("token");
+        const API_PATH = BACKEND_URL + "/users/report/" + this.state.user.id;
+        console.log(TOKEN);
+        axios.put(API_PATH, {}, {
+            headers: {
+                Authorization: TOKEN,
+            }
+        }).then(res=>console.log(res)).catch(err=>console.log(err))
     }
 
     listProject(project) {
@@ -108,7 +122,7 @@ export class Account extends Component {
                                         {this.renderGoogle()}
                                         <div style={{float: 'right'}}>
                                             <div>
-                                                <Button negative><Icon name='flag'/>Report user</Button>
+                                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report user</Button>
                                             </div>
                                         </div>
                                     </Item.Extra>
