@@ -1,6 +1,7 @@
-from flask import Blueprint, jsonify, request, abort
+from flask import Blueprint, jsonify, request, abort, url_for
+from flask_mail import Message
 
-from backend import db
+from backend import db, mail
 from backend.auth import token_required, admin_required
 from backend.models import User
 from backend.schemas import UserSchema
@@ -66,15 +67,36 @@ def create_user():
 
     new_user = result.data
 
+    # TODO: generate token to verify
+    # verify_token = uuid.uuid4()
+
     # save user to storage
     db.session.add(new_user)
     db.session.commit()
     db.session.refresh(new_user)
 
+    # send verify mail to user
+    msg = Message('Verify your Account',
+                  sender='Regalos Team',
+                  recipients=[new_user.email])
+
+    verify_url = url_for('.verify', _external=True)  # , {'vertkn': verify_token})
+    msg.html = "Thank you for signing up. please verify here: <a href='{url}'>{url}</a>".format(
+        url=verify_url)
+
+    mail.send(msg)
+
     return jsonify({
         'message': 'New user created!',
         'user': user_schema.dump(new_user).data
     })
+
+
+@users_api.route('/verify')
+def verify():
+    # TODO: verify the user
+    # verify_token = request.args['vertkn']
+    return jsonify({'message': 'endpoint in construction'})
 
 
 @users_api.route('/<int:user_id>', methods=['PATCH'])
@@ -156,6 +178,7 @@ def forgot_password():
         return jsonify({'message': 'User not found'}), 404
 
     # TODO: generate token
+
     # TODO: send email with the token
     # TODO: make endpoint to check token and set new password
     # mail.send(user.email)

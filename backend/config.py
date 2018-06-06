@@ -16,11 +16,11 @@ class Config:
 
     PAYPAL = localconfig.PAYPAL
 
-    MAIL_SERVER = 'smtp.gmail.com',
-    MAIL_PORT = 25,
-    MAIL_USE_TLS = True,
-    MAIL_USE_SSL = True,
-    MAIL_USERNAME = 'regalos.crew@gmail.com',
-    MAIL_PASSWORD = localconfig.MAIL_PASSWORD,
-    MAIL_DEFAULT_SENDER = 'Regalos Inc.',
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = 'regalos.crew@gmail.com'
+    MAIL_PASSWORD = localconfig.MAIL_PASSWORD
+    MAIL_DEFAULT_SENDER = 'Regalos Inc.'
 
