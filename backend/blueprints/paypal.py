@@ -20,7 +20,9 @@ def create_payment():
     data = request.json
 
     required_fields = [
-        'amount'
+        'amount',
+        'return_url',
+        'cancel_url',
     ]
 
     if not data:
@@ -46,8 +48,8 @@ def create_payment():
         },
 
         'redirect_urls': {
-            'return_url': 'http://localhost:5000/paypal/success',
-            'cancel_url': 'http://localhost:5000/paypal/cancel',
+            'return_url': data['return_url'],
+            'cancel_url': data['cancel_url'],
         },
 
         'transactions': [
@@ -57,6 +59,17 @@ def create_payment():
                     'currency': 'EUR',
                 },
                 'description': "Regalos Project Donation.",
+                'item_list': {
+                    'items': [
+                        {
+                            'name': 'Project Donation',
+                            'description': 'Donation to <project_name>',
+                            'price': '%.2f' % amount,
+                            'currency': 'EUR',
+                            'quantity': '1',
+                        }
+                    ]
+                }
             }
         ]
     })
