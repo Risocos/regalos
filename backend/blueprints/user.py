@@ -1,3 +1,5 @@
+import uuid
+
 from flask import Blueprint, jsonify, request, abort, url_for
 from flask_mail import Message
 
@@ -157,30 +159,42 @@ def delete_user(current_user: User, user_id):
 @users_api.route('/report/<int:user_id>', methods=['PUT'])
 @token_required
 def report_user(current_user: User, user_id):
-    user = find_user_or_404(user_id)
-
-    user.flag_count += 1
+    # the user being reported
+    user = find_user_or_404(user_id)  # type: User
+    user.received_reports.append(user)
     db.session.commit()
 
     return jsonify({'message': 'User reported!'})
 
 
-@users_api.route('/forgot-password', methods=['POST'])
+@users_api.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
     data = request.json
 
-    if not data or 'email' not in data:
-        return jsonify({'message': 'Missing email field in data'}), 400
+    if 'tkn' in request.args:
+        # TODO: check the token and set new password
+        return jsonify({'tkn': request.args['tkn']})
+    else:
+        if not data or 'email' not in data:
+            return jsonify({'message': 'Missing email field in data'}), 400
 
-    user = User.query.filter_by(email=data['email']).first()
+        user = User.query.filter_by(email=data['email']).first()
 
-    if user is None:
-        return jsonify({'message': 'User not found'}), 404
+        if user is None:
+            return jsonify({'message': 'User not found'}), 404
 
-    # TODO: generate token
+        tkn = uuid.uuid4().hex
 
-    # TODO: send email with the token
-    # TODO: make endpoint to check token and set new password
-    # mail.send(user.email)
+        msg = Message('Forgot password',
+                      recipients=[user.email])
 
-    return jsonify({'message': 'Email sent to user'})
+        new_pass_url = url_for('.forgot_password', tkn=tkn, _external=True)
+
+        msg.html = 'A password change for your account has been requested. ' \
+                   'Click here to reset your password: <a href="{url}">{url}</a>'.format(url=new_pass_url)
+
+        mail.send(msg)
+
+        return jsonify({
+            'message': 'Email sent to user with further instructions'
+        })
