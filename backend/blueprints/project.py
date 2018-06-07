@@ -37,9 +37,11 @@ def allowed_file(filename):
 @projects_api.route('/', methods=['GET'])
 def get_all_projects():
     # retrieve the models
-    projects = Project.query.all()
+    q = Project.query
+    if 'country_id' in request.args:
+        q = q.filter(Project.country_id == request.args['country_id'])
     # parse them through a schema which converts is to a dict
-    result = project_schema.dump(projects, many=True)
+    result = project_schema.dump(q.all(), many=True)
     return jsonify({'projects': result.data})  # convert dict to json and return that to client
 
 
