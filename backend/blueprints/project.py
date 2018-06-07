@@ -40,6 +40,13 @@ def get_all_projects():
     q = Project.query
     if 'country_id' in request.args:
         q = q.filter(Project.country_id == request.args['country_id'])
+
+    attr = Project.start_date
+    if 'sort' in request.args:
+        # where to filter on
+        attr = getattr(Project, request.args['sort'], None) or attr
+
+    q = q.order_by(attr.desc())
     # parse them through a schema which converts is to a dict
     result = project_schema.dump(q.all(), many=True)
     return jsonify({'projects': result.data})  # convert dict to json and return that to client
