@@ -142,7 +142,6 @@ export class CreateProject extends Component {
     handleCountryChange = (e, d) => this.setState({country: d.value});
 
     handleSubmit() {
-        //TODO: handle submit with server
         if (!this.validate()) {
             return
         }

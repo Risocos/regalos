@@ -89,7 +89,7 @@ def create_project(current_user: User):
     })
 
 
-@projects_api.route('/<int:project_id>', methods=['PATCH'])
+@projects_api.route('/edit/<int:project_id>', methods=['PATCH'])
 @token_required
 def update_project(current_user: User, project_id: int):
     criteria = {'id': project_id}

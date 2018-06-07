@@ -101,8 +101,6 @@ export class ProjectOverview extends Component {
             {key: 'current_budget', text: 'Current budget', value: 'current_budget'},
         ];
 
-        //TODO: Fix amounts of projects shown etc
-
         //TODO: Fix project on google maps map
 
         return (

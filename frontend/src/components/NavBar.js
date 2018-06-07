@@ -128,7 +128,7 @@ export class NavBar extends Component {
         if (sessionStorage.length !== 0) {
             return (
                 <Menu.Menu position='right'>
-                    <Menu.Item onClick={this.props.toggleSidebar}><Icon name='sidebar'/></Menu.Item>
+                    <Menu.Item onClick={this.props.togglesidebar}><Icon name='sidebar'/></Menu.Item>
                 </Menu.Menu>
             )
         }
