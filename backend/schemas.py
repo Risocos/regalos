@@ -2,11 +2,11 @@ import uuid
 from datetime import datetime
 
 from flask import url_for
-from marshmallow import fields, pre_load, ValidationError, validates
+from marshmallow import fields, pre_load, ValidationError, validates, post_load
 from werkzeug.security import generate_password_hash
 
 from backend import ma
-from backend.models import User, Project, Country
+from backend.models import User, Project, Country, Donation
 
 
 # These schemas are used to specify the output and input of models living in the API
@@ -90,6 +90,11 @@ class UserSchema(ma.ModelSchema):
         if len(value) < self.min_pass_length:
             raise ValidationError('Password should not be less than {len} characters'.format(len=self.min_pass_length))
 
+    @validates('email')
+    def unique_email(self, email):
+        if User.query.filter_by(email=email).count() > 0:
+            raise ValidationError('User with this email already exists')
+
     class Meta:
         model = User
         load_only = ['password_hash']
@@ -97,5 +102,46 @@ class UserSchema(ma.ModelSchema):
         ordered = True
 
 
+def project_exists(project_id):
+    if Project.query.filter_by(id=project_id).first() is None:
+        raise ValidationError('No project found for given project identifier')
+
+
+def validate_amount(amount):
+    try:
+        amount = float(amount)
+        if not (amount > 0.01):
+            raise ValidationError('You need to donate more than 0.01')
+    except ValueError:
+        raise ValidationError('Invalid amount given')
+
+
+class PaymentSchema(ma.Schema):
+    # return_url = fields.Url(required=True)
+    # cancel_url = fields.Url(required=True)
+    amount = fields.Decimal(places=2, required=True, validate=validate_amount, as_string=True)
+    project_id = fields.Integer(required=True, validate=project_exists)
+    donator_id = fields.Integer(required=False)  # can be anonymous
+
+    @validates('donator_id')
+    def user_exists(self, user_id):
+        if user_id is not None:
+            if User.query.filter_by(id=user_id).first() is None:
+                raise ValidationError('This user does not exists')
+
+
+class DonationSchema(ma.ModelSchema):
+    amount = fields.Decimal(places=2, required=True, validate=validate_amount, as_string=True)
+    project_id = fields.Integer(required=True, validate=project_exists)
+    paypal_payment_id = fields.String(required=True)
+    status = fields.String()
+    donator_id = fields.Integer()
+
+    class Meta:
+        model = Donation
+
+
 user_schema = UserSchema()
 project_schema = ProjectSchema()
+payment_schema = PaymentSchema()
+donation_schema = DonationSchema()
