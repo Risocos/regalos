@@ -90,6 +90,11 @@ class UserSchema(ma.ModelSchema):
         if len(value) < self.min_pass_length:
             raise ValidationError('Password should not be less than {len} characters'.format(len=self.min_pass_length))
 
+    @validates('email')
+    def unique_email(self, email):
+        if User.query.filter_by(email=email).count() > 0:
+            raise ValidationError('User with this email already exists')
+
     class Meta:
         model = User
         load_only = ['password_hash']

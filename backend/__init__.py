@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_mail import Mail
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,6 +11,7 @@ app.config.from_object(Config())
 db = SQLAlchemy(app)
 # !!Should be after SQLAlchemy(app)!!
 ma = Marshmallow(app)
+mail = Mail(app)
 
 app.url_map.strict_slashes = False
 
