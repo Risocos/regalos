@@ -13,14 +13,12 @@ Flask-Mail==0.9.1
 flask-marshmallow==0.9.0
 Flask-MongoAlchemy==0.7.2
 Flask-RESTful==0.3.6
-Flask-SQLAlchemy==2.3.2
 future==0.16.0
 idna==2.6
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
 marshmallow==2.15.3
-marshmallow-sqlalchemy==0.14.0
 MongoAlchemy==0.19
 paypalrestsdk==1.13.1
 pyasn1==0.4.2
@@ -32,6 +30,5 @@ pytz==2018.4
 requests==2.18.4
 rsa==3.4.2
 six==1.11.0
-SQLAlchemy==1.2.8
 urllib3==1.22
 Werkzeug==0.14.1
