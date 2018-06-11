@@ -1,6 +1,9 @@
-from flask import Blueprint, jsonify, request, abort
+import uuid
 
-from backend import db
+from flask import Blueprint, jsonify, request, abort, url_for
+from flask_mail import Message
+
+from backend import db, mail
 from backend.auth import token_required, admin_required
 from backend.models import User
 from backend.schemas import UserSchema
@@ -66,15 +69,36 @@ def create_user():
 
     new_user = result.data
 
+    # TODO: generate token to verify
+    # verify_token = uuid.uuid4()
+
     # save user to storage
     db.session.add(new_user)
     db.session.commit()
     db.session.refresh(new_user)
 
+    # send verify mail to user
+    msg = Message('Verify your Account',
+                  sender='Regalos Team',
+                  recipients=[new_user.email])
+
+    verify_url = url_for('.verify', _external=True)  # , {'vertkn': verify_token})
+    msg.html = "Thank you for signing up. please verify here: <a href='{url}'>{url}</a>".format(
+        url=verify_url)
+
+    mail.send(msg)
+
     return jsonify({
         'message': 'New user created!',
         'user': user_schema.dump(new_user).data
     })
+
+
+@users_api.route('/verify')
+def verify():
+    # TODO: verify the user
+    # verify_token = request.args['vertkn']
+    return jsonify({'message': 'endpoint in construction'})
 
 
 @users_api.route('/<int:user_id>', methods=['PATCH'])
@@ -135,29 +159,42 @@ def delete_user(current_user: User, user_id):
 @users_api.route('/report/<int:user_id>', methods=['PUT'])
 @token_required
 def report_user(current_user: User, user_id):
-    user = find_user_or_404(user_id)
-
-    user.flag_count += 1
+    # the user being reported
+    user = find_user_or_404(user_id)  # type: User
+    user.received_reports.append(user)
     db.session.commit()
 
     return jsonify({'message': 'User reported!'})
 
 
-@users_api.route('/forgot-password', methods=['POST'])
+@users_api.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
     data = request.json
 
-    if not data or 'email' not in data:
-        return jsonify({'message': 'Missing email field in data'}), 400
+    if 'tkn' in request.args:
+        # TODO: check the token and set new password
+        return jsonify({'tkn': request.args['tkn']})
+    else:
+        if not data or 'email' not in data:
+            return jsonify({'message': 'Missing email field in data'}), 400
 
-    user = User.query.filter_by(email=data['email']).first()
+        user = User.query.filter_by(email=data['email']).first()
 
-    if user is None:
-        return jsonify({'message': 'User not found'}), 404
+        if user is None:
+            return jsonify({'message': 'User not found'}), 404
 
-    # TODO: generate token
-    # TODO: send email with the token
-    # TODO: make endpoint to check token and set new password
-    # mail.send(user.email)
+        tkn = uuid.uuid4().hex
 
-    return jsonify({'message': 'Email sent to user'})
+        msg = Message('Forgot password',
+                      recipients=[user.email])
+
+        new_pass_url = url_for('.forgot_password', tkn=tkn, _external=True)
+
+        msg.html = 'A password change for your account has been requested. ' \
+                   'Click here to reset your password: <a href="{url}">{url}</a>'.format(url=new_pass_url)
+
+        mail.send(msg)
+
+        return jsonify({
+            'message': 'Email sent to user with further instructions'
+        })
