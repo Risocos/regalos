@@ -33,11 +33,11 @@ def token_required(f):
 
         try:
             data = jwt.decode(token, current_app.config['SECRET_KEY'])
-            current_user = User.query.filter_by(public_id=data['public_id']).first()
+            current_user = User.query.filter(User.public_id == data['public_id']).first()
             if current_user is None:
                 raise jwt.JWTError()
-        except jwt.JWTError:
-            return jsonify({'message': 'Token is invalid!'}), 401
+        except jwt.JWTError as e:
+            return jsonify({'message': 'Token is invalid!', 'error': str(e)}), 401
 
         return f(current_user, *args, **kwargs)
 
@@ -78,7 +78,7 @@ def with_user(f):
         if token is not None:
             try:
                 data = jwt.decode(token, current_app.config['SECRET_KEY'])
-                current_user = User.query.filter_by(public_id=data['public_id']).first()
+                current_user = User.query.filter(User.public_id == data['public_id']).first()
             except jwt.JWTError:
                 pass
 

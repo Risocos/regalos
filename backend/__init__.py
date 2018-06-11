@@ -1,15 +1,15 @@
 from flask import Flask
 from flask_mail import Mail
 from flask_marshmallow import Marshmallow
-from flask_sqlalchemy import SQLAlchemy
+from flask_mongoalchemy import MongoAlchemy
 
 from backend.config import Config
 
 app = Flask(__name__)
 # load configuration for the Flask application
 app.config.from_object(Config())
-db = SQLAlchemy(app)
-# !!Should be after SQLAlchemy(app)!!
+db = MongoAlchemy(app)
+# !!Should be after MongoAlchemy(app)!!
 ma = Marshmallow(app)
 mail = Mail(app)
 

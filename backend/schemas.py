@@ -6,7 +6,7 @@ from marshmallow import fields, pre_load, ValidationError, validates, post_load
 from werkzeug.security import generate_password_hash
 
 from backend import ma
-from backend.models import User, Project, Country, Donation
+from backend.models import User, Project, Country
 
 
 # These schemas are used to specify the output and input of models living in the API
@@ -16,8 +16,9 @@ def not_empty(value):
         raise ValidationError('Should not be empty.')
 
 
-class ProjectSchema(ma.ModelSchema):
+class ProjectSchema(ma.Schema):
     # FIELDS
+    id = fields.String(required=False, dump_only=True, attribute='mongo_id')
     title = fields.String(required=True, validate=not_empty)
     short_description = fields.String(required=True, validate=not_empty)
     project_plan = fields.String(required=True, validate=not_empty)
@@ -52,17 +53,18 @@ class ProjectSchema(ma.ModelSchema):
         pass
 
     class Meta:
-        model = Project
         ordered = True
         exclude = ['country']
         dump_only = ['id', 'flag_count', 'verified', 'donators', 'current_budget', 'owner']
 
 
-class UserSchema(ma.ModelSchema):
+class UserSchema(ma.Schema):
     # FIELDS
+    id = fields.String(required=False, dump_only=True, attribute='mongo_id')
     public_id = fields.String(required=True)
     email = fields.Email(required=True)
-    password = fields.String(required=True)
+    admin = fields.Boolean()
+    password = fields.String(required=True, load_only=True)
     username = fields.String(required=True, validate=not_empty)
     biography = fields.String(validate=not_empty, allow_none=True)
     projects = fields.Nested(ProjectSchema, many=True)
@@ -75,13 +77,19 @@ class UserSchema(ma.ModelSchema):
     min_pass_length = 8
 
     @pre_load
-    def setup_user(self, data):
+    def pre_load(self, data):
         # TODO: find better way to check if its create or update of user
         if 'password_hash' in data:  # password_hash should not directly be set through API
             del data['password_hash']
         if 'password' in data:
             data['public_id'] = str(uuid.uuid4())
+
+    @post_load
+    def post_load(self, data):
+        # TODO: find better way to check if its create or update of user
+        if 'password' in data:
             data['password_hash'] = generate_password_hash(data['password'], method='sha256')
+            del data['password']
         return data
 
     @validates('password')
@@ -92,11 +100,10 @@ class UserSchema(ma.ModelSchema):
 
     @validates('email')
     def unique_email(self, email):
-        if User.query.filter_by(email=email).count() > 0:
+        if not self.partial and User.query.filter_by(email=email).count() > 0:
             raise ValidationError('User with this email already exists')
 
     class Meta:
-        model = User
         load_only = ['password_hash']
         dump_only = ['id', 'admin', 'date_created', 'verified', 'projects', 'flag_count']
         ordered = True
@@ -130,15 +137,12 @@ class PaymentSchema(ma.Schema):
                 raise ValidationError('This user does not exists')
 
 
-class DonationSchema(ma.ModelSchema):
+class DonationSchema(ma.Schema):
     amount = fields.Decimal(places=2, required=True, validate=validate_amount, as_string=True)
     project_id = fields.Integer(required=True, validate=project_exists)
     paypal_payment_id = fields.String(required=True)
     status = fields.String()
     donator_id = fields.Integer()
-
-    class Meta:
-        model = Donation
 
 
 user_schema = UserSchema()
