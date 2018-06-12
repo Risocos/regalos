@@ -16,58 +16,22 @@ def not_empty(value):
         raise ValidationError('Should not be empty.')
 
 
-class ProjectSchema(ma.Schema):
-    # FIELDS
-    id = fields.String(required=False, dump_only=True, attribute='mongo_id')
-    title = fields.String(required=True, validate=not_empty)
-    short_description = fields.String(required=True, validate=not_empty)
-    project_plan = fields.String(required=True, validate=not_empty)
-    start_date = fields.Date(required=True)
-    end_date = fields.Date(required=True)
-    # 'as_string' needed, otherwise serialization crashes because of Decimal conversion to JSON
-    latitude = fields.Decimal(8, as_string=True, validate=not_empty)
-    longitude = fields.Decimal(8, as_string=True, validate=not_empty)
-    user_id = fields.Integer(required=True, load_only=True)
-    country_id = fields.String(allow_none=False)
-    cover = fields.Method(method_name='generate_url')
-
-    def generate_url(self, project):
-        if project.filename:
-            return url_for('serve_project_file', filename=project.filename, _external=True)
-
-    @pre_load
-    def fix_dates(self, data):
-        if 'start_date' in data:
-            data['start_date'] = str(datetime.fromtimestamp(int(data['start_date'])))
-        if 'end_date' in data:
-            data['end_date'] = str(datetime.fromtimestamp(int(data['end_date'])))
-        return data
-
-    @validates('country_id')
-    def check_country(self, country_id):
-        if not country_id or Country.query.filter_by(id=country_id).first() is None:
-            raise ValidationError('This country does not exist')
-
-    # TODO: validate incoming file with schema
-    def validate_file(self):
-        pass
-
-    class Meta:
-        ordered = True
-        exclude = ['country']
-        dump_only = ['id', 'flag_count', 'verified', 'donators', 'current_budget', 'owner']
+class CountrySchema(ma.Schema):
+    id = fields.String()
+    name = fields.String()
+    country_code = fields.String()
 
 
 class UserSchema(ma.Schema):
     # FIELDS
-    id = fields.String(required=False, dump_only=True, attribute='mongo_id')
+    id = fields.String(required=False, dump_only=True)
     public_id = fields.String(required=True)
     email = fields.Email(required=True)
     admin = fields.Boolean()
     password = fields.String(required=True, load_only=True)
     username = fields.String(required=True, validate=not_empty)
     biography = fields.String(validate=not_empty, allow_none=True)
-    projects = fields.Nested(ProjectSchema, many=True)
+    projects = fields.Nested('ProjectSchema', many=True)
     avatar = fields.Method(method_name='generate_url')
 
     def generate_url(self, user):
@@ -107,6 +71,71 @@ class UserSchema(ma.Schema):
         load_only = ['password_hash']
         dump_only = ['id', 'admin', 'date_created', 'verified', 'projects', 'flag_count']
         ordered = True
+
+
+class ProjectSchema(ma.Schema):
+    # FIELDS
+    id = fields.String(required=False, dump_only=True)
+    title = fields.String(required=True, validate=not_empty)
+    short_description = fields.String(required=True, validate=not_empty)
+    project_plan = fields.String(required=True, validate=not_empty)
+    target_budget = fields.Integer(required=True)
+    owner = fields.Nested(UserSchema, required=True)
+    owner_id = fields.String()
+    collaborators = fields.List(fields.Nested(UserSchema))
+    collaborator_ids = fields.List(fields.String())
+    start_date = fields.Date(required=True)
+    end_date = fields.Date(required=True)
+    # 'as_string' needed, otherwise serialization crashes because of Decimal conversion to JSON
+    latitude = fields.Decimal(8, as_string=True, validate=not_empty)
+    longitude = fields.Decimal(8, as_string=True, validate=not_empty)
+    country = fields.Nested(CountrySchema)
+    country_id = fields.String(allow_none=False)
+    cover = fields.Method(method_name='generate_url')
+
+    def generate_url(self, project):
+        if project.filename:
+            return url_for('serve_project_file', filename=project.filename, _external=True)
+
+    @pre_load
+    def fix_dates(self, data):
+        if 'start_date' in data:
+            data['start_date'] = str(datetime.fromtimestamp(int(data['start_date'])))
+        if 'end_date' in data:
+            data['end_date'] = str(datetime.fromtimestamp(int(data['end_date'])))
+        return data
+
+    @post_load
+    def post_load(self, data):
+        if 'country_id' in data:
+            data['country'] = Country.objects(country_code=data['country_id']).first()
+            del data['country_id']
+        if 'owner_id' in data:
+            data['owner'] = User.objects(pk=data['owner_id']).first()
+            del data['owner_id']
+        if 'collaborator_ids' in data:
+            collabs = []
+            for collab_id in data['collaborator_ids']:
+                collabs.append(User.objects(pk=collab_id).first())
+            data['collaborators'] = collabs
+            del data['collaborator_ids']
+        if 'latitude' in data:
+            data['latitude'] = float(data['latitude'])
+        if 'longitude' in data:
+            data['longitude'] = float(data['longitude'])
+
+    @validates('country_id')
+    def check_country(self, country_code):
+        if not country_code or Country.objects(country_code=country_code).first() is None:
+            raise ValidationError('This country does not exist')
+
+    # TODO: validate incoming file with schema
+    def validate_file(self):
+        pass
+
+    class Meta:
+        ordered = True
+        dump_only = ['id', 'flag_count', 'verified', 'donators', 'current_budget', 'owner', 'country']
 
 
 def project_exists(project_id):
