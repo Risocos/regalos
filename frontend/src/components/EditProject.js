@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Container, Dropdown, Form, Message} from "semantic-ui-react";
+import {Button, Container, Dropdown, Form, Image, Message} from "semantic-ui-react";
 import '../styling/EditProfile.css';
 import axios from 'axios';
 import {BACKEND_URL, COUNTRIES} from "../constants";
@@ -16,6 +16,8 @@ export class EditProject extends Component {
             title: '',
             short_description: '',
             project_plan: '',
+            uploadedFile: '',
+            imagePreview: '',
             end_date: moment(),
             target_budget: '',
             country_id: '',
@@ -23,6 +25,8 @@ export class EditProject extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleEndDateChange = this.handleEndDateChange.bind(this);
+        this.handleImageChange = this.handleImageChange.bind(this);
     }
 
     componentDidMount() {
@@ -48,20 +52,38 @@ export class EditProject extends Component {
         })
     }
 
+    handleImageChange(e) {
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.setState({
+                uploadedFile: file,
+                imagePreview: reader.result,
+            });
+        };
+
+        reader.readAsDataURL(file);
+    }
+
     handleSubmit() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + this.props.location.pathname;
 
-        axios.patch(API_PATH, {
-            title: this.state.title,
-            short_description: this.state.description,
-            project_plan: this.state.plan,
-            end_date: this.state.end_date.unix().toString(),
-            target_budget: this.state.target,
-            country_id: this.state.country,
-        }, {
+        let data = new FormData();
+        data.append("title", this.state.title);
+        data.append("short_description", this.state.description);
+        data.append("project_plan", this.state.plan);
+        data.append("cover", this.state.uploadedFile);
+        data.append("end_date", this.state.end_date.unix().toString());
+        data.append("target_budget", this.state.target);
+        data.append("country_id", this.state.country);
+
+        axios.patch(API_PATH, data, {
             headers: {
                 Authorization: TOKEN,
+                'Content-Type': 'multipart/form-data'
             }
         }).then(res => console.log(res)).catch(err => console.log(err))
     }
@@ -113,6 +135,8 @@ export class EditProject extends Component {
                             <label>Country</label><Dropdown placeholder='Select a country'
                                                             fluid search selection
                                                             options={countries} onChange={this.handleCountryChange}/>
+                            <Image className='image' src={this.state.imagePreview} size='medium' rounded/>
+                            <input type='file' onChange={(e) => this.handleImageChange(e)}/>
                         </Form.Group>
                     </Form.Group>
                     <Button.Group>
