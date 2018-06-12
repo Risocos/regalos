@@ -15,7 +15,9 @@ import {ProjectPanel} from "./components/ProjectPanel";
 import {Icon, Menu, Segment, Sidebar} from "semantic-ui-react";
 import {ForbiddenAccess} from "./responsecodes/ForbiddenAccess";
 import {EditProfile} from "./components/EditProfile";
-import {PaymentCancel} from "./components/PaymentCancel"
+import {PaymentCancel} from "./components/PaymentCancel";
+import {MyProjects} from "./components/MyProjects";
+import {EditProject} from "./components/EditProject";
 
 class App extends Component {
     constructor() {
@@ -51,6 +53,15 @@ class App extends Component {
                 </Menu.Item>
             )
         }
+        else {
+            return (
+                <Menu.Item>
+                    <Menu.Menu>
+                        <Menu.Item as={Link} to='/myprojects'><Icon name='calendar outline'/>My projects</Menu.Item>
+                    </Menu.Menu>
+                </Menu.Item>
+            )
+        }
     }
 
     render() {
@@ -79,7 +90,7 @@ class App extends Component {
                     <Sidebar.Pusher>
 
                         <div>
-                            <NavBar toggleSidebar={this.toggleSidemenu}/>
+                            <NavBar togglesidebar={this.toggleSidemenu}/>
                             <Segment basic>
                                 <Switch>
                                     <Route exact path="/" component={ProjectOverview}/>
@@ -97,6 +108,8 @@ class App extends Component {
                                                    (<CreateProject/>)
                                            )}/>
                                     <Route exact path="/projects" component={ProjectOverview}/>
+                                    <Route exact path="/myprojects" component={MyProjects}/>
+                                    <Route exact path="/projects/edit/:projectId" component={EditProject}/>
                                     <Route exact path="/projects/:projectId" component={SingleProjectOverview}/>
 
                                     <Route path="/adminpanel" component={AdminPanel}/>
