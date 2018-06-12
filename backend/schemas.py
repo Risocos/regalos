@@ -6,7 +6,7 @@ from marshmallow import fields, pre_load, ValidationError, validates, post_load
 from werkzeug.security import generate_password_hash
 
 from backend import ma
-from backend.models import User, Project, Country, Donation
+from backend.models import User, Project, Country, Donation, Contributor
 
 
 # These schemas are used to specify the output and input of models living in the API
@@ -130,6 +130,14 @@ class PaymentSchema(ma.Schema):
                 raise ValidationError('This user does not exists')
 
 
+class ContributorSchema(ma.ModelSchema):
+    user_id = fields.Integer(required=True)
+    project_id = fields.Integer(required=True)
+
+    class Meta:
+        model = Contributor
+
+
 class DonationSchema(ma.ModelSchema):
     amount = fields.Decimal(places=2, required=True, validate=validate_amount, as_string=True)
     project_id = fields.Integer(required=True, validate=project_exists)
@@ -145,3 +153,4 @@ user_schema = UserSchema()
 project_schema = ProjectSchema()
 payment_schema = PaymentSchema()
 donation_schema = DonationSchema()
+contributor_schema = ContributorSchema()

@@ -123,7 +123,8 @@ class Donation(db.Model):
     # amount_material =
     date_created = db.Column(db.TIMESTAMP, server_default=db.func.now())
 
-# class Contributor(db.Model):
-#     user_id = db.Column(db.Integer, primary_key=True)
-#     project_id = db.Column(db.Integer, primary_key=True)
-#
+
+class Contributor(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.Integer, primary_key=True)
+

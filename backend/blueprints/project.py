@@ -6,8 +6,8 @@ from werkzeug.utils import secure_filename
 
 from backend import db
 from backend.auth import token_required
-from backend.models import Project, User, Donation
-from backend.schemas import project_schema, donation_schema
+from backend.models import Project, User, Donation, Contributor
+from backend.schemas import project_schema, donation_schema, contributor_schema
 
 projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
 
@@ -29,13 +29,38 @@ def find_project_or_404(project_id):
     return project
 
 
-def find_donators_with_project(project_id):
+def find_user_or_404(user_id):
+    """
+    Finds a user or aborts with a 404 not found
+    :param user_id:
+    :return:
+    """
+    user = User.query.filter_by(id=user_id).first()
+
+    if user is None:
+        response = jsonify({'message': 'No user found!'})
+        response.status_code = 404
+        abort(response)
+
+    return user
+
+
+def find_donators(project_id):
     donations = Donation.query.filter_by(project_id=project_id).all()
     if donations is None:
         response = jsonify({'message': 'No donators found!'})
         abort(response)
 
     return donations
+
+
+def find_contributors(project_id):
+    contributors = Contributor.query.filter_by(project_id=project_id).all()
+    if contributors is None:
+        response = jsonify({'message': 'No contributors found!'})
+        abort(response)
+
+    return contributors
 
 
 def allowed_file(filename):
@@ -64,15 +89,22 @@ def get_all_projects():
 @projects_api.route('/<int:project_id>', methods=['GET'])
 def get_one_project(project_id):
     project = find_project_or_404(project_id)
-    donations = find_donators_with_project(project_id)
+    donations = find_donators(project_id)
+    contributors = find_contributors(project_id)
 
     donations_as_objects = []
     for donation in donations:
         result = donation_schema.dump(donation).data
         donations_as_objects.append(result)
 
-    # result = donation_schema.dump(donations, many=True)
-    return jsonify({"project": project_schema.dump(project).data, "donators": donations_as_objects})
+    contributors_as_objects = []
+    for contributor in contributors:
+        result = contributor_schema.dump(contributor).data
+        contributors_as_objects.append(result)
+
+    return jsonify({"project": project_schema.dump(project).data,
+                    "donators": donations_as_objects,
+                    "contributors": contributors_as_objects})
 
 
 def save_file(file):

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from backend import db
-from backend.models import User, Project, Country, Donation
+from backend.models import User, Project, Country, Donation, Contributor
 
 countries = [
     {'name': 'Afghanistan', 'id': 'af'},
@@ -392,6 +392,25 @@ donations = [
     }
 ]
 
+contributors = [
+    {
+        'user_id': 1,
+        'project_id': 1
+    },
+    {
+        'user_id': 2,
+        'project_id': 1
+    },
+    {
+        'user_id': 1,
+        'project_id': 2
+    },
+    {
+        'user_id': 2,
+        'project_id': 2
+    },
+]
+
 user_reportings = [
     {
         'reporter_id': users[0]['public_id'],
@@ -447,6 +466,11 @@ def populate():
     print('populating donations')
     for donation in donations:
         db.session.add(Donation(**donation))
+
+    # populate collaborators
+    print('populating collaborators')
+    for contributor in contributors:
+        db.session.add(Contributor(**contributor))
 
     for reporting in user_reportings:
         # the user who is reporting another user
