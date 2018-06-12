@@ -6,8 +6,8 @@ from werkzeug.utils import secure_filename
 
 from backend import db
 from backend.auth import token_required
-from backend.models import Project, User
-from backend.schemas import project_schema
+from backend.models import Project, User, Donation
+from backend.schemas import project_schema, donation_schema
 
 projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
 
@@ -27,6 +27,15 @@ def find_project_or_404(project_id):
         abort(response)
 
     return project
+
+
+def find_donators_with_project(project_id):
+    donations = Donation.query.filter_by(project_id=project_id).all()
+    if donations is None:
+        response = jsonify({'message': 'No donators found!'})
+        abort(response)
+
+    return donations
 
 
 def allowed_file(filename):
@@ -55,7 +64,15 @@ def get_all_projects():
 @projects_api.route('/<int:project_id>', methods=['GET'])
 def get_one_project(project_id):
     project = find_project_or_404(project_id)
-    return jsonify({"project": project_schema.dump(project).data})
+    donations = find_donators_with_project(project_id)
+
+    donations_as_objects = []
+    for donation in donations:
+        result = donation_schema.dump(donation).data
+        donations_as_objects.append(result)
+
+    # result = donation_schema.dump(donations, many=True)
+    return jsonify({"project": project_schema.dump(project).data, "donators": donations_as_objects})
 
 
 def save_file(file):
