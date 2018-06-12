@@ -1,6 +1,8 @@
 from datetime import datetime
 
-from backend.models import User, Project, Country
+from mongoengine import connect
+
+from backend.models import User, Project, Country, Donation
 
 countries = [
     {'name': 'Afghanistan', 'country_code': 'af'},
@@ -255,6 +257,7 @@ users = [
         'email': 'sander@vandoorn.nl',
         'username': 'admin',
         'admin': True,
+        'verified': True,
         # password: OneTwoThree123
         'password_hash': 'sha256$N34hfMMN$a6bec8f319443512b9c0cf5a400c66933ab563a5d2ff5d34fd87dbc19f27d3f7',
         'twitter': 'https://twitter.com/DoornSander',
@@ -265,6 +268,7 @@ users = [
         'email': 'melle@dijkstra.nl',
         'username': 'melle',
         'admin': False,
+        'verified': False,
         # password: 123456
         'password_hash': 'sha256$xjKXjf0B$3efddd4395a0320e0ba6b6fddf14f793fe9dbe0170a7cdc657addda822dd65fd',
         'biography': 'Ich bin melle, das kleine Krokodil\n' +
@@ -275,6 +279,7 @@ users = [
                      'Mima Mima Mell\n' +
                      'Mi Ma Melle\n' +
                      'Mima Mima Mell',
+        'twitter': None,
     },
 ]
 
@@ -284,15 +289,16 @@ projects = [
         'short_description': 'We are going to build houses for people in Uganda',
         'project_plan': 'Our plan is to build cheap, but properly sized houses for people in Uganda.',
         'owner': users[0]['public_id'],
+        'collaborators': [
+            users[0]['public_id'],
+            users[1]['public_id'],
+        ],
         'target_budget': 10000,
         'current_budget': 4576,
         'start_date': datetime.fromtimestamp(1527764457),
         'end_date': datetime.fromtimestamp(1527766457),
         'latitude': 0.99190516,
         'longitude': -58.86762519,
-        # 'collaborators': [
-        #     1, 2
-        # ],
         'filename': 'dummy1.jpg',
         'country': 'ug',
     },
@@ -307,9 +313,9 @@ projects = [
         'latitude': 0.61806054,
         'longitude': 62.77961401,
         'project_plan': 'We plan to collect money from door to door and use this app as payment method',
-        # 'collaborators': [
-        #     1, 2
-        # ],
+        'collaborators': [
+            users[0]['public_id']
+        ],
         'filename': 'dummy2.jpg',
         'country': 'an',
     },
@@ -324,9 +330,7 @@ projects = [
         'latitude': 49.02797017,
         'longitude': -32.40686866,
         'project_plan': 'We want people to donate their clothing, so that we can send this to poor countries',
-        # 'collaborators': [
-        #     1, 2
-        # ],
+        'collaborators': [],
         'filename': 'dummy3.jpg',
         'country': 'us',
     },
@@ -341,11 +345,40 @@ projects = [
         'latitude': 31.80457949,
         'longitude': -10.32726764,
         'project_plan': 'Too bad we cannot afford our own hourly pay and Sander is addicted to coffee. Sad face.',
-        # 'collaborators': [
-        #     1, 2
-        # ],
-        'country': 'nl',
+        'collaborators': [],
+        'country': None,
     },
+]
+
+donations = [
+    {
+        'amount': 23,
+        'project': projects[0]['title'],
+        'donator': None,
+        'paypal_payment_id': 'PAY-FAKEPAYMENTID',
+        'status': str(Donation.Status.SUCCESS)
+    },
+    {
+        'amount': 120,
+        'project': projects[0]['title'],
+        'donator': users[1]['public_id'],
+        'paypal_payment_id': 'PAY-FAKEPAYMENTID',
+        'status': str(Donation.Status.SUCCESS)
+    },
+    {
+        'amount': 56,
+        'project': projects[1]['title'],
+        'donator': users[0]['public_id'],
+        'paypal_payment_id': 'PAY-FAKEPAYMENTID',
+        'status': str(Donation.Status.SUCCESS)
+    },
+    {
+        'amount': 34234,
+        'project': projects[1]['title'],
+        'donator': None,
+        'paypal_payment_id': 'PAY-FAKEPAYMENTID',
+        'status': str(Donation.Status.CANCELLED)
+    }
 ]
 
 user_reportings = [
@@ -384,14 +417,30 @@ def populate():
     # populate projects
     print('populating projects')
     for project in projects:
-        owner = User.query.filter(User.public_id == project['owner']).first()
-        country = Country.query.filter(Country.country_code == project['country']).first()
+        owner = User.objects(public_id=project['owner']).first()
+        country = Country.objects(country_code=project['country']).first()
+        collaborators = []
+        for collab in project['collaborators']:
+            collaborators.append(User.objects(public_id=collab).first())
         del project['owner']
         del project['country']
+        del project['collaborators']
         p = Project(**project)
         p.owner = owner
+        p.collaborators += collaborators
         p.country = country
         p.save()
+
+    print('populating donations')
+    for donation in donations:
+        project = Project.objects(title=donation['project']).first()
+        donator = User.objects(public_id=donation['donator']).first()
+        del donation['project']
+        del donation['donator']
+        d = Donation(**donation)
+        d.project = project
+        d.donator = donator
+        d.save()
 
     # for reporting in user_reportings:
     #     # the user who is reporting another user
@@ -407,8 +456,9 @@ def populate():
     #     project = Project.query.filter_by(title=reporting['project_title']).first()  # type: Project
     #     reporter.project_reportings.append(project)
 
-    # db.session.commit()
-
 
 if __name__ == '__main__':
+    if input('clear database first? (y/n): ') is 'y':
+        db = connect('regalos')
+        db.drop_database('regalos')
     populate()

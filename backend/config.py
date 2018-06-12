@@ -10,10 +10,12 @@ class Config:
     ENV = 'development'
     # SERVER_NAME = 'localhost'
     SECRET_KEY = '}Zz_n2=.B<yRp|KpK>,T:?KmS8a6?G0XES,kW0SIF=e}T)YEGh9k&&Xyni(~<5E'
+    UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
 
     # Database configuration
-    MONGOALCHEMY_DATABASE = 'regalos'
-    UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
+    MONGODB_SETTINGS = {
+        'db': 'regalos',
+    }
 
     # PayPal configuration
     PAYPAL = localconfig.PAYPAL

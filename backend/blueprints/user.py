@@ -2,6 +2,7 @@ import uuid
 
 from flask import Blueprint, jsonify, request, abort, url_for
 from flask_mail import Message
+from mongoengine import DoesNotExist
 
 from backend import mail
 from backend.auth import token_required, admin_required
@@ -25,7 +26,11 @@ def find_user_or_404(mongo_id):
     :param mongo_id:
     :return:
     """
-    user = User.query.get(mongo_id)
+    user = None
+    try:
+        user = User.objects.get(id=mongo_id)
+    except DoesNotExist:
+        pass
 
     if user is None:
         response = jsonify({'message': 'No user found!'})
@@ -39,10 +44,9 @@ def find_user_or_404(mongo_id):
 @token_required
 @admin_required
 def get_all_users(current_user: User):
-    users = User.query.all()
-    user_schema = UserSchema(exclude=['projects'])
+    users = User.objects()
     return jsonify({
-        'users': user_schema.dump(users, many=True).data
+        'users': UserSchema(exclude=['projects']).dump(users, many=True).data
     })
 
 
@@ -127,6 +131,17 @@ def update_user(current_user: User, user_id):
     })
 
 
+@users_api.route('/<string:user_id>', methods=['DELETE'])
+@token_required
+@admin_required
+def delete_user(current_user: User, user_id):
+    user = find_user_or_404(user_id)
+    user.delete()
+    return jsonify({
+        'message': 'The user has been deleted!'
+    })
+
+
 @users_api.route('/<string:user_id>', methods=['PUT'])
 @token_required
 @admin_required
@@ -139,19 +154,6 @@ def promote_user(current_user: User, user_id):
 
     return jsonify({
         'message': 'The user has been promoted!'
-    })
-
-
-@users_api.route('/<string:user_id>', methods=['DELETE'])
-@token_required
-@admin_required
-def delete_user(current_user: User, user_id):
-    user = find_user_or_404(user_id)
-
-    user.remove()
-
-    return jsonify({
-        'message': 'The user has been deleted!'
     })
 
 
@@ -178,7 +180,7 @@ def forgot_password():
         if not data or 'email' not in data:
             return jsonify({'message': 'Missing email field in data'}), 400
 
-        user = User.query.filter(User.email == data['email']).first()
+        user = User.objects(email=data['email']).first()
 
         if user is None:
             return jsonify({'message': 'User not found'}), 404

@@ -1,52 +1,47 @@
+import datetime
 import enum
 
 from backend import db
 
 
-class User(db.Document):
-    public_id = db.StringField(required=True)
-    email = db.StringField(required=True)
+class RegalosDocument(db.Document):
+    created_at = db.DateTimeField()
+    modified_at = db.DateTimeField(default=datetime.datetime.now)
+
+    meta = {'abstract': True}
+
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.datetime.now()
+        self.modified_at = datetime.datetime.now()
+        return super(RegalosDocument, self).save(*args, **kwargs)
+
+
+class User(RegalosDocument):
+    public_id = db.StringField()
+    email = db.StringField(required=True, unique=True)
     username = db.StringField(required=True)
     password = None
     password_hash = db.StringField(required=True)
-    admin = db.BoolField(default=False)
-    biography = db.StringField(required=False)
-    filename = db.StringField(required=False)
-    verified = db.BoolField(default=False, required=False)
+    admin = db.BooleanField(default=False)
+    biography = db.StringField()
+    filename = db.StringField()
+    verified = db.BooleanField(default=False)
 
-    twitter = db.StringField(required=False)
-    linkedin = db.StringField(required=False)
-    google = db.StringField(required=False)
-
-    date_created = db.CreatedField()
-    date_modified = db.ModifiedField()
-
-    # def save(self, safe):
-    #     print('user before save')
-    #     return super(User, self).save(safe)
+    twitter = db.URLField()
+    linkedin = db.URLField()
+    google = db.URLField()
 
     # foreign keys and relations
-    # given_reports = db.relation('User', secondary=user_reports,
-    #                             # when giving reports, the reporter_id is this users id
-    #                             primaryjoin=(user_reports.c.reporter_id == id),
-    #                             secondaryjoin=(user_reports.c.user_id == id),
-    #                             )
-    #
-    # received_reports = db.relation('User', secondary=user_reports,
-    #                                # when receiving reports the user_id is this users id
-    #                                primaryjoin=(user_reports.c.user_id == id),
-    #                                secondaryjoin=(user_reports.c.reporter_id == id),
-    #                                )
-
-    # project_reportings = db.relationship('Project', secondary=project_reports, backref='reportings')
+    received_reports = db.ListField(db.ReferenceField('User'))
 
 
-class Country(db.Document):
-    country_code = db.StringField(min_length=2, max_length=10)
+class Country(RegalosDocument):
+    country_code = db.StringField(required=True, unique=True, min_length=2, max_length=10)
     name = db.StringField(required=True)
 
 
-class Donation(db.Document):
+class Donation(RegalosDocument):
     # status of the paypal payment
     class Status(enum.Enum):
         PENDING = 1  # when payment is created
@@ -56,44 +51,35 @@ class Donation(db.Document):
         def __str__(self):
             return '{0}'.format(self.name)
 
-    amount = db.FloatField(required=True)
+    amount = db.FloatField(required=True, min_value=0)
 
     # relations
     # TODO: how to backreference with mongodb ??
-    # project = db.DocumentField(Project)
-    donator = db.DocumentField(User, required=False)
-    paypal_payment_id = db.StringField()
-    status = db.EnumField(db.StringField(), *(e.name for e in Status), default=Status.PENDING)
-
-    date_created = db.CreatedField()
-    date_modified = db.ModifiedField()
+    # try to backreference with project id
+    project = db.ReferenceField('Project', required=True)
+    donator = db.ReferenceField(User, required=False)  # is not required because of anonymous donations
+    paypal_payment_id = db.StringField(required=True)
+    status = db.StringField(default=Status.PENDING)
 
 
-class Project(db.Document):
+class Project(RegalosDocument):
     title = db.StringField(required=True)
     short_description = db.StringField(required=True)
     project_plan = db.StringField(required=True)
     # category = db.Column(db.String(50))
     target_budget = db.IntField(required=True)
     current_budget = db.IntField(default=0)
-    donations = db.DocumentField(Donation, required=False)
+
     start_date = db.DateTimeField(required=True)
     end_date = db.DateTimeField(required=True)
-    filename = db.StringField(required=False)
-    verified = db.BoolField(default=False)
+    filename = db.StringField()
+    verified = db.BooleanField(default=False)
     # Google Maps
-    latitude = db.FloatField(required=False)
-    longitude = db.FloatField(required=False)
+    latitude = db.FloatField()
+    longitude = db.FloatField()
 
     # relations & foreign keys
-    owner = db.DocumentField(User)
-    country = db.DocumentField(Country, required=False)
-
-    date_created = db.CreatedField()
-    date_modified = db.ModifiedField()
-
-
-# class Contributor(db.Model):
-#     user_id = db.Column(db.Integer, primary_key=True)
-#     project_id = db.Column(db.Integer, primary_key=True)
-#
+    collaborators = db.ListField(db.ReferenceField(User))
+    owner = db.ReferenceField(User, required=True)
+    country = db.ReferenceField(Country)
+    reportings = db.ListField(db.ReferenceField(User))
