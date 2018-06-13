@@ -40,7 +40,7 @@ def find_user_or_404(user_id):
 
 def save_file(file):
     filename = secure_filename('{0}.{1}'.format(uuid.uuid4().hex, file.filename.split('.', 1)[1]))
-    file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], 'projects', filename))
+    file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], 'users', filename))
     return filename
 
 
@@ -71,10 +71,10 @@ def get_user_profile(user_id: int):
 
 @users_api.route('/register', methods=['POST'])
 def create_user():
-    data = request.json
+    data = request.form.to_dict()
 
     if not data:
-        return jsonify({'message': 'Missing data to create project'}), 400
+        return jsonify({'message': 'Missing data to create user'}), 400
 
     # check if file is uploaded
     if 'profilepicture' in request.files and request.files['profilepicture'] != '':
@@ -126,10 +126,15 @@ def verify():
 def update_user(current_user: User, user_id):
     user = find_user_or_404(user_id)
 
-    data = request.json
+    data = request.form.to_dict()
 
     if not data:
-        return jsonify({'message': 'Missing data to create project'}), 400
+        return jsonify({'message': 'Missing data to change user'}), 400
+
+    if 'profilepicture' in request.files and request.files['profilepicture'] != '':
+        file = request.files['profilepicture']
+        if allowed_file(file.filename):
+            data['filename'] = save_file(file)
 
     # pass in the user which is being edited and set partial=True so required fields are ignored
     result = user_schema.load(data, instance=user, partial=True)

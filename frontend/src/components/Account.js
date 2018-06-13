@@ -15,7 +15,7 @@ export class Account extends Component {
                 id: '',
                 email: '',
                 username: '',
-                image: '',
+                image: 'http://via.placeholder.com/300x400',
                 bio: '',
                 twitter: '',
                 google: '',
@@ -38,12 +38,14 @@ export class Account extends Component {
             }
         ).then(res => {
             const data = res.data.user;
+            console.log(data);
+
             this.setState({
                 user: {
                     id: data.id,
                     email: data.email,
                     username: data.username,
-                    image: 'http://via.placeholder.com/300x400',
+                    image: data.avatar,
                     bio: data.biography,
                     twitter: data.twitter,
                     google: data.google,
@@ -104,7 +106,7 @@ export class Account extends Component {
                     <Container text>
                         <Item.Group>
                             <Item>
-                                <Item.Image size='small'
+                                <Item.Image circular size='small'
                                             src={this.state.user.image}/>
                                 <Item.Content>
                                     <Item.Header as='h2'
