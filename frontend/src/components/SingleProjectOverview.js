@@ -22,6 +22,7 @@ import {
     WhatsappShareButton
 } from "react-share";
 import {MAPS_KEY} from "../APIkeys";
+import {UserCard} from "./UserCard";
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
@@ -31,11 +32,12 @@ export class SingleProjectOverview extends Component {
             id: "",
             title: "",
             target: "",
-            donators: 0,
+            donators_count: 0,
             achieved: 0,
             description: "",
             plan: "",
-            collaborators: "",
+            collaborators: [],
+            donators: [],
             country: "",
             progress: "Project progress and something with photo albums or blog posts",
             cover: "",
@@ -57,7 +59,33 @@ export class SingleProjectOverview extends Component {
         const API_PATH = BACKEND_URL + this.props.location.pathname;
         axios.get(API_PATH)
             .then((response) => {
-                    this.handleResponse(response);
+                    const projectdata = response.data.project;
+                    let collaborators = [];
+                    let donators = [];
+                    let country = this.findCountry(projectdata.country_id);
+
+                    response.data.donators.forEach(donator => {
+                        if(!donators.includes(donator.donator_id))
+                            donators.push(donator.donator_id)
+                    });
+
+                    response.data.contributors.forEach(contributor => {
+                        if(!collaborators.includes(contributor.user_id))
+                            collaborators.push(contributor.user_id)
+                    });
+
+                    this.setState({
+                        id: projectdata.id,
+                        title: projectdata.title,
+                        target: projectdata.target_budget,
+                        donators_count: projectdata.donators,
+                        achieved: projectdata.current_budget,
+                        description: projectdata.short_description,
+                        plan: projectdata.project_plan,
+                        collaborators: this.createUserCard(collaborators),
+                        donators: this.createUserCard(donators),
+                        country: country,
+                    });
                 }
             ).catch(err => {
             if (err.response.status === 404) {
@@ -96,7 +124,7 @@ export class SingleProjectOverview extends Component {
             return null;
         }
         else {
-            src = "https://www.google.com/maps/embed/v1/place?key="+ MAPS_KEY +"&q=" + this.state.country;
+            src = "https://www.google.com/maps/embed/v1/place?key=" + MAPS_KEY + "&q=" + this.state.country;
             return (
                 <div className='googlemaps'>
                     <div className="gmap_canvas">
@@ -107,24 +135,6 @@ export class SingleProjectOverview extends Component {
                 </div>
             )
         }
-    }
-
-    /*Event handlers*/
-    handleResponse(response) {
-        let data = response.data.project;
-        let country = this.findCountry(data.country_id);
-        this.setState({
-            id: data.id,
-            title: data.title,
-            target: data.target_budget,
-            donators: data.donators,
-            achieved: data.current_budget,
-            description: data.short_description,
-            plan: data.project_plan,
-            collaborators: data.collaborators,
-            country: country,
-            cover: data.cover,
-        })
     }
 
     handleOpen = () => this.setState({active: true});
@@ -143,11 +153,11 @@ export class SingleProjectOverview extends Component {
             headers: {
                 Authorization: TOKEN,
             }
-        }).then(res => console.log(res)).catch(err => console.log(err))
+        })
     }
 
     handleSubmit() {
-        if(!this.validateForm())
+        if (!this.validateForm())
             return;
 
         const TOKEN = 'Bearer ' + sessionStorage.getItem("token");
@@ -164,9 +174,9 @@ export class SingleProjectOverview extends Component {
             headers: {
                 Authorization: TOKEN,
             }
-        }).then(res=>{
+        }).then(res => {
             window.location.href = res.data.approval_url;
-        }).catch(err=>console.log(err))
+        })
     }
 
     /*All methods that return parts of the view*/
@@ -204,7 +214,9 @@ export class SingleProjectOverview extends Component {
         return (
             <Tab.Pane>
                 <Header size='huge'>Donators</Header>
-                {/*Add donators content here*/}
+                <Grid columns={3}>
+                    {this.state.donators}
+                </Grid>
             </Tab.Pane>
         )
     }
@@ -213,9 +225,19 @@ export class SingleProjectOverview extends Component {
         return (
             <Tab.Pane>
                 <Header size='huge'>Collaborators</Header>
-                <p>{this.state.collaborators}</p>
+                <Grid columns={3}>
+                    {this.state.collaborators}
+                </Grid>
             </Tab.Pane>
         )
+    }
+
+    createUserCard(users) {
+        let cardsToRender = [];
+        users.forEach(user => {
+            cardsToRender.push(<UserCard key={user} user_id={user}/>)
+        });
+        return cardsToRender;
     }
 
     render() {
@@ -367,7 +389,7 @@ export class SingleProjectOverview extends Component {
                             <Header as='h1'>{this.state.title}</Header>
                             <Header as='h3'>Target Budget: €{this.state.target}</Header>
                             <Statistic>
-                                <Statistic.Value>{this.state.donators}</Statistic.Value>
+                                <Statistic.Value>{this.state.donators_count}</Statistic.Value>
                                 <Statistic.Label>Donators!</Statistic.Label>
                             </Statistic>
 
@@ -375,14 +397,6 @@ export class SingleProjectOverview extends Component {
                                       success>
                                 ${this.state.achieved}
                             </Progress>
-
-                            {/*WORKING ON TABS TO CLEAN UP PAGE*/}
-                            {/*<p>{this.state.description}</p>*/}
-                            {/*<Header size='huge'>Project details</Header>*/}
-                            {/*<Header as='h3'>Collaborators: {this.state.collaborators}</Header>*/}
-                            {/*<p>{this.state.plan}</p>*/}
-                            {/*<Header size='huge'>Project progress</Header>*/}
-                            {/*<p>Project progress and smething with photoalbum and being able to make posts.</p>*/}
 
                             <Tab renderActiveOnly panes={panes}/>
 

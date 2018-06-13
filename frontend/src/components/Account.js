@@ -15,7 +15,7 @@ export class Account extends Component {
                 id: '',
                 email: '',
                 username: '',
-                image: 'http://via.placeholder.com/300x400',
+                image: '',
                 bio: '',
                 twitter: '',
                 google: '',
@@ -64,7 +64,7 @@ export class Account extends Component {
             headers: {
                 Authorization: TOKEN,
             }
-        }).then(res=>console.log(res)).catch(err=>console.log(err))
+        })
     }
 
     listProject(project) {
@@ -108,7 +108,7 @@ export class Account extends Component {
                         <Item.Group>
                             <Item>
                                 <Item.Image circular size='small'
-                                            src={this.state.user.image}/>
+                                            src={this.state.user.image != null ? this.state.user.image : "http://localhost:5000/uploads/users/no_avatar"}/>
                                 <Item.Content>
                                     <Item.Header as='h2'
                                                  style={{paddingTop: "0px"}}>

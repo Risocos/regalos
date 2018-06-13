@@ -96,11 +96,6 @@ export class ProjectOverview extends Component {
             });
         });
 
-        const options = [
-            {key: 'target_budget', text: 'Target budget', value: 'target_budget'},
-            {key: 'current_budget', text: 'Current budget', value: 'current_budget'},
-        ];
-
         //TODO: Fix project on google maps map
 
         return (

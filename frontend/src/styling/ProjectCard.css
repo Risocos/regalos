@@ -7,7 +7,13 @@
     padding-top: 10px;
 }
 
-.card {
-    margin-bottom: 20px;
-    width: 33%;
+.cardImage {
+    max-height: 200px !important;
+    min-height: 200px !important;
 }
+
+.carddiv {
+    margin-bottom: 20px;
+    width: 300px !important;
+}
+

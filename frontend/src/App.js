@@ -48,7 +48,7 @@ class App extends Component {
                 <Menu.Item>
                     <Menu.Menu>
                         <Menu.Item as={Link} to='/users'><Icon name='users'/>User Management</Menu.Item>
-                        <Menu.Item as={Link} to='/projectpanel'><Icon name='calendar alternate outline'/>Project
+                        <Menu.Item as={Link} to='/projectpanel'><Icon name='calendar outline'/>Project
                             Management</Menu.Item>
                     </Menu.Menu>
                 </Menu.Item>

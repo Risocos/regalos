@@ -31,8 +31,8 @@ export class MyProjects extends Component {
     }
 
     requestDeletionProject(projectId) {
-        const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = BACKEND_URL + "/projects/" + projectId;
+        // const TOKEN = "Bearer " + sessionStorage.getItem("token");
+        // const API_PATH = BACKEND_URL + "/projects/" + projectId;
         //TODO: Send request to endpoint to flag this one as request for deletion
     }
 
