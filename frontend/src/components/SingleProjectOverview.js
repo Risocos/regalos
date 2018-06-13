@@ -148,13 +148,14 @@ export class SingleProjectOverview extends Component {
         if(!this.validateForm())
             return;
 
-        const TOKEN = sessionStorage.getItem("token");
+        const TOKEN = 'Bearer ' + sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + '/paypal/create-payment';
         const RETURN_URL = window.location.href;
         const CANCEL_URL = FRONTEND_URL + '/projects';
 
         axios.post(API_PATH, {
             amount: this.state.amount,
+            project_id: this.state.id,
             return_url: RETURN_URL,
             cancel_url: CANCEL_URL,
         }, {

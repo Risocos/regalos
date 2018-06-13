@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from backend import db
-from backend.models import User, Project, Country
+from backend.models import User, Project, Country, Donation, Contributor
 
 countries = [
     {'name': 'Afghanistan', 'id': 'af'},
@@ -361,6 +361,56 @@ projects = [
     },
 ]
 
+donations = [
+    {
+        'project_id': 1,
+        'donator_id': 2,
+        'amount': 5.00,
+        'paypal_payment_id': 'fake_id1',
+        'status': 'SUCCESS'
+    },
+    {
+        'project_id': 1,
+        'donator_id': 2,
+        'amount': 7.00,
+        'paypal_payment_id': 'fake_id2',
+        'status': 'SUCCESS'
+    },
+    {
+        'project_id': 2,
+        'donator_id': 1,
+        'amount': 5.00,
+        'paypal_payment_id': 'fake_id3',
+        'status': 'SUCCESS'
+    },
+    {
+        'project_id': 2,
+        'donator_id': 2,
+        'amount': 13.00,
+        'paypal_payment_id': 'fake_id4',
+        'status': 'SUCCESS'
+    }
+]
+
+contributors = [
+    {
+        'user_id': 1,
+        'project_id': 1
+    },
+    {
+        'user_id': 2,
+        'project_id': 1
+    },
+    {
+        'user_id': 1,
+        'project_id': 2
+    },
+    {
+        'user_id': 2,
+        'project_id': 2
+    },
+]
+
 user_reportings = [
     {
         'reporter_id': users[0]['public_id'],
@@ -411,6 +461,16 @@ def populate():
         p.owner = owner
         p.country = country
         db.session.add(p)
+
+    # populate donations
+    print('populating donations')
+    for donation in donations:
+        db.session.add(Donation(**donation))
+
+    # populate collaborators
+    print('populating collaborators')
+    for contributor in contributors:
+        db.session.add(Contributor(**contributor))
 
     for reporting in user_reportings:
         # the user who is reporting another user

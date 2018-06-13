@@ -27,7 +27,6 @@ export class MyProjects extends Component {
             }
         }).then(res => {
             this.setState({projects: res.data.user.projects});
-            console.log(this.state.projects)
         })
     }
 
