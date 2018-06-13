@@ -31,8 +31,8 @@ export class MyProjects extends Component {
     }
 
     requestDeletionProject(projectId) {
-        const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = BACKEND_URL + "/projects/" + projectId;
+        // const TOKEN = "Bearer " + sessionStorage.getItem("token");
+        // const API_PATH = BACKEND_URL + "/projects/" + projectId;
         //TODO: Send request to endpoint to flag this one as request for deletion
     }
 
@@ -69,11 +69,11 @@ export class MyProjects extends Component {
             <Grid columns='equal'>
                 <Grid.Row>
                     <Grid.Column>
-                        <div className={"backbutton"}><Button
-                            as={Link}
-                            to='/adminpanel'
-                            icon='left chevron'
-                            content="Back"/></div>
+                        {/*<div className={"backbutton"}><Button*/}
+                            {/*as={Link}*/}
+                            {/*to='/adminpanel'*/}
+                            {/*icon='left chevron'*/}
+                            {/*content="Back"/></div>*/}
                     </Grid.Column>
                     <Grid.Column width={12}>
                         <Header textAlign={"center"}> My projects </Header>

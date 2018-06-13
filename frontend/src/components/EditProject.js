@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Container, Dropdown, Form, Image, Message} from "semantic-ui-react";
+import {Button, Container, Dropdown, Form, Image} from "semantic-ui-react";
 import '../styling/EditProfile.css';
 import axios from 'axios';
 import {BACKEND_URL, COUNTRIES} from "../constants";

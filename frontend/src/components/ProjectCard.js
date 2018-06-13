@@ -59,8 +59,8 @@ export class ProjectCard extends Component {
         return(
             <div className="carddiv">
             <Link to={'/projects/' + this.state.id}>
-                <Card className='card'>
-                    <Image className='cardImage' src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/300x300'}/>
+                <Card>
+                    <Image className='cardImage' src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/300x200'}/>
                     <Card.Content className="card-content">
                         <Card.Header className="card-header">{this.state.name}</Card.Header>
                         <Card.Meta>Country: {this.findCountry(this.state.country)}</Card.Meta>
