@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './styling/App.css';
 import {NavBar} from './components/NavBar';
+import {Footer} from "./components/Footer";
 import {BrowserRouter as Router, Link, Redirect, Route, Switch} from 'react-router-dom';
 import {Login} from "./components/Login";
 import {Register} from "./components/Register";
@@ -123,6 +124,7 @@ class App extends Component {
 
                                 </Switch>
                             </Segment>
+                            <Footer />
                         </div>
 
                     </Sidebar.Pusher>
