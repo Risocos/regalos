@@ -173,9 +173,6 @@ def update_project(current_user: User, project_id: int):
         file = request.files['cover']
         if allowed_file(file.filename):
             data['filename'] = save_file(file)
-            # filename = secure_filename('{0}.{1}'.format(uuid.uuid4().hex, file.filename.split('.', 1)[1]))
-            # file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-            # data['cover'] = url_for('serve_file', filename=filename, _external=True)
 
     # load and validate
     result = project_schema.load(data, instance=project, partial=True)
