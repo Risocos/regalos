@@ -22,6 +22,7 @@ import {
     WhatsappShareButton
 } from "react-share";
 import {MAPS_KEY} from "../APIkeys";
+import {UserCard} from "./UserCard";
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
@@ -31,11 +32,12 @@ export class SingleProjectOverview extends Component {
             id: "",
             title: "",
             target: "",
-            donators: 0,
+            donators_count: 0,
             achieved: 0,
             description: "",
             plan: "",
-            collaborators: "",
+            collaborators: [],
+            donators: [],
             country: "",
             progress: "Project progress and something with photo albums or blog posts",
 
@@ -95,7 +97,7 @@ export class SingleProjectOverview extends Component {
             return null;
         }
         else {
-            src = "https://www.google.com/maps/embed/v1/place?key="+ MAPS_KEY +"&q=" + this.state.country;
+            src = "https://www.google.com/maps/embed/v1/place?key=" + MAPS_KEY + "&q=" + this.state.country;
             return (
                 <div className='googlemaps'>
                     <div className="gmap_canvas">
@@ -110,17 +112,21 @@ export class SingleProjectOverview extends Component {
 
     /*Event handlers*/
     handleResponse(response) {
-        let data = response.data.project;
-        let country = this.findCountry(data.country_id);
+        let projectdata = response.data.project;
+        let collaborators = response.data.contributors;
+        let donators = response.data.donators;
+
+        let country = this.findCountry(projectdata.country_id);
         this.setState({
-            id: data.id,
-            title: data.title,
-            target: data.target_budget,
-            donators: data.donators,
-            achieved: data.current_budget,
-            description: data.short_description,
-            plan: data.project_plan,
-            collaborators: data.collaborators,
+            id: projectdata.id,
+            title: projectdata.title,
+            target: projectdata.target_budget,
+            donators_count: projectdata.donators,
+            achieved: projectdata.current_budget,
+            description: projectdata.short_description,
+            plan: projectdata.project_plan,
+            collaborators: collaborators,
+            donators: donators,
             country: country,
         })
     }
@@ -145,7 +151,7 @@ export class SingleProjectOverview extends Component {
     }
 
     handleSubmit() {
-        if(!this.validateForm())
+        if (!this.validateForm())
             return;
 
         const TOKEN = 'Bearer ' + sessionStorage.getItem("token");
@@ -162,9 +168,9 @@ export class SingleProjectOverview extends Component {
             headers: {
                 Authorization: TOKEN,
             }
-        }).then(res=>{
+        }).then(res => {
             window.location.href = res.data.approval_url;
-        }).catch(err=>console.log(err))
+        }).catch(err => console.log(err))
     }
 
     /*All methods that return parts of the view*/
@@ -202,7 +208,9 @@ export class SingleProjectOverview extends Component {
         return (
             <Tab.Pane>
                 <Header size='huge'>Donators</Header>
-                {/*Add donators content here*/}
+                <Grid columns={3}>
+                    {this.createUserCard(this.state.donators)}
+                </Grid>
             </Tab.Pane>
         )
     }
@@ -211,9 +219,22 @@ export class SingleProjectOverview extends Component {
         return (
             <Tab.Pane>
                 <Header size='huge'>Collaborators</Header>
-                <p>{this.state.collaborators}</p>
+                <Grid columns={3}>
+                    {this.createUserCard(this.state.collaborators)}
+                </Grid>
             </Tab.Pane>
         )
+    }
+
+    createUserCard(users) {
+        let cardsToRender = [];
+        users.forEach(user => {
+            if(!user.user_id) {
+                user.user_id = user.donator_id;
+            }
+            cardsToRender.push(<UserCard key={user.user_id} user_id={user.user_id}/>)
+        });
+        return cardsToRender;
     }
 
     render() {
@@ -365,7 +386,7 @@ export class SingleProjectOverview extends Component {
                             <Header as='h1'>{this.state.title}</Header>
                             <Header as='h3'>Target Budget: €{this.state.target}</Header>
                             <Statistic>
-                                <Statistic.Value>{this.state.donators}</Statistic.Value>
+                                <Statistic.Value>{this.state.donators_count}</Statistic.Value>
                                 <Statistic.Label>Donators!</Statistic.Label>
                             </Statistic>
 
@@ -373,14 +394,6 @@ export class SingleProjectOverview extends Component {
                                       success>
                                 ${this.state.achieved}
                             </Progress>
-
-                            {/*WORKING ON TABS TO CLEAN UP PAGE*/}
-                            {/*<p>{this.state.description}</p>*/}
-                            {/*<Header size='huge'>Project details</Header>*/}
-                            {/*<Header as='h3'>Collaborators: {this.state.collaborators}</Header>*/}
-                            {/*<p>{this.state.plan}</p>*/}
-                            {/*<Header size='huge'>Project progress</Header>*/}
-                            {/*<p>Project progress and smething with photoalbum and being able to make posts.</p>*/}
 
                             <Tab renderActiveOnly panes={panes}/>
 

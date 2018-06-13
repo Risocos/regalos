@@ -35,11 +35,12 @@ export class EditProject extends Component {
 
         axios.get(API_PATH, {}).then(res => {
             const project = res.data.project;
-
             this.setState({
                 title: project.title,
                 short_description: project.short_description,
                 project_plan: project.project_plan,
+                imagePreview: project.cover,
+                end_date: moment(project.end_date, 'YYYY-MM-DD').toDate(),
                 target_budget: project.target_budget,
                 country_id: project.country_id,
             })
@@ -118,23 +119,39 @@ export class EditProject extends Component {
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group widths='equal'>
                         <Form.Group className='formgroup' grouped>
-                            <Form.Input fluid label='Project title' value={this.state.title} name='title'
-                                        placeholder='Project title' onChange={this.handleChange}/>
-                            <Form.TextArea rows='7' label='Short description' name='description'
-                                           placeholder='Short description' onChange={this.handleChange}/>
+                            <Form.Input fluid label='Project title'
+                                        value={this.state.title}
+                                        name='title'
+                                        placeholder='Project title'
+                                        onChange={this.handleChange}/>
+
+                            <Form.TextArea rows='7'
+                                           label='Short description'
+                                           value={this.state.short_description}
+                                           name='description'
+                                           placeholder='Short description'
+                                           onChange={this.handleChange}/>
+
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
-                            <Form.TextArea rows='15' label='Project plan' name='plan' placeholder='Project Plan'
+                            <Form.TextArea rows='15'
+                                           label='Project plan'
+                                           value={this.state.project_plan}
+                                           name='plan'
+                                           placeholder='Project Plan'
                                            onChange={this.handleChange}/>
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
-                            <label>End date</label><DatePicker name='end_date' selected={this.state.end_date}
+                            <label>End date</label><DatePicker name='end_date'
+                                                               selected={moment(this.state.end_date)}
                                                                onChange={this.handleEndDateChange}/>
-                            <Form.Input fluid label='Target budget' name='target' placeholder='$0'
+                            <Form.Input fluid label='Target budget' value={this.state.target_budget} name='target' placeholder='$0'
                                         onChange={this.handleChange}/>
                             <label>Country</label><Dropdown placeholder='Select a country'
                                                             fluid search selection
-                                                            options={countries} onChange={this.handleCountryChange}/>
+                                                            options={countries}
+                                                            onChange={this.handleCountryChange}
+                                                            value={this.state.country_id}/>
                             <Image className='image' src={this.state.imagePreview} size='medium' rounded/>
                             <input type='file' onChange={(e) => this.handleImageChange(e)}/>
                         </Form.Group>

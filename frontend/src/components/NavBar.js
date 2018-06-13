@@ -117,7 +117,6 @@ export class NavBar extends Component {
                         onSearchChange={this.querySearch}
                         results={this.state.results}
                         value={this.state.value}
-                        {...this.props}
                     />
                 </Menu.Item>
             </Menu.Menu>
