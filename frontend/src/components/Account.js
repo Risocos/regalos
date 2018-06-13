@@ -75,6 +75,7 @@ export class Account extends Component {
                          desc={project.description}
                          target={project.target_budget}
                          achieved={project.current_budget}
+                         cover={project.cover}
             />)
     }
 
