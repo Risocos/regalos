@@ -10,8 +10,6 @@ export class EditProfile extends Component {
         super(props);
 
         this.state = {
-            firstname: '',
-            lastname: '',
             email: '',
             pictureFile: '',
             picturePreview: 'http://via.placeholder.com/300x300',
@@ -43,11 +41,9 @@ export class EditProfile extends Component {
             const data = res.data.user;
             console.log(data);
             this.setState({
-            firstname: data.firstname,
-            lastname: data.lastname,
             email: data.email,
-            picturePreview: 'http://via.placeholder.com/300x300',
-            bio: data.bio,
+            picturePreview: data.avatar,
+            bio: data.biography,
             twitter: data.twitter,
             linkedin: data.linkedin,
             google: data.google,
@@ -72,16 +68,18 @@ export class EditProfile extends Component {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + "/users/" + sessionStorage.getItem("user");
 
-        axios.patch(API_PATH, {
-            firstname: this.state.firstname,
-            lastname: this.state.lastname,
-            biography: this.state.bio,
-            twitter: this.state.twitter,
-            google: this.state.google,
-            linkedin: this.state.linkedin,
-        }, {
+        let data = new FormData();
+        data.append("email", this.state.email);
+        data.append("biography", this.state.bio);
+        data.append("profilepicture", this.state.pictureFile);
+        data.append("twitter", this.state.twitter);
+        data.append("google", this.state.google);
+        data.append("linkedin", this.state.linkedin);
+
+        axios.patch(API_PATH, data, {
             headers: {
                 Authorization: TOKEN,
+                'Content-Type': 'multipart/form-data'
             }
         }).then(res=>console.log(res)).catch(err=>console.log(err))
     }
@@ -133,10 +131,8 @@ export class EditProfile extends Component {
                             <Form.Input type='file' onChange={(e) => this.handleImageChange(e)}/>
                         </Form.Group>
                         <Form.Group className='mediumcolumn' grouped>
-                            <Form.Input fluid label='Firstname' value={this.state.firstname} name='firstname'
-                                        placeholder='Firstname' onChange={this.handleChange}/>
-                            <Form.Input fluid label='Lastname' value={this.state.lastname} name='lastname'
-                                        placeholder='Lastname' onChange={this.handleChange}/>
+                            <Form.Input fluid label='Email' value={this.state.email} name='email'
+                                        placeholder='Email' onChange={this.handleChange}/>
                             <Form.TextArea rows='20' label='Bio' value={this.state.bio} name='bio'
                                            placeholder='Bio' onChange={this.handleChange}/>
                             <Button content='Update profile' onClick={this.handleSubmit} />
