@@ -8,13 +8,13 @@
 }
 
 .cardImage {
-    max-height: 300px !important;
-    min-height: 300px !important;
+    max-height: 200px !important;
+    min-height: 200px !important;
 }
 
 .carddiv {
     margin-bottom: 20px;
-    width: 33%;
+    width: 300px !important;
 }
 
 .card {

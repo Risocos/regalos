@@ -58,7 +58,23 @@ export class SingleProjectOverview extends Component {
         const API_PATH = BACKEND_URL + this.props.location.pathname;
         axios.get(API_PATH)
             .then((response) => {
-                    this.handleResponse(response);
+                    let projectdata = response.data.project;
+                    let collaborators = response.data.contributors;
+                    let donators = response.data.donators;
+
+                    let country = this.findCountry(projectdata.country_id);
+                    this.setState({
+                        id: projectdata.id,
+                        title: projectdata.title,
+                        target: projectdata.target_budget,
+                        donators_count: projectdata.donators,
+                        achieved: projectdata.current_budget,
+                        description: projectdata.short_description,
+                        plan: projectdata.project_plan,
+                        collaborators: this.createUserCard(collaborators),
+                        donators: this.createUserCard(donators),
+                        country: country,
+                    });
                 }
             ).catch(err => {
             if (err.response.status === 404) {
@@ -110,27 +126,6 @@ export class SingleProjectOverview extends Component {
         }
     }
 
-    /*Event handlers*/
-    handleResponse(response) {
-        let projectdata = response.data.project;
-        let collaborators = response.data.contributors;
-        let donators = response.data.donators;
-
-        let country = this.findCountry(projectdata.country_id);
-        this.setState({
-            id: projectdata.id,
-            title: projectdata.title,
-            target: projectdata.target_budget,
-            donators_count: projectdata.donators,
-            achieved: projectdata.current_budget,
-            description: projectdata.short_description,
-            plan: projectdata.project_plan,
-            collaborators: collaborators,
-            donators: donators,
-            country: country,
-        })
-    }
-
     handleOpen = () => this.setState({active: true});
     handleClose = () => this.setState({active: false});
     handleChange = (e, {value}) => this.setState({radio: value});
@@ -147,7 +142,7 @@ export class SingleProjectOverview extends Component {
             headers: {
                 Authorization: TOKEN,
             }
-        }).then(res => console.log(res)).catch(err => console.log(err))
+        })
     }
 
     handleSubmit() {
@@ -170,7 +165,7 @@ export class SingleProjectOverview extends Component {
             }
         }).then(res => {
             window.location.href = res.data.approval_url;
-        }).catch(err => console.log(err))
+        })
     }
 
     /*All methods that return parts of the view*/
@@ -209,7 +204,7 @@ export class SingleProjectOverview extends Component {
             <Tab.Pane>
                 <Header size='huge'>Donators</Header>
                 <Grid columns={3}>
-                    {this.createUserCard(this.state.donators)}
+                    {this.state.donators}
                 </Grid>
             </Tab.Pane>
         )
@@ -220,7 +215,7 @@ export class SingleProjectOverview extends Component {
             <Tab.Pane>
                 <Header size='huge'>Collaborators</Header>
                 <Grid columns={3}>
-                    {this.createUserCard(this.state.collaborators)}
+                    {this.state.collaborators}
                 </Grid>
             </Tab.Pane>
         )
@@ -229,7 +224,7 @@ export class SingleProjectOverview extends Component {
     createUserCard(users) {
         let cardsToRender = [];
         users.forEach(user => {
-            if(!user.user_id) {
+            if (!user.user_id) {
                 user.user_id = user.donator_id;
             }
             cardsToRender.push(<UserCard key={user.user_id} user_id={user.user_id}/>)
