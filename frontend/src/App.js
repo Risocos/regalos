@@ -16,7 +16,7 @@ import {ProjectPanel} from "./components/ProjectPanel";
 import {Icon, Menu, Segment, Sidebar} from "semantic-ui-react";
 import {ForbiddenAccess} from "./responsecodes/ForbiddenAccess";
 import {EditProfile} from "./components/EditProfile";
-import {PaymentCancel} from "./components/PaymentCancel";
+import {Donation} from "./components/Donation";
 import {MyProjects} from "./components/MyProjects";
 import {EditProject} from "./components/EditProject";
 
@@ -100,7 +100,7 @@ class App extends Component {
                                     <Route path="/signup" component={Register}/>
                                     <Route path="/users/:userId" component={Account}/>
                                     <Route path="/settings" component={EditProfile}/>
-                                    <Route path="/paymentcancel" component={PaymentCancel}/>
+                                    <Route path="/paymentcancel" component={Donation}/>
 
 
                                     <Route exact path="/projects/create"

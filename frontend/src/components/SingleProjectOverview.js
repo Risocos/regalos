@@ -38,6 +38,7 @@ export class SingleProjectOverview extends Component {
             collaborators: "",
             country: "",
             progress: "Project progress and something with photo albums or blog posts",
+            cover: "",
 
             //Donateform state
             anonymous: false,
@@ -122,6 +123,7 @@ export class SingleProjectOverview extends Component {
             plan: data.project_plan,
             collaborators: data.collaborators,
             country: country,
+            cover: data.cover,
         })
     }
 
@@ -361,7 +363,7 @@ export class SingleProjectOverview extends Component {
                         </Grid.Column>
 
                         <Grid.Column textAlign="center" width={10}>
-                            <Image src='http://via.placeholder.com/1000x300' centered={true}/>
+                            <Image src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/600x400'} centered={true}/>
                             <Header as='h1'>{this.state.title}</Header>
                             <Header as='h3'>Target Budget: €{this.state.target}</Header>
                             <Statistic>
