@@ -34,7 +34,7 @@ export class UserCard extends Component {
     }
 
     render() {
-        const LINK = "/users/" + this.state.id
+        const LINK = "/users/" + this.state.id;
         return (
             <div>
                 <Link to={LINK}>

@@ -58,11 +58,21 @@ export class SingleProjectOverview extends Component {
         const API_PATH = BACKEND_URL + this.props.location.pathname;
         axios.get(API_PATH)
             .then((response) => {
-                    let projectdata = response.data.project;
-                    let collaborators = response.data.contributors;
-                    let donators = response.data.donators;
-
+                    const projectdata = response.data.project;
+                    let collaborators = [];
+                    let donators = [];
                     let country = this.findCountry(projectdata.country_id);
+
+                    response.data.donators.forEach(donator => {
+                        if(!donators.includes(donator.donator_id))
+                            donators.push(donator.donator_id)
+                    });
+
+                    response.data.contributors.forEach(contributor => {
+                        if(!collaborators.includes(contributor.user_id))
+                            collaborators.push(contributor.user_id)
+                    });
+
                     this.setState({
                         id: projectdata.id,
                         title: projectdata.title,
@@ -224,10 +234,7 @@ export class SingleProjectOverview extends Component {
     createUserCard(users) {
         let cardsToRender = [];
         users.forEach(user => {
-            if (!user.user_id) {
-                user.user_id = user.donator_id;
-            }
-            cardsToRender.push(<UserCard key={user.user_id} user_id={user.user_id}/>)
+            cardsToRender.push(<UserCard key={user} user_id={user}/>)
         });
         return cardsToRender;
     }
