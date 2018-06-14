@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
+import {BACKEND_URL} from "../constants";
 
 export class Login extends Component {
     constructor(props) {
@@ -36,7 +37,7 @@ export class Login extends Component {
 
         const USERNAME = this.state.username;
         const PASSWORD = this.state.password;
-        const API_PATH = this.props.basepath + '/login';
+        const API_PATH = BACKEND_URL + '/login';
         axios.post(API_PATH, {}, {
             auth: {
                 username: USERNAME,
@@ -48,6 +49,7 @@ export class Login extends Component {
             sessionStorage.setItem("user", res.data.user.id);
 
             if(res.data.user.admin) {
+                sessionStorage.setItem("admin", "perhaps");
                 this.setState({isAdmin: true})
             }
 
@@ -133,6 +135,7 @@ export class Login extends Component {
 
                                 <Form.Input
                                     fluid
+                                    label = "E-mail address"
                                     name="username"
                                     icon='user'
                                     iconPosition='left'
@@ -141,6 +144,7 @@ export class Login extends Component {
                                 />
                                 <Form.Input
                                     fluid
+                                    label = "Password"
                                     name="password"
                                     icon='lock'
                                     iconPosition='left'

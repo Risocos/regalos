@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import './styling/App.css';
 import {NavBar} from './components/NavBar';
+import {Footer} from "./components/Footer";
 import {BrowserRouter as Router, Link, Redirect, Route, Switch} from 'react-router-dom';
 import {Login} from "./components/Login";
 import {Register} from "./components/Register";
 import {CreateProject} from './components/CreateProject';
 import {Account} from "./components/Account";
-import {ProjectOverview} from './components/ProjectOverview'
+import {ProjectOverview} from './components/ProjectOverview';
 import {SingleProjectOverview} from "./components/SingleProjectOverview";
 import {PageNotFound} from "./responsecodes/PageNotFound";
 import {AdminPanel} from "./components/AdminPanel";
@@ -15,6 +16,10 @@ import {ProjectPanel} from "./components/ProjectPanel";
 import {Icon, Menu, Segment, Sidebar} from "semantic-ui-react";
 import {ForbiddenAccess} from "./responsecodes/ForbiddenAccess";
 import {EditProfile} from "./components/EditProfile";
+import {MyProjects} from "./components/MyProjects";
+import {EditProject} from "./components/EditProject";
+import {PaymentCancel} from "./components/PaymentCancel";
+import {PaymentSuccess} from "./components/PaymentSuccess";
 
 class App extends Component {
     constructor() {
@@ -35,12 +40,33 @@ class App extends Component {
     }
 
     isAuthenticated() {
-        return (!sessionStorage.getItem("token").length>0)
+        return (sessionStorage.getItem("token") === null)
     }
 
+    renderAdminButtons() {
+        if (sessionStorage.getItem("admin") === 'perhaps') {
+            return (
+                <Menu.Item>
+                    <Menu.Menu>
+                        <Menu.Item as={Link} to='/users'><Icon name='users'/>User Management</Menu.Item>
+                        <Menu.Item as={Link} to='/projectpanel'><Icon name='calendar outline'/>Project
+                            Management</Menu.Item>
+                    </Menu.Menu>
+                </Menu.Item>
+            )
+        }
+        else {
+            return (
+                <Menu.Item>
+                    <Menu.Menu>
+                        <Menu.Item as={Link} to='/myprojects'><Icon name='calendar outline'/>My projects</Menu.Item>
+                    </Menu.Menu>
+                </Menu.Item>
+            )
+        }
+    }
 
     render() {
-        const BASEPATH = "http://127.0.0.1:5000";
         const USER = '/users/' + sessionStorage.getItem("user");
         return (
             <Router>
@@ -60,49 +86,49 @@ class App extends Component {
                                 <Menu.Item as={Link} to='/settings'><Icon name='pencil'/>Edit settings</Menu.Item>
                             </Menu.Menu>
                         </Menu.Item>
+                        {this.renderAdminButtons()}
                         <Menu.Item as={Link} to='/login' onClick={this.handleLogout}>Logout</Menu.Item>
                     </Sidebar>
                     <Sidebar.Pusher>
 
                         <div>
-                            <NavBar toggleSidebar={this.toggleSidemenu}/>
+                            <NavBar togglesidebar={this.toggleSidemenu}/>
                             <Segment basic>
                                 <Switch>
-                                    <Route exact path="/"
-                                           render={props => <ProjectOverview basepath={BASEPATH}/>}/>
+                                    <Route exact path="/" component={ProjectOverview}/>
 
-                                    <Route path="/login"
-                                           render={props => <Login basepath={BASEPATH}/>}/>
-                                    <Route path="/signup"
-                                           render={props => <Register basepath={BASEPATH}/>}/>
-                                    <Route path="/users/:userId"
-                                           component={Account}/>
-                                    <Route path="/settings"
-                                           render={props => <EditProfile basepath={BASEPATH}/>}/>
+                                    <Route path="/login" component={Login}/>
+                                    <Route path="/signup" component={Register}/>
+                                    <Route path="/users/:userId" component={Account}/>
+                                    <Route path="/settings" component={EditProfile}/>
+                                    <Route path="/paymentcancel" component={PaymentCancel}/>
 
 
                                     <Route exact path="/projects/create"
                                            render={() => (
-                                               this.isAuthenticated ? (<Redirect to='/login'/>) :
-                                                   (props => <CreateProject basepath={BASEPATH}/>)
+                                               this.isAuthenticated() ? (<Redirect to='/login'/>) :
+                                                   (<CreateProject/>)
                                            )}/>
-                                    <Route exact path="/projects"
-                                           render={props => <ProjectOverview basepath={BASEPATH}/>}/>
-                                    <Route exact path="/projects/:projectId"
-                                           component={SingleProjectOverview}/>
+                                    <Route exact path="/projects" component={ProjectOverview}/>
+                                    <Route exact path="/myprojects" component={MyProjects}/>
+                                    <Route exact path="/projects/edit/:projectId" component={EditProject}/>
+                                    <Route exact path="/projects/:projectId" component={SingleProjectOverview}/>
 
-                                    <Route path="/adminpanel"
-                                           component={AdminPanel}/>
-                                    <Route exact path="/users"
-                                           render={props => <UserPanel basepath={BASEPATH}/>}/>
-                                    <Route path="/projectpanel"
-                                           render={props => <ProjectPanel basepath={BASEPATH}/>}/>
+                                    <Route path="/adminpanel" component={AdminPanel}/>
+                                    <Route exact path="/users" component={UserPanel}/>
+                                    <Route path="/projectpanel" component={ProjectPanel}/>
+
+                                    <Route path="/donation/success" component={PaymentSuccess}/>
+                                    <Route path="/donation/cancel" component={PaymentCancel} />
 
                                     <Route path="/403" component={ForbiddenAccess}/>
                                     <Route path="/404" component={PageNotFound}/>
                                     <Route component={PageNotFound}/>
+
+
                                 </Switch>
                             </Segment>
+                            <Footer />
                         </div>
 
                     </Sidebar.Pusher>

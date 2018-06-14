@@ -7,6 +7,7 @@ import {
 import "../styling/UserPanel.css";
 import {Link,} from "react-router-dom";
 import axios from 'axios';
+import {BACKEND_URL} from "../constants";
 
 export class UserPanel extends Component {
     constructor(props) {
@@ -23,7 +24,7 @@ export class UserPanel extends Component {
 
     componentDidMount() {
         const TOKEN = sessionStorage.getItem("token");
-        const API_PATH = this.props.basepath + '/users';
+        const API_PATH = BACKEND_URL + '/users';
 
         axios.get(API_PATH, {
             headers: {
@@ -46,7 +47,7 @@ export class UserPanel extends Component {
 
     deleteUser(user) {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
-        const API_PATH = this.props.basepath + "/users/" + user;
+        const API_PATH = BACKEND_URL + "/users/" + user;
         axios.delete(API_PATH, {
             headers: {
                 Authorization: TOKEN,
@@ -65,7 +66,7 @@ export class UserPanel extends Component {
         if (user.admin) {
             isAdmin = "Yes";
         }
-        if (user.flagged) {
+        if (user.flag_count>20) {
             isFlagged = "Yes";
         }
         const PROFILE = '/users/' + user.id;

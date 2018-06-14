@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {Container, Form, Image, Message, Dropdown} from "semantic-ui-react";
+import {Container, Form, Image, Message, Dropdown, Button} from "semantic-ui-react";
 import "../styling/CreateProject.css";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import {COUNTRIES, BACKEND_URL} from "../constants";
 
 
 //Installed dependencies for this:
@@ -25,6 +26,7 @@ export class CreateProject extends Component {
             end: moment(),
             target: '',
             collabs: [],
+            country: '',
 
             //Utility variables
             formMessage: [],
@@ -107,7 +109,7 @@ export class CreateProject extends Component {
 
         const errorMessage = (
             <Message error>
-                <Message.Header>Oops! Something went wrong!</Message.Header>
+                <Message.Header style={{padding: "0px"}}>Oops! Something went wrong!</Message.Header>
                 <Message.List>
                     {messages.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
                 </Message.List>
@@ -137,13 +139,14 @@ export class CreateProject extends Component {
         reader.readAsDataURL(file);
     }
 
+    handleCountryChange = (e, d) => this.setState({country: d.value});
+
     handleSubmit() {
-        //TODO: handle submit with server
         if (!this.validate()) {
             return
         }
 
-        const API_PATH = this.props.basepath + '/projects';
+        const API_PATH = BACKEND_URL + '/projects';
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
 
         let data = new FormData();
@@ -151,9 +154,13 @@ export class CreateProject extends Component {
         data.append("short_description", this.state.description);
         data.append("project_plan", this.state.plan);
         data.append("cover", this.state.uploadedFile);
-        data.append("date_begin", this.state.start);
-        data.append("date_end", this.state.end);
-        data.append("target", this.state.target);
+        data.append("start_date", this.state.start.unix().toString());
+        data.append("end_date", this.state.end.unix().toString());
+        this.state.collabs.forEach((collab) => {
+            data.append("collaborators[]", collab)
+        });
+        data.append("target_budget", this.state.target);
+        data.append("country_id", this.state.country);
 
         axios.post(API_PATH, data, {
             headers: {
@@ -166,7 +173,7 @@ export class CreateProject extends Component {
             console.log(err);
         });
         let message = <Message success>
-            <Message.Header>Project created</Message.Header>
+            <Message.Header style={{padding: "0px"}}>Project created</Message.Header>
         </Message>;
 
         this.setState({
@@ -182,6 +189,17 @@ export class CreateProject extends Component {
             {key: 2, value: 'Romy', text: 'Romy'},
             {key: 3, value: 'Jan', text: 'Jan'},
             {key: 4, value: 'Sander', text: 'Sander'}];
+
+        let countries = [];
+        COUNTRIES.map(country => {
+            countries.push({
+                key: country.countryCode,
+                value: country.countryCode,
+                flag: country.countryCode,
+                text: country.name
+            });
+            return null;
+        });
 
         return (
             <Container>
@@ -207,14 +225,19 @@ export class CreateProject extends Component {
                                                                onChange={this.handleEndDateChange}/>
                             <Form.Input fluid label='Target budget' name='target' placeholder='$0'
                                         onChange={this.handleInputChange}/>
+                            <label>Country</label><Dropdown placeholder='Select a country' fluid search selection
+                                      options={countries} onChange={this.handleCountryChange}/>
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
                             <Dropdown placeholder='Collaborator name' fluid multiple search selection
                                       options={collaboratorsAvailable} onChange={this.handleCollabInputChange}/>
                         </Form.Group>
                     </Form.Group>
-                    <Form.Button content="Create Project" positive/>
-                    <Form.Button content="Cancel"/>
+                    <Button.Group>
+                        <Button>Cancel</Button>
+                        <Button.Or/>
+                        <Button positive>Create Project</Button>
+                    </Button.Group>
                 </Form>
             </Container>
         )

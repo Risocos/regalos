@@ -3,6 +3,7 @@ import {Button, Grid, Form, Header, Segment, Message} from "semantic-ui-react";
 import "../styling/login.css"
 import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
+import {BACKEND_URL} from "../constants";
 
 export class Register extends Component {
 
@@ -42,7 +43,7 @@ export class Register extends Component {
             const USERNAME = this.state.username;
             const EMAIL = this.state.email;
             const PASSWORD = this.state.password;
-            const API_PATH = this.props.basepath + '/users/register';
+            const API_PATH = BACKEND_URL + '/users/register';
 
             axios.post(API_PATH, {
                 username: USERNAME,
@@ -82,6 +83,7 @@ export class Register extends Component {
                             {this.state.error}
                             <Form.Input
                                 fluid
+                                label='Username'
                                 icon='user'
                                 iconPosition='left'
                                 name='username'
@@ -90,6 +92,7 @@ export class Register extends Component {
                             />
                             <Form.Input
                                 fluid
+                                label='E-mail address'
                                 icon='at'
                                 iconPosition='left'
                                 name='email'
@@ -98,6 +101,7 @@ export class Register extends Component {
                             />
                             <Form.Input
                                 fluid
+                                label='Password'
                                 icon='lock'
                                 iconPosition='left'
                                 name='password'
@@ -107,6 +111,7 @@ export class Register extends Component {
                             />
                             <Form.Input
                                 fluid
+                                label='Re-enter Password'
                                 icon='lock'
                                 iconPosition='left'
                                 name='temppass'

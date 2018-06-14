@@ -3,6 +3,7 @@ import {Form, Grid, Header, Pagination} from "semantic-ui-react";
 import "../styling/ProjectOverview.css";
 import axios from "axios";
 import {ProjectCard} from "./ProjectCard";
+import {COUNTRIES, BACKEND_URL} from "../constants";
 
 
 export class ProjectOverview extends Component {
@@ -11,7 +12,7 @@ export class ProjectOverview extends Component {
 
         this.state = {
             //list of options used for filtering the projectview
-            filterOptions: [{key: 'f', text: 'Filter', value: 'filter'},
+            filterOptions: [
                 {key: 'p', text: 'Popularity', value: 'popularity'},
                 {key: 't', text: 'Targetbudget', value: 'targetbudget'},
             ],
@@ -28,7 +29,7 @@ export class ProjectOverview extends Component {
 
     componentDidMount() {
         let projectList = this.state.projects;
-        const API_PATH = this.props.basepath + '/projects';
+        const API_PATH = BACKEND_URL + '/projects';
         axios.get(API_PATH)
             .then((response) => {
                 response.data.projects.map((projectObject) => (
@@ -48,10 +49,11 @@ export class ProjectOverview extends Component {
             <ProjectCard key={project.id}
                          id={project.id}
                          name={project.title}
-                         target={project.target}
-                         achieved={project.achieved}
-                         country={project.country}
+                         target={project.target_budget}
+                         achieved={project.current_budget}
+                         country={project.country_id}
                          cover={project.cover}
+                         className="card"
             />
         )
     }
@@ -75,28 +77,49 @@ export class ProjectOverview extends Component {
 
     handlePageChange = (e, {activePage}) => this.setState({activePage});
 
+    handleCountryChange = (e, d) => this.setState({
+        filter: {country: d.value}
+    });
+
+
     render() {
         const PAGES_REQUIRED = this.state.projects.length / 12;
 
-        //TODO: funtionality of filters
-
-        //TODO: Fix amounts of projects shown etc
+        //TODO: functionality of filters
+        let countries = [];
+        COUNTRIES.forEach(country => {
+            countries.push({
+                key: country.countryCode,
+                value: country.countryCode,
+                flag: country.countryCode,
+                text: country.name
+            });
+        });
 
         //TODO: Fix project on google maps map
+
         return (
             <div className="container">
 
                 <Grid columns='equal'>
                     <Grid.Row>
                         <Grid.Column>
+                            <Header as='h3'>Filters</Header>
+                            {/* TODO: put filters in own Component */}
+                            <label>Pick a filter:</label><Form.Dropdown placeholder='Filter' fluid search selection
+                                                                        options={this.state.filterOptions}/>
+                            {/*<p> </p>*/}
+                            {/* TODO: Option to not choose a country */}
+                            <label>Pick a country:</label><Form.Dropdown placeholder='Select a country' fluid search
+                                                                         selection
+                                                                         options={countries}
+                                                                         onChange={this.handleCountryChange}/>
 
-                            <Form.Select options={this.state.filterOptions} placeholder='Filter'/>
-
-                            <Form.Field label='United States' control='input' type='checkbox' defaultChecked='true'/>
-                            <Form.Field label='Europe' control='input' type='checkbox' defaultChecked='true'/>
-                            <Form.Field label='Asia' control='input' type='checkbox' defaultChecked='true'/>
-                            <Form.Field label='Australia' control='input' type='checkbox' defaultChecked='true'/>
-                            <Form.Field label='Africa' control='input' type='checkbox' defaultChecked='true'/>
+                            {/* TODO: should use a slider */}
+                            {/*<Form.Input*/}
+                            {/*action={<Form.Dropdown button basic floating options={options} defaultValue='page'/>}*/}
+                            {/*placeholder='$...'*/}
+                            {/*/>*/}
 
                         </Grid.Column>
 

@@ -1,5 +1,5 @@
 .card-content {
-    height: 150px;
+    height: 150px !important;
     margin-bottom: 20px;
 }
 
@@ -7,7 +7,13 @@
     padding-top: 10px;
 }
 
-.card {
-    margin-bottom: 20px;
-    width: 33%;
+.cardImage {
+    max-height: 200px !important;
+    min-height: 200px !important;
 }
+
+.carddiv {
+    margin-bottom: 20px;
+    width: 33% !important;
+}
+

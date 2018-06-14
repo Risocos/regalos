@@ -4,6 +4,36 @@
     align-content: center;
 }
 
+.leftcolumn {
+    width: 33%;
+}
+
+.middlecolumn {
+    margin: 20px !important;
+}
+
+.label {
+    color: white !important;
+}
+
 .image {
     margin-bottom: 20px;
+}
+
+.reportProject {
+    align-content: center;
+    margin-top: 50px;
+}
+
+.googlemaps {
+    overflow:hidden;
+    height:500px;
+    width:100%;
+    margin-top: 50px;
+}
+
+.gmap_canvas {
+    background:none!important;
+    height:500px;
+    width:100%;
 }
