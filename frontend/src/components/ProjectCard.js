@@ -65,6 +65,7 @@ export class ProjectCard extends Component {
                         <Card.Header className="card-header">{this.state.name}</Card.Header>
                         <Card.Meta>Country: {this.findCountry(this.state.country)}</Card.Meta>
                         <Card.Meta>Target budget: €{this.state.target}</Card.Meta>
+                        <Card.Meta>Achieved budget: €{this.state.achieved}</Card.Meta>
                         <Progress percent={this.returnProgress()} progress success> </Progress>
                     </Card.Content>
                 </Card>

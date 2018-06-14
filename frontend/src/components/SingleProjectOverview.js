@@ -79,6 +79,7 @@ export class SingleProjectOverview extends Component {
                         title: projectdata.title,
                         target: projectdata.target_budget,
                         donators_count: projectdata.donators,
+                        cover: projectdata.cover,
                         achieved: projectdata.current_budget,
                         description: projectdata.short_description,
                         plan: projectdata.project_plan,
@@ -388,6 +389,7 @@ export class SingleProjectOverview extends Component {
                             <Image src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/600x400'} centered={true}/>
                             <Header as='h1'>{this.state.title}</Header>
                             <Header as='h3'>Target Budget: €{this.state.target}</Header>
+                            <Header as='h3'>Achieved Budget: €{this.state.achieved}</Header>
                             <Statistic>
                                 <Statistic.Value>{this.state.donators_count}</Statistic.Value>
                                 <Statistic.Label>Donators!</Statistic.Label>
