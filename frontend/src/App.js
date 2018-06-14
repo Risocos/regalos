@@ -19,6 +19,7 @@ import {EditProfile} from "./components/EditProfile";
 import {MyProjects} from "./components/MyProjects";
 import {EditProject} from "./components/EditProject";
 import {PaymentCancel} from "./components/PaymentCancel";
+import {PaymentSuccess} from "./components/PaymentSuccess";
 
 class App extends Component {
     constructor() {
@@ -116,6 +117,9 @@ class App extends Component {
                                     <Route path="/adminpanel" component={AdminPanel}/>
                                     <Route exact path="/users" component={UserPanel}/>
                                     <Route path="/projectpanel" component={ProjectPanel}/>
+
+                                    <Route path="/donation/success" component={PaymentSuccess}/>
+                                    <Route path="/donation/cancel" component={PaymentCancel} />
 
                                     <Route path="/403" component={ForbiddenAccess}/>
                                     <Route path="/404" component={PageNotFound}/>

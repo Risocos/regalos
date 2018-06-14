@@ -108,7 +108,7 @@ export class Account extends Component {
                         <Item.Group>
                             <Item>
                                 <Item.Image circular size='small'
-                                            src={this.state.user.image != null ? this.state.user.image : "http://localhost:5000/uploads/users/no_avatar"}/>
+                                            src={this.state.user.image != null ? this.state.user.image : "http://localhost:5000/uploads/users/no_avatar.png"}/>
                                 <Item.Content>
                                     <Item.Header as='h2'
                                                  style={{paddingTop: "0px"}}>

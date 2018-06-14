@@ -71,7 +71,7 @@ def get_user_profile(user_id: int):
 
 @users_api.route('/register', methods=['POST'])
 def create_user():
-    data = request.form.to_dict()
+    data = request.json
 
     if not data:
         return jsonify({'message': 'Missing data to create user'}), 400
@@ -136,6 +136,7 @@ def update_user(current_user: User, user_id):
         if allowed_file(file.filename):
             data['filename'] = save_file(file)
 
+    user_schema.partial = True
     # pass in the user which is being edited and set partial=True so required fields are ignored
     result = user_schema.load(data, instance=user, partial=True)
 

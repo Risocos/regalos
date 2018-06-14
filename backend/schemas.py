@@ -92,7 +92,7 @@ class UserSchema(ma.ModelSchema):
 
     @validates('email')
     def unique_email(self, email):
-        if User.query.filter_by(email=email).count() > 0:
+        if not self.partial and User.query.filter_by(email=email).count() > 0:
             raise ValidationError('User with this email already exists')
 
     class Meta:
