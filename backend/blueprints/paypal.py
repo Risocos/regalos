@@ -103,8 +103,9 @@ def success():
         try:
             payment = Payment.find(request.args['paymentId'])  # type: Payment
             payment.execute({'payer_id': request.args['PayerID']})
-            donation = Donation.query.filter_by(paypal_payment_id=request.args['paymentId']).first()
+            donation = Donation.query.filter_by(paypal_payment_id=request.args['paymentId']).first()  # type: Donation
             if donation is not None:
+                donation.project.current_budget += donation.amount
                 donation.status = Donation.Status.SUCCESS
                 db.session.commit()
             # redirected to frontend again

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './styling/App.css';
 import {NavBar} from './components/NavBar';
+import {Footer} from "./components/Footer";
 import {BrowserRouter as Router, Link, Redirect, Route, Switch} from 'react-router-dom';
 import {Login} from "./components/Login";
 import {Register} from "./components/Register";
@@ -15,9 +16,10 @@ import {ProjectPanel} from "./components/ProjectPanel";
 import {Icon, Menu, Segment, Sidebar} from "semantic-ui-react";
 import {ForbiddenAccess} from "./responsecodes/ForbiddenAccess";
 import {EditProfile} from "./components/EditProfile";
-import {PaymentCancel} from "./components/PaymentCancel";
 import {MyProjects} from "./components/MyProjects";
 import {EditProject} from "./components/EditProject";
+import {PaymentCancel} from "./components/PaymentCancel";
+import {PaymentSuccess} from "./components/PaymentSuccess";
 
 class App extends Component {
     constructor() {
@@ -47,7 +49,7 @@ class App extends Component {
                 <Menu.Item>
                     <Menu.Menu>
                         <Menu.Item as={Link} to='/users'><Icon name='users'/>User Management</Menu.Item>
-                        <Menu.Item as={Link} to='/projectpanel'><Icon name='calendar alternate outline'/>Project
+                        <Menu.Item as={Link} to='/projectpanel'><Icon name='calendar outline'/>Project
                             Management</Menu.Item>
                     </Menu.Menu>
                 </Menu.Item>
@@ -116,6 +118,9 @@ class App extends Component {
                                     <Route exact path="/users" component={UserPanel}/>
                                     <Route path="/projectpanel" component={ProjectPanel}/>
 
+                                    <Route path="/donation/success" component={PaymentSuccess}/>
+                                    <Route path="/donation/cancel" component={PaymentCancel} />
+
                                     <Route path="/403" component={ForbiddenAccess}/>
                                     <Route path="/404" component={PageNotFound}/>
                                     <Route component={PageNotFound}/>
@@ -123,6 +128,7 @@ class App extends Component {
 
                                 </Switch>
                             </Segment>
+                            <Footer />
                         </div>
 
                     </Sidebar.Pusher>

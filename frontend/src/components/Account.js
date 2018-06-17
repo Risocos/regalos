@@ -38,12 +38,14 @@ export class Account extends Component {
             }
         ).then(res => {
             const data = res.data.user;
+            console.log(data);
+
             this.setState({
                 user: {
                     id: data.id,
                     email: data.email,
                     username: data.username,
-                    image: 'http://via.placeholder.com/300x400',
+                    image: data.avatar,
                     bio: data.biography,
                     twitter: data.twitter,
                     google: data.google,
@@ -62,7 +64,7 @@ export class Account extends Component {
             headers: {
                 Authorization: TOKEN,
             }
-        }).then(res=>console.log(res)).catch(err=>console.log(err))
+        })
     }
 
     listProject(project) {
@@ -73,6 +75,7 @@ export class Account extends Component {
                          desc={project.description}
                          target={project.target_budget}
                          achieved={project.current_budget}
+                         cover={project.cover}
             />)
     }
 
@@ -104,8 +107,8 @@ export class Account extends Component {
                     <Container text>
                         <Item.Group>
                             <Item>
-                                <Item.Image size='small'
-                                            src={this.state.user.image}/>
+                                <Item.Image circular size='small'
+                                            src={this.state.user.image != null ? this.state.user.image : "http://localhost:5000/uploads/users/no_avatar.png"}/>
                                 <Item.Content>
                                     <Item.Header as='h2'
                                                  style={{paddingTop: "0px"}}>

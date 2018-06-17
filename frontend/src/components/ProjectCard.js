@@ -57,14 +57,15 @@ export class ProjectCard extends Component {
 
     render() {
         return(
-            <div className="card">
+            <div className="carddiv">
             <Link to={'/projects/' + this.state.id}>
                 <Card>
-                    <Image src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/300x300'}/>
+                    <Image className='cardImage' src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/300x200'}/>
                     <Card.Content className="card-content">
                         <Card.Header className="card-header">{this.state.name}</Card.Header>
                         <Card.Meta>Country: {this.findCountry(this.state.country)}</Card.Meta>
                         <Card.Meta>Target budget: €{this.state.target}</Card.Meta>
+                        <Card.Meta>Achieved budget: €{this.state.achieved}</Card.Meta>
                         <Progress percent={this.returnProgress()} progress success> </Progress>
                     </Card.Content>
                 </Card>
