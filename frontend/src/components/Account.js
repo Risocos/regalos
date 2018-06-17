@@ -138,7 +138,7 @@ export class Account extends Component {
                 <Container style={{margin: '80px'}}>
                     <Header as='h1'>Projects</Header>
                     <Grid columns={3}>
-                        {this.state.user.projects.map(project => this.listProject(project))}
+                        {this.state.user.projects && this.state.user.projects.map(project => this.listProject(project))}
                     </Grid>
                 </Container>
             </div>

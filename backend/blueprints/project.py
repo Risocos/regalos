@@ -2,7 +2,7 @@ import os
 import uuid
 
 from flask import Blueprint, jsonify, request, current_app, abort
-from mongoengine import DoesNotExist
+from mongoengine import DoesNotExist, ValidationError
 from pymongo.errors import DuplicateKeyError
 from werkzeug.utils import secure_filename
 
@@ -23,7 +23,7 @@ def find_project_or_404(project_id):
     project = None
     try:
         project = Project.objects.get(id=project_id)
-    except DoesNotExist:
+    except (DoesNotExist, ValidationError):
         pass
 
     if project is None:
@@ -32,22 +32,6 @@ def find_project_or_404(project_id):
         abort(response)
 
     return project
-
-
-def find_user_or_404(user_id):
-    """
-    Finds a user or aborts with a 404 not found
-    :param user_id:
-    :return:
-    """
-    user = User.query.filter_by(id=user_id).first()
-
-    if user is None:
-        response = jsonify({'message': 'No user found!'})
-        response.status_code = 404
-        abort(response)
-
-    return user
 
 
 def find_donators(project_id):
