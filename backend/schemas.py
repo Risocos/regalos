@@ -80,17 +80,22 @@ class ProjectSchema(ma.Schema):
     short_description = fields.String(required=True, validate=not_empty)
     project_plan = fields.String(required=True, validate=not_empty)
     target_budget = fields.Integer(required=True)
-    owner = fields.Nested(UserSchema, required=True)
-    owner_id = fields.String()
     collaborators = fields.List(fields.Nested(UserSchema))
     collaborator_ids = fields.List(fields.String())
+    filename = fields.String()
     start_date = fields.Date(required=True)
     end_date = fields.Date(required=True)
     # 'as_string' needed, otherwise serialization crashes because of Decimal conversion to JSON
     latitude = fields.Decimal(8, as_string=True, validate=not_empty)
     longitude = fields.Decimal(8, as_string=True, validate=not_empty)
+
+    # relations
     country = fields.Nested(CountrySchema)
     country_id = fields.String(allow_none=False)
+    owner = fields.Nested(UserSchema, required=True)
+    owner_id = fields.String()
+
+    # generated
     cover = fields.Method(method_name='generate_url')
 
     def generate_url(self, project):
