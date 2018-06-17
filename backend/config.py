@@ -28,4 +28,3 @@ class Config:
     MAIL_USERNAME = 'regalos.crew@gmail.com'
     MAIL_PASSWORD = localconfig.MAIL_PASSWORD
     MAIL_DEFAULT_SENDER = 'Regalos Inc.'
-

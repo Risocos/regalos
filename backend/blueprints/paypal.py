@@ -125,4 +125,3 @@ def cancel():
             donation.status = Donation.Status.CANCELLED
             db.session.commit()
     return redirect('http://localhost:3000/donation/cancel')
-

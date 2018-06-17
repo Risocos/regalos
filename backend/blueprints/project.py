@@ -51,7 +51,7 @@ def find_user_or_404(user_id):
 
 
 def find_donators(project_id):
-    donations = Donation.query.filter_by(project_id=project_id).all()
+    donations = Donation.objects(project=project_id).all()
     if donations is None:
         response = jsonify({'message': 'No donators found!'})
         abort(response)

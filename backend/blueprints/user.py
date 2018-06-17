@@ -1,14 +1,12 @@
-import uuid
 import os
+import uuid
 
 from flask import Blueprint, jsonify, request, abort, url_for, current_app
 from flask_mail import Message
-from mongoengine import DoesNotExist
-
-from backend import mail
+from mongoengine import DoesNotExist, ValidationError
 from werkzeug.utils import secure_filename
 
-from backend import db, mail
+from backend import mail
 from backend.auth import token_required, admin_required
 from backend.models import User
 from backend.schemas import UserSchema
@@ -33,7 +31,7 @@ def find_user_or_404(mongo_id):
     user = None
     try:
         user = User.objects.get(id=mongo_id)
-    except DoesNotExist:
+    except (DoesNotExist, ValidationError):
         pass
 
     if user is None:
