@@ -1,15 +1,14 @@
 import os
 import uuid
 
-from flask import Blueprint, jsonify, request, current_app, url_for, abort
+from flask import Blueprint, jsonify, request, current_app, abort
 from mongoengine import DoesNotExist
 from pymongo.errors import DuplicateKeyError
 from werkzeug.utils import secure_filename
 
-from backend import db
 from backend.auth import token_required
-from backend.models import Project, User, Donation, Contributor
-from backend.schemas import project_schema, donation_schema, contributor_schema
+from backend.models import Project, User, Donation
+from backend.schemas import project_schema, donation_schema, user_schema
 
 projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
 
@@ -61,12 +60,9 @@ def find_donators(project_id):
 
 
 def find_contributors(project_id):
-    contributors = Contributor.query.filter_by(project_id=project_id).all()
-    if contributors is None:
-        response = jsonify({'message': 'No contributors found!'})
-        abort(response)
+    project = find_project_or_404(project_id)  # type: Project
 
-    return contributors
+    return project.collaborators
 
 
 def allowed_file(filename):
@@ -102,7 +98,7 @@ def get_one_project(project_id):
 
     contributors_as_objects = []
     for contributor in contributors:
-        result = contributor_schema.dump(contributor).data
+        result = user_schema.dump(contributor).data
         contributors_as_objects.append(result)
 
     return jsonify({"project": project_schema.dump(project).data,
