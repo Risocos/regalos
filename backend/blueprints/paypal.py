@@ -2,10 +2,10 @@ import paypalrestsdk
 from flask import Blueprint, jsonify, request, current_app as app, redirect, url_for
 from paypalrestsdk import Payment, ResourceNotFound
 
-from backend import db
 from backend.auth import with_user
-from backend.models import Donation, Project
-from backend.schemas import payment_schema, donation_schema
+from backend.blueprints.project import find_project_or_404
+from backend.models import Donation
+from backend.schemas import donation_schema
 
 paypal_api = Blueprint('PayPalApi', __name__, url_prefix='/paypal')
 
@@ -29,17 +29,17 @@ def create_payment(current_user):
         return jsonify({'message': 'No data given'}), 400
 
     if current_user is not None:  # if it is None then it's an anonymous donation
-        data['donator_id'] = current_user.id
+        data['donator'] = str(current_user.id)
     else:
-        data['donator_id'] = None  # make sure it's set to None, otherwise user can manipulate which user donated
+        data['donator'] = None  # make sure it's set to None, otherwise user can manipulate which user donated
 
     # load and validate
-    result = payment_schema.load(data)
+    result = donation_schema.load(data, partial=True)
 
     if len(result.errors) > 0:
         return jsonify({'errors': result.errors}), 422
 
-    project = Project.query.filter_by(id=result.data['project_id']).first()
+    project = find_project_or_404(result.data['project_id'])
 
     payment = Payment({
         'intent': 'sale',
@@ -78,10 +78,12 @@ def create_payment(current_user):
 
     if payment.create():
         result.data['paypal_payment_id'] = payment.id
-        new_donation = donation_schema.load(result.data).data
-        db.session.add(new_donation)
-        db.session.commit()
-        db.session.refresh(new_donation)
+        donation_schema.load(result.data)
+        if len(result.errors) > 0:
+            return jsonify({'errors': result.errors}), 422
+        del result.data['project_id']
+        new_donation = Donation(**result.data)
+        new_donation.save()
         for link in payment.links:
             if link.rel == 'approval_url':
                 return jsonify({
@@ -103,25 +105,26 @@ def success():
         try:
             payment = Payment.find(request.args['paymentId'])  # type: Payment
             payment.execute({'payer_id': request.args['PayerID']})
-            donation = Donation.query.filter_by(paypal_payment_id=request.args['paymentId']).first()  # type: Donation
+            donation = Donation.objects(paypal_payment_id=request.args['paymentId']).first()  # type: Donation
             if donation is not None:
                 donation.project.current_budget += donation.amount
-                donation.status = Donation.Status.SUCCESS
-                db.session.commit()
+                donation.status = str(Donation.Status.SUCCESS)
+                donation.project.save()
+                donation.save()
             # redirected to frontend again
             return redirect('http://localhost:3000/donation/success')
         except ResourceNotFound:
             return redirect('http://localhost:3000/donation/failed')
     else:
-        return redirect('/')
+        return jsonify({'message': 'No payment details given'}), 422
 
 
 @paypal_api.route('/cancel')  # callback from PayPal API
 def cancel():
     # TODO: paymentId is not given for cancel requests, find another way to set the donation to CANCELLED
     if 'paymentId' in request.args:
-        donation = Donation.query.filter_by(paypal_payment_id=request.args['paymentId'])
+        donation = Donation.objects(paypal_payment_id=request.args['paymentId'])
         if donation is not None:
-            donation.status = Donation.Status.CANCELLED
-            db.session.commit()
+            donation.status = str(Donation.Status.CANCELLED)
+            donation.save()
     return redirect('http://localhost:3000/donation/cancel')

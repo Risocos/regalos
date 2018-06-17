@@ -59,7 +59,7 @@ class Donation(RegalosDocument):
     project = db.ReferenceField('Project', required=True)
     donator = db.ReferenceField(User, required=False)  # is not required because of anonymous donations
     paypal_payment_id = db.StringField(required=True)
-    status = db.StringField(default=Status.PENDING)
+    status = db.StringField(default=str(Status.PENDING))
 
 
 class Project(RegalosDocument):

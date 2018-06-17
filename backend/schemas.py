@@ -3,6 +3,7 @@ from datetime import datetime
 
 from flask import url_for
 from marshmallow import fields, pre_load, ValidationError, validates, post_load
+from mongoengine import DoesNotExist, ValidationError as MValidationError
 from werkzeug.security import generate_password_hash
 
 from backend import ma
@@ -144,7 +145,13 @@ class ProjectSchema(ma.Schema):
 
 
 def project_exists(project_id):
-    if Project.query.filter_by(id=project_id).first() is None:
+    valid = True
+    try:
+        if Project.objects.get(id=project_id) is None:
+            valid = False
+    except (DoesNotExist, MValidationError):
+        valid = False
+    if not valid:
         raise ValidationError('No project found for given project identifier')
 
 
@@ -157,29 +164,31 @@ def validate_amount(amount):
         raise ValidationError('Invalid amount given')
 
 
-class PaymentSchema(ma.Schema):
-    # return_url = fields.Url(required=True)
-    # cancel_url = fields.Url(required=True)
-    amount = fields.Decimal(places=2, required=True, validate=validate_amount, as_string=True)
-    project_id = fields.Integer(required=True, validate=project_exists)
-    donator_id = fields.Integer(required=False)  # can be anonymous
-
-    @validates('donator_id')
-    def user_exists(self, user_id):
-        if user_id is not None:
-            if User.query.filter_by(id=user_id).first() is None:
-                raise ValidationError('This user does not exists')
-
-
 class DonationSchema(ma.Schema):
     amount = fields.Decimal(places=2, required=True, validate=validate_amount, as_string=True)
-    project_id = fields.Integer(required=True, validate=project_exists)
+    project_id = fields.String(required=True, validate=project_exists)
     paypal_payment_id = fields.String(required=True)
     status = fields.String()
-    donator_id = fields.Integer()
+    donator = fields.String()  # not required because of anonymous donations
+
+    @validates('donator')
+    def user_exists(self, user_id):
+        if user_id is not None:
+            valid = True
+            try:
+                if User.objects(id=user_id).first() is None:
+                    valid = False
+            except (DoesNotExist, MValidationError):
+                valid = False
+            if not valid:
+                raise ValidationError('This user does not exists')
+
+    @post_load
+    def post_load(self, data):
+        if 'project_id' in data:
+            data['project'] = data['project_id']
 
 
 user_schema = UserSchema()
 project_schema = ProjectSchema()
-payment_schema = PaymentSchema()
 donation_schema = DonationSchema()
