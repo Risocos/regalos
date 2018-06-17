@@ -3,7 +3,7 @@ import {Form, Grid, Header, Pagination} from "semantic-ui-react";
 import "../styling/ProjectOverview.css";
 import axios from "axios";
 import {ProjectCard} from "./ProjectCard";
-import {COUNTRIES, BACKEND_URL} from "../constants";
+import {BACKEND_URL, COUNTRIES} from "../constants";
 
 
 export class ProjectOverview extends Component {

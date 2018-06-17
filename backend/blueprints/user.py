@@ -50,7 +50,7 @@ def save_file(file):
 
 def allowed_file(filename):
     ALLOWED_EXTS = {'jpg', 'png', 'jpeg', 'gif'}
-    return '.' in filename and filename.split('.', 1)[1].lower() in ALLOWED_EXTS
+    return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTS
 
 
 @users_api.route('/', methods=['GET'])

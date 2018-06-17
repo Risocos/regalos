@@ -162,7 +162,6 @@ export class SingleProjectOverview extends Component {
     handleReport() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + "/projects/report/" + this.state.id;
-        console.log(TOKEN);
         axios.put(API_PATH, {}, {
             headers: {
                 Authorization: TOKEN,

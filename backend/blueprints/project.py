@@ -36,7 +36,7 @@ def find_project_or_404(project_id):
 
 def allowed_file(filename):
     ALLOWED_EXTS = {'jpg', 'png', 'jpeg', 'gif'}
-    return '.' in filename and filename.split('.', 1)[1].lower() in ALLOWED_EXTS
+    return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTS
 
 
 @projects_api.route('/', methods=['GET'])
