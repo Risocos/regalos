@@ -64,25 +64,27 @@ export class SingleProjectOverview extends Component {
         const API_PATH = BACKEND_URL + this.props.location.pathname;
         axios.get(API_PATH)
             .then((response) => {
-                    console.log(response);
                     const projectdata = response.data.project;
                     let collaborators = [];
                     let donators = [];
                     let country = this.findCountry(projectdata.country_id);
 
-                    response.data.donators.forEach(donator => {
+                    response.data.donators.forEach(donation => {
                         // users can donate multiple times, so check if already in list
-                        // also anonymous donations are possible so check id
-                        if (!donators.includes(donator.donator_id) && donator.donator_id)
-                            donators.push(donator.donator_id)
+                        // check if anonymous donation
+                        if (donation.donator) {
+                            if (!donators.includes(donation.donator.id))
+                                donators.push(donation.donator.id)
+                        } else {
+                            // anonymous donation
+                            // TODO: show anonymous donations somehow?
+                        }
                     });
 
                     response.data.contributors.forEach(contributor => {
                         if (contributor.id)
                             collaborators.push(contributor.id)
                     });
-
-                    console.log(donators, collaborators);
 
                     this.setState({
                         id: projectdata.id,

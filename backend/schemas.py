@@ -81,6 +81,7 @@ class ProjectSchema(ma.Schema):
     short_description = fields.String(required=True, validate=not_empty)
     project_plan = fields.String(required=True, validate=not_empty)
     target_budget = fields.Integer(required=True)
+    current_budget = fields.Integer(dump_only=True)
     collaborators = fields.List(fields.Nested(UserSchema))
     collaborator_ids = fields.List(fields.String())
     filename = fields.String()
@@ -169,9 +170,10 @@ class DonationSchema(ma.Schema):
     project_id = fields.String(required=True, validate=project_exists)
     paypal_payment_id = fields.String(required=True)
     status = fields.String()
-    donator = fields.String()  # not required because of anonymous donations
+    donator_id = fields.String(load_only=True)
+    donator = fields.Nested(UserSchema, allow_none=True)   # not required because of anonymous donations
 
-    @validates('donator')
+    @validates('donator_id')
     def user_exists(self, user_id):
         if user_id is not None:
             valid = True
@@ -185,6 +187,8 @@ class DonationSchema(ma.Schema):
 
     @post_load
     def post_load(self, data):
+        if 'donator_id' in data:
+            data['donator'] = data['donator_id']
         if 'project_id' in data:
             data['project'] = data['project_id']
 

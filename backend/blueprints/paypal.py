@@ -29,9 +29,9 @@ def create_payment(current_user):
         return jsonify({'message': 'No data given'}), 400
 
     if current_user is not None:  # if it is None then it's an anonymous donation
-        data['donator'] = str(current_user.id)
+        data['donator_id'] = str(current_user.id)
     else:
-        data['donator'] = None  # make sure it's set to None, otherwise user can manipulate which user donated
+        data['donator_id'] = None  # make sure it's set to None, otherwise user can manipulate which user donated
 
     # load and validate
     result = donation_schema.load(data, partial=True)
@@ -82,6 +82,7 @@ def create_payment(current_user):
         if len(result.errors) > 0:
             return jsonify({'errors': result.errors}), 422
         del result.data['project_id']
+        del result.data['donator_id']
         new_donation = Donation(**result.data)
         new_donation.save()
         for link in payment.links:

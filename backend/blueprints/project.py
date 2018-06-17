@@ -34,21 +34,6 @@ def find_project_or_404(project_id):
     return project
 
 
-def find_donators(project_id):
-    donations = Donation.objects(project=project_id).all()
-    if donations is None:
-        response = jsonify({'message': 'No donators found!'})
-        abort(response)
-
-    return donations
-
-
-def find_contributors(project_id):
-    project = find_project_or_404(project_id)  # type: Project
-
-    return project.collaborators
-
-
 def allowed_file(filename):
     ALLOWED_EXTS = {'jpg', 'png', 'jpeg', 'gif'}
     return '.' in filename and filename.split('.', 1)[1].lower() in ALLOWED_EXTS
@@ -71,23 +56,13 @@ def get_all_projects():
 
 @projects_api.route('/<string:project_id>', methods=['GET'])
 def get_one_project(project_id):
-    project = find_project_or_404(project_id)
-    donations = find_donators(project_id)
-    contributors = find_contributors(project_id)
-
-    donations_as_objects = []
-    for donation in donations:
-        result = donation_schema.dump(donation).data
-        donations_as_objects.append(result)
-
-    contributors_as_objects = []
-    for contributor in contributors:
-        result = user_schema.dump(contributor).data
-        contributors_as_objects.append(result)
+    project = find_project_or_404(project_id)  # type: Project
+    donations = Donation.objects(project=project_id).all()
+    contributors = project.collaborators
 
     return jsonify({"project": project_schema.dump(project).data,
-                    "donators": donations_as_objects,
-                    "contributors": contributors_as_objects})
+                    "donators": donation_schema.dump(donations, many=True).data,
+                    "contributors": user_schema.dump(contributors, many=True).data})
 
 
 def save_file(file):
