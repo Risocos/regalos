@@ -1,13 +1,14 @@
 import os
 import uuid
 
-from flask import Blueprint, jsonify, request, current_app, url_for, abort
+from flask import Blueprint, jsonify, request, current_app, abort
+from mongoengine import DoesNotExist, ValidationError
+from pymongo.errors import DuplicateKeyError
 from werkzeug.utils import secure_filename
 
-from backend import db
 from backend.auth import token_required
-from backend.models import Project, User, Donation, Contributor
-from backend.schemas import project_schema, donation_schema, contributor_schema
+from backend.models import Project, User, Donation
+from backend.schemas import project_schema, donation_schema, user_schema
 
 projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
 
@@ -19,7 +20,11 @@ projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
 ####################
 
 def find_project_or_404(project_id):
-    project = Project.query.filter_by(id=project_id).first()
+    project = None
+    try:
+        project = Project.objects.get(id=project_id)
+    except (DoesNotExist, ValidationError):
+        pass
 
     if project is None:
         response = jsonify({'message': 'No project found!'})
@@ -29,82 +34,35 @@ def find_project_or_404(project_id):
     return project
 
 
-def find_user_or_404(user_id):
-    """
-    Finds a user or aborts with a 404 not found
-    :param user_id:
-    :return:
-    """
-    user = User.query.filter_by(id=user_id).first()
-
-    if user is None:
-        response = jsonify({'message': 'No user found!'})
-        response.status_code = 404
-        abort(response)
-
-    return user
-
-
-def find_donators(project_id):
-    donations = Donation.query.filter_by(project_id=project_id).all()
-    if donations is None:
-        response = jsonify({'message': 'No donators found!'})
-        abort(response)
-
-    return donations
-
-
-def find_contributors(project_id):
-    contributors = Contributor.query.filter_by(project_id=project_id).all()
-    if contributors is None:
-        response = jsonify({'message': 'No contributors found!'})
-        abort(response)
-
-    return contributors
-
-
 def allowed_file(filename):
     ALLOWED_EXTS = {'jpg', 'png', 'jpeg', 'gif'}
-    return '.' in filename and filename.split('.', 1)[1].lower() in ALLOWED_EXTS
+    return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTS
 
 
 @projects_api.route('/', methods=['GET'])
 def get_all_projects():
-    # retrieve the models
-    q = Project.query
+    # TODO: find out how to filter and sort with mongoengine
+    q = Project.objects()
     if 'country_id' in request.args:
-        q = q.filter(Project.country_id == request.args['country_id'])
+        q.filter(country__country_code=request.args['country_id'])
 
-    attr = Project.start_date
     if 'sort' in request.args:
-        # where to filter on
-        attr = getattr(Project, request.args['sort'], None) or attr
+        q.order_by(request.args['sort'])
 
-    q = q.order_by(attr.desc())
     # parse them through a schema which converts is to a dict
     result = project_schema.dump(q.all(), many=True)
     return jsonify({'projects': result.data})  # convert dict to json and return that to client
 
 
-@projects_api.route('/<int:project_id>', methods=['GET'])
+@projects_api.route('/<string:project_id>', methods=['GET'])
 def get_one_project(project_id):
-    project = find_project_or_404(project_id)
-    donations = find_donators(project_id)
-    contributors = find_contributors(project_id)
-
-    donations_as_objects = []
-    for donation in donations:
-        result = donation_schema.dump(donation).data
-        donations_as_objects.append(result)
-
-    contributors_as_objects = []
-    for contributor in contributors:
-        result = contributor_schema.dump(contributor).data
-        contributors_as_objects.append(result)
+    project = find_project_or_404(project_id)  # type: Project
+    donations = Donation.objects(project=project_id).all()
+    contributors = project.collaborators
 
     return jsonify({"project": project_schema.dump(project).data,
-                    "donators": donations_as_objects,
-                    "contributors": contributors_as_objects})
+                    "donators": donation_schema.dump(donations, many=True).data,
+                    "contributors": user_schema.dump(contributors, many=True).data})
 
 
 def save_file(file):
@@ -116,10 +74,14 @@ def save_file(file):
 @projects_api.route('/', methods=['POST'])
 @token_required
 def create_project(current_user: User):
+    # fix to retrieve collaborators
+    collabs = request.form.getlist('collaborators[]')
     data = request.form.to_dict()  # form data is used instead request.json so files can be uploaded
 
     if not data:  # no data given
         return jsonify({'message': 'Missing data to create project'}), 400
+
+    data['collaborator_ids'] = collabs
 
     # check if file is uploaded
     if 'cover' in request.files and request.files['cover'] != '':
@@ -127,7 +89,8 @@ def create_project(current_user: User):
         if allowed_file(file.filename):
             data['filename'] = save_file(file)
 
-    data['user_id'] = current_user.id
+    if current_user is not None:
+        data['owner_id'] = str(current_user.id)
 
     # load and validate
     result = project_schema.load(data)
@@ -135,11 +98,8 @@ def create_project(current_user: User):
     if len(result.errors) > 0:
         return jsonify({'errors': result.errors}), 422
 
-    new_project = result.data
-
-    db.session.add(new_project)
-    db.session.commit()
-    db.session.refresh(new_project)
+    new_project = Project(**result.data)
+    new_project.save()
 
     return jsonify({
         'message': "Project created!",
@@ -147,17 +107,17 @@ def create_project(current_user: User):
     })
 
 
-@projects_api.route('/edit/<int:project_id>', methods=['PATCH'])
+@projects_api.route('/edit/<string:project_id>', methods=['PATCH'])
 @token_required
-def update_project(current_user: User, project_id: int):
-    criteria = {'id': project_id}
+def update_project(current_user: User, project_id):
+    q = Project.objects(pk=project_id)
 
     # check if user is an admin
     if not current_user.admin:
         # if not filter by the projects only from this user
-        criteria['user_id'] = current_user.id
+        q = q.filter(owner=current_user.id)
 
-    project = Project.query.filter_by(**criteria).first()
+    project = q.first()
 
     if project is None:
         return jsonify({'message': 'No project found!'}), 404
@@ -175,47 +135,48 @@ def update_project(current_user: User, project_id: int):
             data['filename'] = save_file(file)
 
     # load and validate
-    result = project_schema.load(data, instance=project, partial=True)
+    result = project_schema.load(data, partial=True)
 
     if len(result.errors) > 0:
         return jsonify({'errors': result.errors}), 422
 
-    new_project = result.data
-    db.session.commit()
+    for attr, value in result.data.items():
+        setattr(project, attr, value)
+
+    project.save()
 
     return jsonify({
         'message': "Project updated!",
-        'project': project_schema.dump(new_project).data
+        'project': project_schema.dump(project).data
     })
 
 
-@projects_api.route('/<int:project_id>', methods=['DELETE'])
+@projects_api.route('/<string:project_id>', methods=['DELETE'])
 @token_required
 def delete_project(current_user: User, project_id):
-    criteria = {'id': project_id}
+    project = Project.objects(pk=project_id)
 
     # check if user is an admin
     if not current_user.admin:
         # if not filter by the projects only from this user
-        criteria['user_id'] = current_user.id
+        project = project.filter(owner=current_user.id)
 
-    project = Project.query.filter_by(**criteria).first()
+    project = project.first()
 
     if project is None:
         return jsonify({'message': 'No project found!'}), 404
 
-    db.session.delete(project)
-    db.session.commit()
+    project.delete()
 
     return jsonify({'message': 'Project deleted!'})
 
 
-@projects_api.route('/report/<int:project_id>', methods=['PUT'])
+@projects_api.route('/report/<string:project_id>', methods=['PUT'])
 @token_required
 def report_project(current_user: User, project_id):
-    project = find_project_or_404(project_id)
-
-    project.flag_count += 1
-    db.session.commit()
-
+    project = find_project_or_404(project_id)  # type: Project
+    try:
+        project.update(add_to_set__reportings=current_user)
+    except DuplicateKeyError:
+        return jsonify({'message': 'You have reported this project already'})
     return jsonify({'message': 'Project reported!'})

@@ -1,15 +1,20 @@
 import React, {Component} from 'react';
 import {
-    Header,
     Button,
-    Image,
-    Progress,
-    Statistic,
-    Grid,
+    Checkbox,
+    Container,
     Dimmer,
     Form,
+    Grid,
+    Header,
+    Icon,
+    Image,
     Input,
-    Radio, TextArea, Checkbox, Container, Icon, Tab
+    Progress,
+    Radio,
+    Statistic,
+    Tab,
+    TextArea
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
@@ -64,14 +69,21 @@ export class SingleProjectOverview extends Component {
                     let donators = [];
                     let country = this.findCountry(projectdata.country_id);
 
-                    response.data.donators.forEach(donator => {
-                        if(!donators.includes(donator.donator_id))
-                            donators.push(donator.donator_id)
+                    response.data.donators.forEach(donation => {
+                        // users can donate multiple times, so check if already in list
+                        // check if anonymous donation
+                        if (donation.donator) {
+                            if (!donators.includes(donation.donator.id))
+                                donators.push(donation.donator.id)
+                        } else {
+                            // anonymous donation
+                            // TODO: show anonymous donations somehow?
+                        }
                     });
 
                     response.data.contributors.forEach(contributor => {
-                        if(!collaborators.includes(contributor.user_id))
-                            collaborators.push(contributor.user_id)
+                        if (contributor.id)
+                            collaborators.push(contributor.id)
                     });
 
                     this.setState({
@@ -89,10 +101,11 @@ export class SingleProjectOverview extends Component {
                     });
                 }
             ).catch(err => {
-            if (err.response.status === 404) {
-                this.props.history.push('/404')
+                if (err.response && err.response.status === 404) {
+                    this.props.history.push('/404')
+                }
             }
-        })
+        )
     }
 
     findCountry(cc) {
@@ -149,7 +162,6 @@ export class SingleProjectOverview extends Component {
     handleReport() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + "/projects/report/" + this.state.id;
-        console.log(TOKEN);
         axios.put(API_PATH, {}, {
             headers: {
                 Authorization: TOKEN,
@@ -386,7 +398,9 @@ export class SingleProjectOverview extends Component {
                         </Grid.Column>
 
                         <Grid.Column textAlign="center" width={10}>
-                            <Image src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/600x400'} centered={true}/>
+                            <Image
+                                src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/600x400'}
+                                centered={true}/>
                             <Header as='h1'>{this.state.title}</Header>
                             <Header as='h3'>Target Budget: €{this.state.target}</Header>
                             <Header as='h3'>Achieved Budget: €{this.state.achieved}</Header>

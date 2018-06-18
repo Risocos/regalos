@@ -59,7 +59,6 @@ export class Account extends Component {
     handleReport() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + "/users/report/" + this.state.user.id;
-        console.log(TOKEN);
         axios.put(API_PATH, {}, {
             headers: {
                 Authorization: TOKEN,
@@ -138,7 +137,7 @@ export class Account extends Component {
                 <Container style={{margin: '80px'}}>
                     <Header as='h1'>Projects</Header>
                     <Grid columns={3}>
-                        {this.state.user.projects.map(project => this.listProject(project))}
+                        {this.state.user.projects && this.state.user.projects.map(project => this.listProject(project))}
                     </Grid>
                 </Container>
             </div>

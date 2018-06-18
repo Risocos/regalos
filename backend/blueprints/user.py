@@ -1,12 +1,12 @@
-import uuid
 import os
+import uuid
 
 from flask import Blueprint, jsonify, request, abort, url_for, current_app
 from flask_mail import Message
-
+from mongoengine import DoesNotExist, ValidationError
 from werkzeug.utils import secure_filename
 
-from backend import db, mail
+from backend import mail
 from backend.auth import token_required, admin_required
 from backend.models import User
 from backend.schemas import UserSchema
@@ -22,13 +22,17 @@ user_schema = UserSchema()
 #
 ##############
 
-def find_user_or_404(user_id):
+def find_user_or_404(mongo_id):
     """
     Finds a user or aborts with a 404 not found
-    :param user_id:
+    :param mongo_id:
     :return:
     """
-    user = User.query.filter_by(id=user_id).first()
+    user = None
+    try:
+        user = User.objects.get(id=mongo_id)
+    except (DoesNotExist, ValidationError):
+        pass
 
     if user is None:
         response = jsonify({'message': 'No user found!'})
@@ -46,22 +50,21 @@ def save_file(file):
 
 def allowed_file(filename):
     ALLOWED_EXTS = {'jpg', 'png', 'jpeg', 'gif'}
-    return '.' in filename and filename.split('.', 1)[1].lower() in ALLOWED_EXTS
+    return '.' in filename and filename.split('.')[-1].lower() in ALLOWED_EXTS
 
 
 @users_api.route('/', methods=['GET'])
 @token_required
 @admin_required
 def get_all_users(current_user: User):
-    users = User.query.all()
-    user_schema = UserSchema(exclude=['projects'])
+    users = User.objects()
     return jsonify({
-        'users': user_schema.dump(users, many=True).data
+        'users': UserSchema(exclude=['projects']).dump(users, many=True).data
     })
 
 
-@users_api.route('/<int:user_id>', methods=['GET'])
-def get_user_profile(user_id: int):
+@users_api.route('/<string:user_id>', methods=['GET'])
+def get_user_profile(user_id):
     user = find_user_or_404(user_id)
 
     return jsonify({
@@ -87,15 +90,12 @@ def create_user():
     if len(result.errors) > 0:
         return jsonify({'errors': result.errors}), 422
 
-    new_user = result.data
-
     # TODO: generate token to verify
     # verify_token = uuid.uuid4()
 
+    new_user = User(**result.data)
     # save user to storage
-    db.session.add(new_user)
-    db.session.commit()
-    db.session.refresh(new_user)
+    new_user.save()
 
     # send verify mail to user
     msg = Message('Verify your Account',
@@ -121,7 +121,7 @@ def verify():
     return jsonify({'message': 'endpoint in construction'})
 
 
-@users_api.route('/<int:user_id>', methods=['PATCH'])
+@users_api.route('/<string:user_id>', methods=['PATCH'])
 @token_required
 def update_user(current_user: User, user_id):
     user = find_user_or_404(user_id)
@@ -136,24 +136,37 @@ def update_user(current_user: User, user_id):
         if allowed_file(file.filename):
             data['filename'] = save_file(file)
 
-    user_schema.partial = True
     # pass in the user which is being edited and set partial=True so required fields are ignored
-    result = user_schema.load(data, instance=user, partial=True)
+    user_schema.partial = True
+    result = user_schema.load(data, partial=True)
 
     if len(result.errors) > 0:
         return jsonify({'errors': result.errors}), 422
 
-    # the updated user
-    new_user = result.data
-    db.session.commit()
+    # update the user
+    for key, value in result.data.items():
+        setattr(user, key, value)
+
+    user.save()
 
     return jsonify({
         'message': 'User updated successfully!',
-        'user': user_schema.dump(new_user).data
+        'user': user_schema.dump(user).data
     })
 
 
-@users_api.route('/<int:user_id>', methods=['PUT'])
+@users_api.route('/<string:user_id>', methods=['DELETE'])
+@token_required
+@admin_required
+def delete_user(current_user: User, user_id):
+    user = find_user_or_404(user_id)
+    user.delete()
+    return jsonify({
+        'message': 'The user has been deleted!'
+    })
+
+
+@users_api.route('/<string:user_id>', methods=['PUT'])
 @token_required
 @admin_required
 def promote_user(current_user: User, user_id):
@@ -161,34 +174,21 @@ def promote_user(current_user: User, user_id):
     user = find_user_or_404(user_id)
 
     user.admin = True
-    db.session.commit()
+    user.save()
 
     return jsonify({
         'message': 'The user has been promoted!'
     })
 
 
-@users_api.route('/<int:user_id>', methods=['DELETE'])
-@token_required
-@admin_required
-def delete_user(current_user: User, user_id):
-    user = find_user_or_404(user_id)
-
-    db.session.delete(user)
-    db.session.commit()
-
-    return jsonify({
-        'message': 'The user has been deleted!'
-    })
-
-
-@users_api.route('/report/<int:user_id>', methods=['PUT'])
+@users_api.route('/report/<string:user_id>', methods=['PUT'])
 @token_required
 def report_user(current_user: User, user_id):
     # the user being reported
+    # TODO: fix this because we are using MongoDB now!!!! thanks :D
     user = find_user_or_404(user_id)  # type: User
-    user.received_reports.append(user)
-    db.session.commit()
+    # user.received_reports.append(user)
+    user.save()
 
     return jsonify({'message': 'User reported!'})
 
@@ -204,7 +204,7 @@ def forgot_password():
         if not data or 'email' not in data:
             return jsonify({'message': 'Missing email field in data'}), 400
 
-        user = User.query.filter_by(email=data['email']).first()
+        user = User.objects(email=data['email']).first()
 
         if user is None:
             return jsonify({'message': 'User not found'}), 404
