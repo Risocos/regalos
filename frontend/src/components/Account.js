@@ -66,12 +66,15 @@ export class Account extends Component {
     }
 
     listProject(project) {
+        if (project.country === null)
+            project.country = {country_code: "none", name: "None"};
         return (
             <ProjectCard key={project.id}
                          id={project.id}
                          name={project.title}
                          desc={project.description}
                          target={project.target_budget}
+                         country={project.country.name}
                          achieved={project.current_budget}
                          cover={project.cover}
             />)
@@ -86,24 +89,27 @@ export class Account extends Component {
     }
 
     renderTwitter() {
-        if(this.state.user.twitter!=null) {
-        return(
-            <a href={this.state.user.twitter}><Button circular color='twitter' icon='twitter' /></a>
-        )}
+        if (this.state.user.twitter != null) {
+            return (
+                <a href={this.state.user.twitter}><Button circular color='twitter' icon='twitter'/></a>
+            )
+        }
     }
 
     renderGoogle() {
-        if(this.state.user.google!=null) {
-        return(
-            <a href={this.state.user.google}><Button circular color='google plus' icon='google plus'/></a>
-        )}
+        if (this.state.user.google != null) {
+            return (
+                <a href={this.state.user.google}><Button circular color='google plus' icon='google plus'/></a>
+            )
+        }
     }
 
     renderLinkedin() {
-        if(this.state.user.linkedin!=null) {
-        return(
-            <a href={this.state.user.linkedin}><Button circular color='linkedin' icon='linkedin'/></a>
-        )}
+        if (this.state.user.linkedin != null) {
+            return (
+                <a href={this.state.user.linkedin}><Button circular color='linkedin' icon='linkedin'/></a>
+            )
+        }
     }
 
     render() {
@@ -131,7 +137,8 @@ export class Account extends Component {
                                         {this.renderGoogle()}
                                         <div style={{float: 'right'}}>
                                             <div>
-                                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report user</Button>
+                                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report
+                                                    user</Button>
                                             </div>
                                         </div>
                                     </Item.Extra>
