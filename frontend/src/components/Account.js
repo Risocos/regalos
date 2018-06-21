@@ -38,7 +38,6 @@ export class Account extends Component {
             }
         ).then(res => {
             const data = res.data.user;
-            console.log(data);
 
             this.setState({
                 user: {
@@ -52,8 +51,8 @@ export class Account extends Component {
                     linkedin: data.linkedin,
                     projects: data.projects,
                 }
-            });
-        })
+            }, this.findUserProjects);
+        });
     }
 
     handleReport() {
@@ -76,6 +75,14 @@ export class Account extends Component {
                          achieved={project.current_budget}
                          cover={project.cover}
             />)
+    }
+
+    findUserProjects() {
+        const API_PATH = BACKEND_URL + '/projects/userprojects/' + this.state.user.id;
+        axios.get(API_PATH, {}
+        ).then(res => this.setState({
+            projects: res.data.projects
+        }))
     }
 
     renderTwitter() {
@@ -137,7 +144,7 @@ export class Account extends Component {
                 <Container style={{margin: '80px'}}>
                     <Header as='h1'>Projects</Header>
                     <Grid columns={3}>
-                        {this.state.user.projects && this.state.user.projects.map(project => this.listProject(project))}
+                        {this.state.projects && this.state.projects.map(project => this.listProject(project))}
                     </Grid>
                 </Container>
             </div>

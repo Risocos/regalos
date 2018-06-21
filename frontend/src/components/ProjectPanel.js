@@ -26,10 +26,11 @@ export class ProjectPanel extends Component {
                 Authorization: 'Bearer ' + TOKEN,
             }
         }).then(res => {
-            this.setState({
-                projects: res.data.projects,
-            });
-        })
+                this.setState({
+                    projects: res.data.projects,
+                })
+            }
+        )
     }
 
     deleteProject(projectId) {
@@ -46,13 +47,13 @@ export class ProjectPanel extends Component {
             this.closeConfirm();
             if (response.status === 200) {
                 window.location.reload();
-            } else if([401, 403].includes(response.status)) {
+            } else if ([401, 403].includes(response.status)) {
                 // todo: show message or automatically login used again
                 const PATH = '/' + response.status;
                 window.location.href = PATH;
             }
         }).catch((err) => {
-                console.log(err)
+            console.log(err)
         });
     }
 
@@ -60,7 +61,7 @@ export class ProjectPanel extends Component {
     closeConfirm = () => this.setState({confirm: {open: false}});
 
     projectRow(project) {
-        let isFlagged = (project.flag_count>20) ? "Yes" : "No";
+        let isFlagged = (project.flag_count > 20) ? "Yes" : "No";
 
         const PROJECT = '/projects/' + project.id;
         const startEndDate = project.startdate + ' to ' + project.enddate;
@@ -69,7 +70,7 @@ export class ProjectPanel extends Component {
                 <Table.Cell collapsing>
                 </Table.Cell>
                 <Table.Cell>{project.title}</Table.Cell>
-                <Table.Cell>{project.owner}</Table.Cell>
+                <Table.Cell>{project.owner.username}</Table.Cell>
                 <Table.Cell>{startEndDate}</Table.Cell>
                 <Table.Cell>{isFlagged}</Table.Cell>
                 <Table.Cell>
