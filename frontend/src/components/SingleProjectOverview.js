@@ -259,10 +259,8 @@ export class SingleProjectOverview extends Component {
         const shareTitle = "Please help me by donating to my project: " + this.state.title;
         const shareUrl = window.location.href;
 
-        //TODO: functionality of filters
         //TODO: Posts, photo album, see what we can do
 
-        //TODO: Add payment system to donate form
         return (
             <div className="container">
                 {/*Donation form*/}
