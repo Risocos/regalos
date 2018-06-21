@@ -19,14 +19,14 @@ export class MyProjects extends Component {
 
     componentDidMount() {
         const TOKEN = sessionStorage.getItem("token");
-        const API_PATH = BACKEND_URL + '/users/' + sessionStorage.getItem("user");
-
+        const API_PATH = BACKEND_URL + '/projects/userprojects/' + sessionStorage.getItem("user");
+        console.log(API_PATH);
         axios.get(API_PATH, {
             headers: {
                 Authorization: 'Bearer ' + TOKEN,
             }
         }).then(res => {
-            this.setState({projects: res.data.user.projects});
+            this.setState({projects: res.data.projects});
         })
     }
 
