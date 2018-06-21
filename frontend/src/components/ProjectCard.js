@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {Card, Image, Progress} from 'semantic-ui-react'
 import {Link} from "react-router-dom";
 import '../styling/ProjectCard.css';
-import {COUNTRIES} from '../constants';
 
 export class ProjectCard extends Component {
     constructor(props) {
@@ -26,7 +25,7 @@ export class ProjectCard extends Component {
             achieved: this.props.achieved,
             country: this.props.country,
             cover: this.props.cover,
-        })
+        });
     }
 
     componentDidMount() {
@@ -43,18 +42,6 @@ export class ProjectCard extends Component {
         }
     }
 
-    findCountry(cc) {
-        let name = '';
-        COUNTRIES.map((countryObject) => {
-            if(countryObject.countryCode===cc) {
-                name = countryObject.name;
-            }
-            return null;
-        });
-        if(name==='') return 'None';
-        return name;
-    }
-
     render() {
         return(
             <div className="carddiv">
@@ -63,7 +50,7 @@ export class ProjectCard extends Component {
                     <Image className='cardImage' src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/300x200'}/>
                     <Card.Content className="card-content">
                         <Card.Header className="card-header">{this.state.name}</Card.Header>
-                        <Card.Meta>Country: {this.findCountry(this.state.country)}</Card.Meta>
+                        <Card.Meta>Country: {this.state.country}</Card.Meta>
                         <Card.Meta>Target budget: €{this.state.target}</Card.Meta>
                         <Card.Meta>Achieved budget: €{this.state.achieved}</Card.Meta>
                         <Progress percent={this.returnProgress()} progress success> </Progress>

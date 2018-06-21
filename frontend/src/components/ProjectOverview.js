@@ -45,13 +45,15 @@ export class ProjectOverview extends Component {
     }
 
     createCardObject(project) {
+        if(project.country===null)
+            project.country={country_code: "none", name: "None"};
         return (
             <ProjectCard key={project.id}
                          id={project.id}
                          name={project.title}
                          target={project.target_budget}
                          achieved={project.current_budget}
-                         country={project.country_id}
+                         country={project.country.name}
                          cover={project.cover}
                          className="card"
             />
