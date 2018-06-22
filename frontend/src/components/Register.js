@@ -4,6 +4,7 @@ import "../styling/login.css"
 import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
 import {BACKEND_URL} from "../constants";
+import '../styling/Register.css';
 
 export class Register extends Component {
 
@@ -31,15 +32,14 @@ export class Register extends Component {
         });
     }
 
-    validate(){
-        if(this.state.password===this.state.temppass) return true;
-        return false
+    validate() {
+        return (this.state.password === this.state.temppass);
     }
 
     onSubmit = event => {
         event.preventDefault();
 
-        if(this.validate()) {
+        if (this.validate()) {
             const USERNAME = this.state.username;
             const EMAIL = this.state.email;
             const PASSWORD = this.state.password;
@@ -54,9 +54,30 @@ export class Register extends Component {
                     redirect: true,
                 })
             }).catch(err => {
-                console.log(err);
+                const errors = err.response.data.errors;
+                let items = [];
+                if (err.response.status === 422) {
+                    if (errors.email)
+                        items.push(...errors.email);
+                    if (errors.password)
+                        items.push(...errors.password);
+                }
+
+                const MESSAGE = (
+                    <Message className="error" error>
+                        <Message.Header className="errorheader">Oops! Something went wrong!</Message.Header>
+                        <Message.List>
+                            {items.map(val => <Message.Item key={val}>{val}</Message.Item>)}
+                        </Message.List>
+                    </Message>
+                );
+
+                this.setState({
+                    error: MESSAGE,
+                })
             })
         }
+
         else {
             this.setState({
                 error: <Message negative>Passwords do not match</Message>,
@@ -65,8 +86,7 @@ export class Register extends Component {
     };
 
     render() {
-
-        if(this.state.redirect===true)
+        if (this.state.redirect === true)
             return <Redirect to='/login'/>;
         return (
             <Grid textAlign="center"

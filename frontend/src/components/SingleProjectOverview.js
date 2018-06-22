@@ -18,7 +18,7 @@ import {
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
-import {BACKEND_URL, COUNTRIES, FRONTEND_URL} from "../constants";
+import {BACKEND_URL, FRONTEND_URL} from "../constants";
 import {
     FacebookShareButton,
     GooglePlusShareButton,
