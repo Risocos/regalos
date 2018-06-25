@@ -48,7 +48,6 @@ export class ProjectPanel extends Component {
             if (response.status === 200) {
                 window.location.reload();
             } else if ([401, 403].includes(response.status)) {
-                // todo: show message or automatically login used again
                 const PATH = '/' + response.status;
                 window.location.href = PATH;
             }
@@ -64,7 +63,7 @@ export class ProjectPanel extends Component {
         let isFlagged = (project.flag_count > 20) ? "Yes" : "No";
 
         const PROJECT = '/projects/' + project.id;
-        const startEndDate = project.startdate + ' to ' + project.enddate;
+        const startEndDate =project.start_date + ' to ' + project.end_date;
         return (
             <Table.Row key={project.id}>
                 <Table.Cell collapsing>

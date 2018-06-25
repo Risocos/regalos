@@ -18,7 +18,7 @@ import {
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
-import {BACKEND_URL, COUNTRIES, FRONTEND_URL} from "../constants";
+import {BACKEND_URL, FRONTEND_URL} from "../constants";
 import {
     FacebookShareButton,
     GooglePlusShareButton,
@@ -67,7 +67,7 @@ export class SingleProjectOverview extends Component {
                     const projectdata = response.data.project;
                     let collaborators = [];
                     let donators = [];
-                    let country = this.findCountry(projectdata.country_id);
+                    let country = projectdata.country.name;
 
                     response.data.donators.forEach(donation => {
                         // users can donate multiple times, so check if already in list
@@ -106,17 +106,6 @@ export class SingleProjectOverview extends Component {
                 }
             }
         )
-    }
-
-    findCountry(cc) {
-        let name = '';
-        COUNTRIES.map((countryObject) => {
-            if (countryObject.countryCode === cc) {
-                name = countryObject.name;
-            }
-            return null;
-        });
-        return name;
     }
 
     isANumber(string) {

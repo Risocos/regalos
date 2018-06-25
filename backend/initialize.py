@@ -157,7 +157,7 @@ countries = [
     {'name': 'Nauru', 'country_code': 'nr'},
     {'name': 'Nepal', 'country_code': 'np'},
     {'name': 'Netherlands', 'country_code': 'nl'},
-    {'name': 'Netherlandsantilles', 'country_code': 'an'},
+    {'name': 'Netherlands Antilles', 'country_code': 'an'},
     {'name': 'New Caledonia', 'country_code': 'nc'},
     {'name': 'New Guinea', 'country_code': 'pg'},
     {'name': 'New Zealand', 'country_code': 'nz'},
