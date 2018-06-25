@@ -16,7 +16,7 @@ export class Footer extends Component {
                                 About
                             </Header>
                                 <List>
-                                    <List.Item as={Link} to='/' icon='users' content='About us'/>
+                                    <List.Item as={Link} to='/aboutus' icon='users' content='About us'/>
                                     <List.Item as={Link} to='/' icon='user' content='User agreements'/>
                                     <List.Item as={Link} to='/' icon='tasks' content='Terms and conditions'/>
                                 </List>
@@ -35,7 +35,7 @@ export class Footer extends Component {
                                         content='Contact@Regalos.com'
                                     />
                                     <List.Item icon='linkify'
-                                               as={Link} to='/' content='Contact us'/>
+                                               as={Link} to='/contactus' content='Contact us'/>
                                     <p>{}</p>
                                     <List.Item as={Link} to='http://www.Twitter.com' icon='twitter' content='Twitter'/>
                                     <List.Item as={Link} to='http://www.Facebook.com' icon='facebook' content='Facebook'/>

@@ -321,7 +321,7 @@ projects = [
             users[0]['public_id']
         ],
         'filename': 'dummy2.jpg',
-        'country': 'an',
+        'country': 'nl',
     },
     {
         'title': 'Recycle clothing',
@@ -400,7 +400,7 @@ projects = [
             users[0]['public_id']
         ],
         'filename': 'dummy2.jpg',
-        'country': 'an',
+        'country': 'nl',
     },
 {
         'title': 'Project Regalos',
@@ -478,7 +478,7 @@ projects = [
             users[0]['public_id']
         ],
         'filename': 'dummy2.jpg',
-        'country': 'an',
+        'country': 'nl',
     },
 {
         'title': 'Building Houses',

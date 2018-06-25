@@ -20,6 +20,8 @@ import {MyProjects} from "./components/MyProjects";
 import {EditProject} from "./components/EditProject";
 import {PaymentCancel} from "./components/PaymentCancel";
 import {PaymentSuccess} from "./components/PaymentSuccess";
+import {AboutUs} from "./components/AboutUs";
+import {ContactUs} from "./components/ContactUs";
 
 class App extends Component {
     constructor() {
@@ -101,7 +103,8 @@ class App extends Component {
                                     <Route path="/signup" component={Register}/>
                                     <Route path="/users/:userId" component={Account}/>
                                     <Route path="/settings" component={EditProfile}/>
-                                    <Route path="/paymentcancel" component={PaymentCancel}/>
+                                    <Route path="/aboutus" component={AboutUs}/>
+                                    <Route path="/contactus" component={ContactUs}/>
 
 
                                     <Route exact path="/projects/create"
