@@ -68,11 +68,6 @@ export class MyProjects extends Component {
             <Grid columns='equal'>
                 <Grid.Row>
                     <Grid.Column>
-                        {/*<div className={"backbutton"}><Button*/}
-                            {/*as={Link}*/}
-                            {/*to='/adminpanel'*/}
-                            {/*icon='left chevron'*/}
-                            {/*content="Back"/></div>*/}
                     </Grid.Column>
                     <Grid.Column width={12}>
                         <Header textAlign={"center"}> My projects </Header>

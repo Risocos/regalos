@@ -22,7 +22,7 @@ export class EditProfile extends Component {
             current: '',
             new: '',
             reNew: '',
-            match: '',
+            message: '',
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -37,16 +37,15 @@ export class EditProfile extends Component {
             headers: {
                 Authorization: TOKEN,
             }
-        }).then(res=> {
+        }).then(res => {
             const data = res.data.user;
-            console.log(data);
             this.setState({
-            email: data.email,
-            picturePreview: data.avatar,
-            bio: data.biography,
-            twitter: data.twitter,
-            linkedin: data.linkedin,
-            google: data.google,
+                email: data.email,
+                picturePreview: data.avatar,
+                bio: data.biography,
+                twitter: data.twitter,
+                linkedin: data.linkedin,
+                google: data.google,
             })
         })
     }
@@ -55,13 +54,35 @@ export class EditProfile extends Component {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + "/users/" + sessionStorage.getItem("user");
 
-        axios.patch(API_PATH, {
-            password: this.state.new
-        }, {
+        let data = new FormData();
+        data.append("password", this.state.new);
+
+        axios.patch(API_PATH, data, {
             headers: {
                 Authorization: TOKEN,
+                'Content-Type': 'multipart/form-data'
             }
-        }).then(res=>{/*TODO: give feedback to user*/}).catch(err=>console.log(err))
+        }).then(() => {
+            const MESSAGE = (
+                <Message success>
+                    <Message.Header className='message'>Password has been successfully changed! Please log in with your new password</Message.Header>
+                </Message>
+            );
+            this.setState({
+                message: MESSAGE,
+            })
+        }).catch(err => {
+            const error = err.response.data.errors.password;
+            const MESSAGE = (
+                <Message error>
+                    <Message.Header className='message'>{error[0]}</Message.Header>
+                </Message>
+            );
+
+            this.setState({
+                message: MESSAGE,
+            })
+        })
     }
 
     handleSubmit() {
@@ -81,7 +102,36 @@ export class EditProfile extends Component {
                 Authorization: TOKEN,
                 'Content-Type': 'multipart/form-data'
             }
-        }).then(res=>console.log(res)).catch(err=>console.log(err))
+        }).then(() => {
+            const MESSAGE = (
+                <Message success>
+                    <Message.Header className='message'>Profile Successfully updated!</Message.Header>
+                </Message>
+            );
+            this.setState({
+                message: MESSAGE,
+            })
+        }).catch(err => {
+            const errors = err.response.data.errors;
+            let items = [];
+            if(errors.title)
+                items.push(...errors.title);
+            if(errors.biography)
+                items.push(...errors.biography);
+
+            const MESSAGE = (
+                <Message error>
+                    <Message.Header className='message'>Oops! Something went wrong</Message.Header>
+                    <Message.List>
+                        {items.map(val => <Message.Item key={val}>{val}</Message.Item>)}
+                    </Message.List>
+                </Message>
+            );
+
+            this.setState({
+                message: MESSAGE
+            })
+        })
     }
 
     handlePasswordUpdate() {
@@ -89,11 +139,11 @@ export class EditProfile extends Component {
             this.updatePassword();
         }
         else {
-            let message = <Message error>
-                <Message.Header style={{paddingTop: "0px"}}>Passwords do not match</Message.Header>
-            </Message>;
-            this.setState({match: message});
-            console.log(message);
+            const MESSAGE = (
+                <Message error>
+                    <Message.Header className='message'>Passwords do not match</Message.Header>
+                </Message>);
+            this.setState({message: MESSAGE});
         }
     }
 
@@ -123,7 +173,7 @@ export class EditProfile extends Component {
     render() {
         return (
             <Container textAlign='center'>
-                <div>{this.state.match}</div>
+                <div>{this.state.message}</div>
                 <Form>
                     <Form.Group widths='equal'>
                         <Form.Group className='mediumcolumn' grouped>
@@ -135,7 +185,7 @@ export class EditProfile extends Component {
                                         placeholder='Email' onChange={this.handleChange}/>
                             <Form.TextArea rows='20' label='Bio' value={this.state.bio} name='bio'
                                            placeholder='Bio' onChange={this.handleChange}/>
-                            <Button content='Update profile' onClick={this.handleSubmit} />
+                            <Button content='Update profile' onClick={this.handleSubmit}/>
                         </Form.Group>
                         <Form.Group className='mediumcolumn' grouped>
                             <Form.Input fluid label='Twitter' value={this.state.twitter} name='twitter'
@@ -144,7 +194,7 @@ export class EditProfile extends Component {
                                         placeholder='Google+' onChange={this.handleChange}/>
                             <Form.Input fluid label='LinkedIn' value={this.state.linkedin} name='linkedin'
                                         placeholder='LinkedIn' onChange={this.handleChange}/>
-                            <Divider />
+                            <Divider/>
                             <Header as='h3'>Change password</Header>
                             <Form.Input fluid type='password' label='Current password' value={this.state.current}
                                         name='current' placeholder='Current password' onChange={this.handleChange}/>
@@ -157,6 +207,6 @@ export class EditProfile extends Component {
                     </Form.Group>
                 </Form>
             </Container>
-    )
+        )
     }
-    }
+}

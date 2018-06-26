@@ -109,7 +109,7 @@ export class CreateProject extends Component {
                 Authorization: TOKEN,
                 'Content-Type': 'multipart/form-data'
             }
-        }).then(res => {
+        }).then(() => {
             let message = (
                 <Message success>
                     <Message.Header style={{padding: "0px"}}>Project created</Message.Header>

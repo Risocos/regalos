@@ -55,7 +55,7 @@ export class Login extends Component {
 
             this.setState({redirect: true})
 
-        }).catch(err => {
+        }).catch(() => {
             this.setState({failedLogin: true})
         })
     };

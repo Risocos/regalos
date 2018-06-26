@@ -88,7 +88,7 @@ export class EditProject extends Component {
                 Authorization: TOKEN,
                 'Content-Type': 'multipart/form-data'
             }
-        }).then(res => {
+        }).then(() => {
             const MESSAGE = (
                 <Message success>
                     <Message.Header className='message'>Project successfully updated</Message.Header>
