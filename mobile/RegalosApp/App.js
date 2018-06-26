@@ -92,12 +92,11 @@ export default class App extends React.Component {
 
     fetchProjects = async () => {
         try {
-            // console.log('START');
-            // let response = await fetch(API+'/projects');
-            // let result = await response.json();
-            // console.log('DONE');
-            let result = projects;
-            this.setState({dataSource: result, isLoading: false});
+            fetch(API+'/projects')
+                .then(response => {return response.json(); })
+                .then(result => {
+                    this.setState({dataSource: result.projects, isLoading: false});
+                });
         } catch (e) {
             console.error(e);
         }
@@ -117,7 +116,7 @@ export default class App extends React.Component {
             <View style={{flex: 1, paddingTop: 20}}>
                 <FlatList
                     data={this.state.dataSource}
-                    renderItem={({item}) => <Text style={{marginTop: 10}}>{item.title}</Text>}
+                    renderItem={({item}) => <Text style={{marginTop: 10}}>{item.title} {item.project_plan}</Text>}
                     keyExtractor={(item, index) => index}
                 />
             </View>
