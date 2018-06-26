@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Container, Dropdown, Form, Image} from "semantic-ui-react";
+import {Button, Container, Dropdown, Form, Image, Message} from "semantic-ui-react";
 import '../styling/EditProfile.css';
 import axios from 'axios';
 import {BACKEND_URL, COUNTRIES} from "../constants";
@@ -21,6 +21,7 @@ export class EditProject extends Component {
             end_date: moment(),
             target_budget: '',
             country_id: '',
+            message: '',
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -77,7 +78,7 @@ export class EditProject extends Component {
         data.append("short_description", this.state.short_description);
         data.append("project_plan", this.state.project_plan);
         data.append("cover", this.state.uploadedFile);
-        if(!this.state.end_date instanceof Date)
+        if (!this.state.end_date instanceof Date)
             data.append("end_date", this.state.end_date.unix().toString());
         data.append("target_budget", this.state.target_budget);
         data.append("country_id", this.state.country_id);
@@ -88,8 +89,39 @@ export class EditProject extends Component {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(res => {
-            console.log(res)
-        }).catch(err => console.log(err))
+            const MESSAGE = (
+                <Message success>
+                    <Message.Header className='message'>Project successfully updated</Message.Header>
+                </Message>
+            );
+            this.setState({
+                message: MESSAGE,
+            });
+        }).catch(err => {
+            const errors = err.response.data.errors;
+            let items = [];
+            if (errors.title)
+                items.push(...errors.title);
+            if (errors.country_id)
+                items.push(...errors.country_id);
+            if (errors.project_plan)
+                items.push(...errors.project_plan);
+            if (errors.target_budget)
+                items.push(...errors.target_budget);
+
+            const MESSAGE = (
+                <Message error>
+                    <Message.Header className='message'>Oops! Something went wrong!</Message.Header>
+                    <Message.List>
+                        {items.map(val => <Message.Item key={val}>{val}</Message.Item>)}
+                    </Message.List>
+                </Message>
+            );
+
+            this.setState({
+                message: MESSAGE,
+            })
+        })
     }
 
     handleCountryChange = (e, d) => this.setState({country_id: d.value});
@@ -117,7 +149,7 @@ export class EditProject extends Component {
         return (
             <Container>
                 <div className='message'>
-                    {this.state.formMessage}
+                    {this.state.message}
                 </div>
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group widths='equal'>
@@ -148,7 +180,8 @@ export class EditProject extends Component {
                             <label>End date</label><DatePicker name='end_date'
                                                                selected={moment(this.state.end_date)}
                                                                onChange={this.handleEndDateChange}/>
-                            <Form.Input fluid label='Target budget' value={this.state.target_budget} name='target_budget' placeholder='$0'
+                            <Form.Input fluid label='Target budget' value={this.state.target_budget}
+                                        name='target_budget' placeholder='$0'
                                         onChange={this.handleChange}/>
                             <label>Country</label><Dropdown placeholder='Select a country'
                                                             fluid search selection
