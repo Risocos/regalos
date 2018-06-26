@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 from backend.auth import token_required
 from backend.models import Project, User, Donation
 from backend.schemas import project_schema, donation_schema, user_schema
+from backend.blueprints.user import find_user_or_404
 
 projects_api = Blueprint('ProjectsApi', __name__, url_prefix='/projects')
 
@@ -52,6 +53,15 @@ def get_all_projects():
     # parse them through a schema which converts is to a dict
     result = project_schema.dump(q.all(), many=True)
     return jsonify({'projects': result.data})  # convert dict to json and return that to client
+
+
+@projects_api.route('/userprojects/<string:user_id>', methods=['GET'])
+def get_user_projects(user_id):
+    user = user_schema.dump(find_user_or_404(user_id)).data
+    projects = Project.objects(owner=user['id'])
+
+    result = project_schema.dump(projects.all(), many=True)
+    return jsonify({'projects': result.data})
 
 
 @projects_api.route('/<string:project_id>', methods=['GET'])
