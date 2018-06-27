@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Header} from "semantic-ui-react";
-import "../styling/ResponseCodes.css";
 
 export class ForbiddenAccess extends Component {
 

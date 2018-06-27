@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import "../styling/PaymentCancel.css";
 import {Header,} from "semantic-ui-react";
 
 export class PaymentCancel extends Component {

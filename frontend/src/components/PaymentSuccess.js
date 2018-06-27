@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import "../styling/PaymentCancel.css";
 import {Header,} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 

@@ -4,7 +4,7 @@ import "../styling/login.css"
 import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
 import {BACKEND_URL} from "../constants";
-import '../styling/Register.css';
+import {ErrorMessage} from "./ErrorMessage";
 
 export class Register extends Component {
 
@@ -49,7 +49,7 @@ export class Register extends Component {
                 username: USERNAME,
                 email: EMAIL,
                 password: PASSWORD,
-            }).then(res => {
+            }).then(() => {
                 this.setState({
                     redirect: true,
                 })
@@ -63,24 +63,15 @@ export class Register extends Component {
                         items.push(...errors.password);
                 }
 
-                const MESSAGE = (
-                    <Message className="error" error>
-                        <Message.Header className="errorheader">Oops! Something went wrong!</Message.Header>
-                        <Message.List>
-                            {items.map(val => <Message.Item key={val}>{val}</Message.Item>)}
-                        </Message.List>
-                    </Message>
-                );
-
                 this.setState({
-                    error: MESSAGE,
+                    error: <ErrorMessage content={items}/>
                 })
             })
         }
 
         else {
             this.setState({
-                error: <Message negative>Passwords do not match</Message>,
+                error: <ErrorMessage content='Passwords do not match'/>
             })
         }
     };
