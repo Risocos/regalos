@@ -39,9 +39,6 @@ export class ProjectOverview extends Component {
                     projects: projectList,
                 })
             })
-            .catch(function (error) {
-                console.log(error)
-            });
     }
 
     createCardObject(project) {

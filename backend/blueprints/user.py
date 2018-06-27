@@ -4,6 +4,7 @@ import uuid
 from flask import Blueprint, jsonify, request, abort, url_for, current_app
 from flask_mail import Message
 from mongoengine import DoesNotExist, ValidationError
+from pymongo.errors import DuplicateKeyError
 from werkzeug.utils import secure_filename
 
 from backend import mail
@@ -184,13 +185,13 @@ def promote_user(current_user: User, user_id):
 @users_api.route('/report/<string:user_id>', methods=['PUT'])
 @token_required
 def report_user(current_user: User, user_id):
-    # the user being reported
     # TODO: fix this because we are using MongoDB now!!!! thanks :D
     user = find_user_or_404(user_id)  # type: User
-    # user.received_reports.append(user)
-    user.save()
-
-    return jsonify({'message': 'User reported!'})
+    try:
+        user.update(add_to_set__reportings=current_user)
+    except DuplicateKeyError:
+        return jsonify({'message': 'You have reported this project already'})
+    return jsonify({'message': 'Project reported!'})
 
 
 @users_api.route('/forgot-password', methods=['GET', 'POST'])

@@ -28,6 +28,7 @@ import {
 } from "react-share";
 import {MAPS_KEY} from "../APIkeys";
 import {UserCard} from "./UserCard";
+import {SuccessMessage} from "./SuccessMessage";
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
@@ -53,6 +54,7 @@ export class SingleProjectOverview extends Component {
             terms: false,
             amount: 0,
             item: '',
+            message: '',
         };
 
 
@@ -155,7 +157,12 @@ export class SingleProjectOverview extends Component {
             headers: {
                 Authorization: TOKEN,
             }
+        }).then(() => {
+            this.setState({
+                message: <SuccessMessage content='Project reported!'/>
+            })
         })
+
     }
 
     handleSubmit() {
@@ -343,7 +350,7 @@ export class SingleProjectOverview extends Component {
                     </Container>
                 </Dimmer>
                 {/*Donation form end*/}
-
+                {this.state.message}
                 <Grid columns='equal'>
                     <Grid.Row>
 
