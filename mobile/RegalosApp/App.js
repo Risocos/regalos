@@ -114,14 +114,32 @@ export default class App extends React.Component {
         }
 
         return (
-            <View style={{flex: 1, paddingTop: 20}}>
+            <View style={styles.container}>
                 <FlatList
                     data={this.state.dataSource}
-                    renderItem={({item}) => <Text style={{marginTop: 10}}>{item.title}</Text>}
+                    renderItem={({item}) => App.createItem(item)}
                     keyExtractor={(item, index) => index}
                 />
             </View>
         );
     }
 
+    static createItem(item) {
+        return (
+            <Text>{item.title}</Text>
+        )
+    }
+
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingTop: 22
+    },
+    item: {
+        padding: 10,
+        fontSize: 18,
+        height: 44,
+    },
+});
