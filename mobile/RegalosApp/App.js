@@ -5,74 +5,7 @@
  */
 
 import React from 'react';
-import {ActivityIndicator, FlatList, StyleSheet, Text, View} from 'react-native';
-
-let projects = [
-    {
-        title: 'Building Houses',
-        short_description: 'We are going to build houses for people in Uganda',
-        project_plan: 'Our plan is to build cheap, but properly sized houses for people in Uganda.',
-        owner: '705897b6-5478-4ba2-822a-c5e5833d4124',
-        collaborators: [
-            '705897b6-5478-4ba2-822a-c5e5833d4124',
-            '705897b6-5478-4ba2-822a-c5e5833d4124',
-        ],
-        target_budget: 10000,
-        current_budget: 4576,
-        start_date: 1527764457,
-        end_date: 1527766457,
-        latitude: 0.99190516,
-        longitude: -58.86762519,
-        filename: 'dummy1.jpg',
-        country: 'ug',
-    },
-    {
-        title: 'Collecting money',
-        short_description: 'We want to collect money for others',
-        owner: '705897b6-5478-4ba2-822a-c5e5833d4124',
-        target_budget: 15000,
-        current_budget: 8594,
-        start_date: 1527764457,
-        end_date: 1527766457,
-        latitude: 0.61806054,
-        longitude: 62.77961401,
-        project_plan: 'We plan to collect money from door to door and use this app as payment method',
-        collaborators: [
-            '705897b6-5478-4ba2-822a-c5e5833d4124'
-        ],
-        filename: 'dummy2.jpg',
-        country: 'an',
-    },
-    {
-        title: 'Recycle clothing',
-        short_description: 'Donate your clothing, so we can recycle it!',
-        owner: '705897b6-5478-4ba2-822a-c5e5833d4124',
-        target_budget: 0,
-        current_budget: 0,
-        start_date: 1527764457,
-        end_date: 1527766457,
-        latitude: 49.02797017,
-        longitude: -32.40686866,
-        project_plan: 'We want people to donate their clothing, so that we can send this to poor countries',
-        collaborators: [],
-        filename: 'dummy3.jpg',
-        country: 'us',
-    },
-    {
-        title: 'Project Regalos',
-        short_description: 'Donate for our project to create this project app',
-        owner: '705897b6-5478-4ba2-822a-c5e5833d4124',
-        target_budget: 5000,
-        current_budget: 30,
-        start_date: 1527764457,
-        end_date: 1527766457,
-        latitude: 31.80457949,
-        longitude: -10.32726764,
-        project_plan: 'Too bad we cannot afford our own hourly pay and Sander is addicted to coffee. Sad face.',
-        collaborators: [],
-        country: null,
-    },
-];
+import {ActivityIndicator, FlatList, Image, StyleSheet, Text, View} from 'react-native';
 
 const API = 'http://10.0.2.2:5000';
 
@@ -92,12 +25,13 @@ export default class App extends React.Component {
 
     fetchProjects = async () => {
         try {
-            // console.log('START');
-            // let response = await fetch(API+'/projects');
-            // let result = await response.json();
-            // console.log('DONE');
-            let result = projects;
-            this.setState({dataSource: result, isLoading: false});
+            fetch(API + '/projects')
+                .then(response => {
+                    return response.json();
+                })
+                .then(result => {
+                    this.setState({dataSource: result.projects, isLoading: false});
+                });
         } catch (e) {
             console.error(e);
         }
@@ -115,18 +49,39 @@ export default class App extends React.Component {
 
         return (
             <View style={styles.container}>
+                <Text style={{
+                    textAlign: 'center',
+                    fontSize: 27,
+                    padding: 3,
+                    backgroundColor: 'orange',
+                    color: 'white',
+                }}>Regalos</Text>
                 <FlatList
                     data={this.state.dataSource}
-                    renderItem={({item}) => App.createItem(item)}
-                    keyExtractor={(item, index) => index}
+                    renderItem={({item}) => App.createProjectCard(item)}
+                    keyExtractor={(item, index) => index.toString()}
                 />
             </View>
         );
     }
 
-    static createItem(item) {
+    static createProjectCard(project) {
         return (
-            <Text>{item.title}</Text>
+            <View style={styles.card}>
+                <Image
+                    style={styles.image}
+                    source={{uri: project.cover}}
+                />
+                <View style={styles.content}>
+                    <Text style={{fontSize: 20}}>{project.title}</Text>
+                    {project.country &&
+                    <Text>Country: {project.country.name}</Text>
+                    }
+                    <Text>Target budget: €{project.target_budget}</Text>
+                    <Text>Achieved: €{project.current_budget}</Text>
+                </View>
+                <View style={[styles.progress, {width: (project.current_budget / project.target_budget * 100) + '%'}]} />
+            </View>
         )
     }
 
@@ -135,11 +90,27 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 22
+        marginBottom: 0,
     },
-    item: {
+    card: {
+        borderRadius: 5,
+        marginLeft: 15,
+        marginRight: 15,
+        marginBottom: 10,
+        marginTop: 10,
+        elevation: 2,
+    },
+    image: {
+        width: '100%',
+        height: 100,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+    },
+    content: {
         padding: 10,
-        fontSize: 18,
-        height: 44,
     },
+    progress: {
+        backgroundColor: 'green',
+        height: 5,
+    }
 });
