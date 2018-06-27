@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {Button, Container, Divider, Form, Header, Image, Message} from "semantic-ui-react";
+import {Button, Container, Divider, Form, Header, Image} from "semantic-ui-react";
 import '../styling/EditProfile.css';
 import axios from 'axios';
 import {BACKEND_URL} from "../constants";
+import {ErrorMessage} from "./ErrorMessage";
+import {SuccessMessage} from "./SuccessMessage";
 
 
 export class EditProfile extends Component {
@@ -63,24 +65,13 @@ export class EditProfile extends Component {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(() => {
-            const MESSAGE = (
-                <Message success>
-                    <Message.Header className='message'>Password has been successfully changed! Please log in with your new password</Message.Header>
-                </Message>
-            );
             this.setState({
-                message: MESSAGE,
+                message: <SuccessMessage content='Password has been successfully changed! Please log in with your new password'/>
             })
         }).catch(err => {
             const error = err.response.data.errors.password;
-            const MESSAGE = (
-                <Message error>
-                    <Message.Header className='message'>{error[0]}</Message.Header>
-                </Message>
-            );
-
             this.setState({
-                message: MESSAGE,
+                message: <ErrorMessage content={error}/>
             })
         })
     }
@@ -103,13 +94,8 @@ export class EditProfile extends Component {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(() => {
-            const MESSAGE = (
-                <Message success>
-                    <Message.Header className='message'>Profile Successfully updated!</Message.Header>
-                </Message>
-            );
             this.setState({
-                message: MESSAGE,
+                message: <SuccessMessage content='Profile Successfully updated!'/>
             })
         }).catch(err => {
             const errors = err.response.data.errors;
@@ -119,17 +105,8 @@ export class EditProfile extends Component {
             if(errors.biography)
                 items.push(...errors.biography);
 
-            const MESSAGE = (
-                <Message error>
-                    <Message.Header className='message'>Oops! Something went wrong</Message.Header>
-                    <Message.List>
-                        {items.map(val => <Message.Item key={val}>{val}</Message.Item>)}
-                    </Message.List>
-                </Message>
-            );
-
             this.setState({
-                message: MESSAGE
+                message: <ErrorMessage content={errors}/>
             })
         })
     }
@@ -140,9 +117,7 @@ export class EditProfile extends Component {
         }
         else {
             const MESSAGE = (
-                <Message error>
-                    <Message.Header className='message'>Passwords do not match</Message.Header>
-                </Message>);
+                <ErrorMessage content='Passwords do not match!'/>);
             this.setState({message: MESSAGE});
         }
     }

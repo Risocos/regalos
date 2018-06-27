@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import {Container, Form, Image, Message, Dropdown, Button} from "semantic-ui-react";
+import {Container, Form, Image, Dropdown, Button} from "semantic-ui-react";
 import "../styling/CreateProject.css";
-import "../styling/Register.css";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import {COUNTRIES, BACKEND_URL} from "../constants";
 import {Link} from "react-router-dom";
+import {SuccessMessage} from "./SuccessMessage";
+import {ErrorMessage} from "./ErrorMessage";
 
 
 //Installed dependencies for this:
@@ -31,7 +32,7 @@ export class CreateProject extends Component {
             country: '',
 
             //Utility variables
-            formMessage: [],
+            message: [],
             uploadedFile: '',
             imagePreview: BACKEND_URL + '/uploads/users/no_avatar.png',
         };
@@ -110,13 +111,8 @@ export class CreateProject extends Component {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(() => {
-            let message = (
-                <Message success>
-                    <Message.Header style={{padding: "0px"}}>Project created</Message.Header>
-                </Message>
-            );
             this.setState({
-                formMessage: message,
+                message: <SuccessMessage content='Project created!'/>,
             })
         }).catch(err => {
             const errors = err.response.data.errors;
@@ -132,17 +128,8 @@ export class CreateProject extends Component {
                     items.push(...errors.target_budget);
             }
 
-            const MESSAGE = (
-                <Message className="error" error>
-                    <Message.Header className="errorheader">Oops! Something went wrong!</Message.Header>
-                    <Message.List>
-                        {items.map(val => <Message.Item key={val}>{val}</Message.Item>)}
-                    </Message.List>
-                </Message>
-            );
-
             this.setState({
-                formMessage: MESSAGE,
+                message: <ErrorMessage content={items}/>
             })
         });
 
@@ -171,7 +158,7 @@ export class CreateProject extends Component {
         return (
             <Container>
                 <div className='message'>
-                    {this.state.formMessage}
+                    {this.state.message}
                 </div>
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group widths='equal'>

@@ -4,6 +4,7 @@ import '../styling/Account.css';
 import axios from 'axios';
 import {ProjectCard} from "./ProjectCard";
 import {BACKEND_URL} from "../constants";
+import {SuccessMessage} from "./SuccessMessage";
 
 export class Account extends Component {
 
@@ -62,6 +63,10 @@ export class Account extends Component {
             headers: {
                 Authorization: TOKEN,
             }
+        }).then(() => {
+            this.setState({
+                message: <SuccessMessage content='User reported!'/>
+            })
         })
     }
 

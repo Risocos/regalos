@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Button, Confirm, Grid, Header, Table} from "semantic-ui-react";
-import "../styling/ProjectPanel.css";
 import {Link} from "react-router-dom";
 import axios from "axios/index";
 import {BACKEND_URL} from "../constants";

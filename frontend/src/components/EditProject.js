@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {Button, Container, Dropdown, Form, Image, Message} from "semantic-ui-react";
+import {Button, Container, Dropdown, Form, Image} from "semantic-ui-react";
 import '../styling/EditProfile.css';
 import axios from 'axios';
 import {BACKEND_URL, COUNTRIES} from "../constants";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from "moment";
+import {SuccessMessage} from "./SuccessMessage";
+import {ErrorMessage} from "./ErrorMessage";
 
 
 export class EditProject extends Component {
@@ -89,13 +91,8 @@ export class EditProject extends Component {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(() => {
-            const MESSAGE = (
-                <Message success>
-                    <Message.Header className='message'>Project successfully updated</Message.Header>
-                </Message>
-            );
             this.setState({
-                message: MESSAGE,
+                message: <SuccessMessage content='Project successfully updated'/>
             });
         }).catch(err => {
             const errors = err.response.data.errors;
@@ -109,17 +106,8 @@ export class EditProject extends Component {
             if (errors.target_budget)
                 items.push(...errors.target_budget);
 
-            const MESSAGE = (
-                <Message error>
-                    <Message.Header className='message'>Oops! Something went wrong!</Message.Header>
-                    <Message.List>
-                        {items.map(val => <Message.Item key={val}>{val}</Message.Item>)}
-                    </Message.List>
-                </Message>
-            );
-
             this.setState({
-                message: MESSAGE,
+                message: <ErrorMessage content={items}/>
             })
         })
     }
