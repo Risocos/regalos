@@ -56,7 +56,6 @@ def allowed_file(filename):
 
 @users_api.route('/', methods=['GET'])
 @token_required
-@admin_required
 def get_all_users(current_user: User):
     users = User.objects()
     return jsonify({

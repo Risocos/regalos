@@ -32,6 +32,7 @@ export class CreateProject extends Component {
             country: '',
 
             //Utility variables
+            users: [],
             message: [],
             uploadedFile: '',
             imagePreview: BACKEND_URL + '/uploads/users/no_avatar.png',
@@ -42,6 +43,29 @@ export class CreateProject extends Component {
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        const TOKEN = 'Bearer ' + sessionStorage.getItem("token");
+        const API_PATH = BACKEND_URL + '/users';
+
+        axios.get(API_PATH, {
+            headers: {
+                Authorization: TOKEN,
+            }
+        }).then(res => {
+            const USERS = res.data.users;
+            USERS.map(user => {
+                let obj = {key: user.id, value: user.id, text: user.username};
+                let oldUsers = this.state.users;
+                oldUsers.push(obj);
+                this.setState({
+                    users: oldUsers
+                });
+
+                return null;
+            })
+        })
     }
 
     handleStartDateChange(e) {
@@ -137,12 +161,7 @@ export class CreateProject extends Component {
 
     render() {
         //This needs to be replaced by collecting all users from app and showing these
-        let collaboratorsAvailable = [
-            {key: 0, value: 'Melle', text: 'Melle'},
-            {key: 1, value: 'Thijs', text: 'Thijs'},
-            {key: 2, value: 'Romy', text: 'Romy'},
-            {key: 3, value: 'Jan', text: 'Jan'},
-            {key: 4, value: 'Sander', text: 'Sander'}];
+        let collaboratorsAvailable = this.state.users;
 
         let countries = [];
         COUNTRIES.map(country => {
