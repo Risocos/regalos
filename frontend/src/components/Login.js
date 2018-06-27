@@ -12,6 +12,7 @@ import {
 import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
 import {BACKEND_URL} from "../constants";
+import {ErrorMessage} from "./ErrorMessage";
 
 export class Login extends Component {
     constructor(props) {
@@ -55,7 +56,7 @@ export class Login extends Component {
 
             this.setState({redirect: true})
 
-        }).catch(err => {
+        }).catch(() => {
             this.setState({failedLogin: true})
         })
     };
@@ -92,12 +93,7 @@ export class Login extends Component {
 
         if (failedLogin) {
             fail = (
-                <Message error>
-                    <Message.Header style={{paddingTop: "0px"}}>Login unsuccesful</Message.Header>
-                    <Message.List style={{height: "20px"}}>
-                        <Message.Item>Email and/or password invalid</Message.Item>
-                    </Message.List>
-                </Message>
+                <ErrorMessage content='Email and/or password incorrect'/>
             )
         }
 
