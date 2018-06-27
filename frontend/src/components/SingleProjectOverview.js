@@ -29,6 +29,7 @@ import {
 import {MAPS_KEY} from "../APIkeys";
 import {UserCard} from "./UserCard";
 import {SuccessMessage} from "./SuccessMessage";
+import {MapContainer} from "./MapContainer";
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
@@ -45,6 +46,7 @@ export class SingleProjectOverview extends Component {
             collaborators: [],
             donators: [],
             country: "",
+            location: {lat: 0, lng: 0},
             progress: "Project progress and something with photo albums or blog posts",
             cover: "",
 
@@ -67,6 +69,7 @@ export class SingleProjectOverview extends Component {
         axios.get(API_PATH)
             .then((response) => {
                     const projectdata = response.data.project;
+                    console.log(projectdata);
                     let collaborators = [];
                     let donators = [];
                     let country = projectdata.country.name;
@@ -100,6 +103,10 @@ export class SingleProjectOverview extends Component {
                         collaborators: this.createUserCard(collaborators),
                         donators: this.createUserCard(donators),
                         country: country,
+                        location: {
+                            lat: projectdata.latitude,
+                            lng: projectdata.longitude
+                        }
                     });
                 }
             ).catch(err => {
@@ -124,20 +131,12 @@ export class SingleProjectOverview extends Component {
     }
 
     getMaps() {
-        let src = "";
         if (this.state.country === "") {
             return null;
         }
         else {
-            src = "https://www.google.com/maps/embed/v1/place?key=" + MAPS_KEY + "&q=" + this.state.country;
             return (
-                <div className='googlemaps'>
-                    <div className="gmap_canvas">
-                        <iframe title="maps" width="100%" height="500" id="gmap_canvas"
-                                src={src}
-                                frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0"/>
-                    </div>
-                </div>
+                <MapContainer location={this.state.location}/>
             )
         }
     }

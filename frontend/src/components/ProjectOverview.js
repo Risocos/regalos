@@ -156,7 +156,7 @@ export class ProjectOverview extends Component {
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <MapContainer/>
+                        <MapContainer location=''/>
                         {/*<div className='googlemaps'>*/}
                             {/*<div className="gmap_canvas">*/}
                                 {/*<iframe title="maps" width="100%" height="500" id="gmap_canvas"*/}
