@@ -120,6 +120,7 @@ export class Account extends Component {
     render() {
         return (
             <div>
+                {this.state.message}
                 <div className='account-header'>
                     <Container text>
                         <Item.Group>

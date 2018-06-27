@@ -75,7 +75,7 @@ export class MyProjects extends Component {
                                 <Table.Row>
                                     <Table.HeaderCell/>
                                     <Table.HeaderCell>Project name</Table.HeaderCell>
-                                    <Table.HeaderCell>Donations</Table.HeaderCell>
+                                    <Table.HeaderCell>Status</Table.HeaderCell>
                                     <Table.HeaderCell>Target Budget</Table.HeaderCell>
                                     <Table.HeaderCell>Achieved</Table.HeaderCell>
                                     <Table.HeaderCell>Change project</Table.HeaderCell>
