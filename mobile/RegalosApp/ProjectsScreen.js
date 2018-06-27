@@ -5,7 +5,17 @@
  */
 
 import React from 'react';
-import {ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {
+    ActivityIndicator, Button,
+    FlatList,
+    Image,
+    RefreshControl,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableHighlight,
+    View
+} from 'react-native';
 
 const API = 'http://10.0.2.2:5000';
 
@@ -15,7 +25,8 @@ export default class ProjectsScreen extends React.Component {
         super(props);
         this.state = {
             isLoading: true,
-            dataSource: []
+            dataSource: [],
+            apiUrl: API,
         }
     }
 
@@ -25,7 +36,7 @@ export default class ProjectsScreen extends React.Component {
 
     fetchProjects = async () => {
         try {
-            fetch(API + '/projects')
+            fetch(this.state.apiUrl + '/projects')
                 .then(response => {
                     return response.json();
                 })
@@ -35,13 +46,19 @@ export default class ProjectsScreen extends React.Component {
         } catch (e) {
             console.error(e);
         }
+        this.setState({refreshing: false});
     };
 
     render() {
         if (this.state.isLoading) {
             return (
                 <View style={{flex: 1, padding: 20}}>
-                    <Text>Trying to receive data from: {API}</Text>
+                    <TextInput
+                        onChangeText={(text) => this.setState({apiUrl: text})}
+                        value={this.state.apiUrl}
+                    />
+                    <Text>Trying to receive data from: {this.state.apiUrl}</Text>
+                    <Button onPress={this.fetchProjects} title="Try again" />
                     <ActivityIndicator/>
                 </View>
             )
@@ -60,10 +77,21 @@ export default class ProjectsScreen extends React.Component {
                     data={this.state.dataSource}
                     renderItem={({item}) => this.createProjectCard(item)}
                     keyExtractor={(item, index) => index.toString()}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh}
+                        />
+                    }
                 />
             </View>
         );
     }
+
+    _onRefresh = () => {
+        this.setState({refreshing: true});
+        this.fetchProjects();
+    };
 
     createProjectCard(project) {
         return (
@@ -89,7 +117,7 @@ export default class ProjectsScreen extends React.Component {
     }
 
     showProjectScreen(project) {
-        return this.props.navigation.navigate('ProjectDetail');
+        return this.props.navigation.navigate('ProjectDetail', {project: project});
     }
 }
 
