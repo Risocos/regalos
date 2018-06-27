@@ -34,6 +34,9 @@ class UserSchema(ma.Schema):
     biography = fields.String(validate=not_empty, allow_none=True)
     projects = fields.Nested('ProjectSchema', many=True)
     avatar = fields.Method(method_name='generate_url')
+    linkedin = fields.String(required=False)
+    google = fields.String(required=False)
+    twitter = fields.String(required=False)
 
     def generate_url(self, user):
         if user.filename:

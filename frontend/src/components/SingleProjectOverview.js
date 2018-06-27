@@ -18,7 +18,7 @@ import {
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
-import {BACKEND_URL, COUNTRIES, FRONTEND_URL} from "../constants";
+import {BACKEND_URL, FRONTEND_URL} from "../constants";
 import {
     FacebookShareButton,
     GooglePlusShareButton,
@@ -67,7 +67,7 @@ export class SingleProjectOverview extends Component {
                     const projectdata = response.data.project;
                     let collaborators = [];
                     let donators = [];
-                    let country = this.findCountry(projectdata.country_id);
+                    let country = projectdata.country.name;
 
                     response.data.donators.forEach(donation => {
                         // users can donate multiple times, so check if already in list
@@ -106,17 +106,6 @@ export class SingleProjectOverview extends Component {
                 }
             }
         )
-    }
-
-    findCountry(cc) {
-        let name = '';
-        COUNTRIES.map((countryObject) => {
-            if (countryObject.countryCode === cc) {
-                name = countryObject.name;
-            }
-            return null;
-        });
-        return name;
     }
 
     isANumber(string) {
@@ -270,10 +259,8 @@ export class SingleProjectOverview extends Component {
         const shareTitle = "Please help me by donating to my project: " + this.state.title;
         const shareUrl = window.location.href;
 
-        //TODO: functionality of filters
         //TODO: Posts, photo album, see what we can do
 
-        //TODO: Add payment system to donate form
         return (
             <div className="container">
                 {/*Donation form*/}
@@ -361,40 +348,55 @@ export class SingleProjectOverview extends Component {
                     <Grid.Row>
 
                         <Grid.Column>
-                            <Header> <Button size='massive' color='green' onClick={this.handleOpen}> Donate
-                                now! </Button> </Header>
+
 
                             {/*Some buttons do not work in local environment due to API not excepting portnumbers in the URL*/}
-                            <FacebookShareButton
-                                url={shareUrl}
-                                quote={shareTitle}
-                            ><Button circular color='facebook' icon='facebook'/></FacebookShareButton>
+                            <Grid columns='equal'>
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Header>
+                                            <Button size='massive' color='green'
+                                                    onClick={this.handleOpen}> Donate now! </Button>
+                                        </Header>
+                                    </Grid.Column>
+                                </Grid.Row>
 
-                            <TwitterShareButton
-                                url={shareUrl}
-                                title={shareTitle}
-                            ><Button circular color='twitter' icon='twitter'/></TwitterShareButton>
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <FacebookShareButton
+                                            url={shareUrl}
+                                            quote={shareTitle}
+                                        ><Button circular color='facebook' icon='facebook'/></FacebookShareButton>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <TwitterShareButton
+                                            url={shareUrl}
+                                            title={shareTitle}
+                                        ><Button circular color='twitter' icon='twitter'/></TwitterShareButton>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <LinkedinShareButton
+                                            url={shareUrl}
+                                            title={shareTitle}
+                                            description={shareUrl}
+                                        ><Button circular color='linkedin' icon='linkedin'/></LinkedinShareButton>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <GooglePlusShareButton
+                                            url={shareUrl}
+                                            title={shareTitle}
+                                        ><Button circular color='google plus'
+                                                 icon='google plus'/></GooglePlusShareButton>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <WhatsappShareButton
+                                            url={shareUrl}
+                                            title={shareTitle}
+                                        ><Button circular color='green' icon='whatsapp'/></WhatsappShareButton>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
 
-                            <LinkedinShareButton
-                                url={shareUrl}
-                                title={shareTitle}
-                                description={shareUrl}
-                            ><Button circular color='linkedin' icon='linkedin'/></LinkedinShareButton>
-
-                            <GooglePlusShareButton
-                                url={shareUrl}
-                                title={shareTitle}
-                            ><Button circular color='google plus' icon='google plus'/></GooglePlusShareButton>
-
-                            <WhatsappShareButton
-                                url={shareUrl}
-                                title={shareTitle}
-                            ><Button circular color='green' icon='whatsapp'/></WhatsappShareButton>
-
-                            <div className="reportProject">
-                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report this
-                                    project</Button>
-                            </div>
                         </Grid.Column>
 
                         <Grid.Column textAlign="center" width={10}>
@@ -415,6 +417,11 @@ export class SingleProjectOverview extends Component {
                             </Progress>
 
                             <Tab renderActiveOnly panes={panes}/>
+
+                            <div className="reportProject">
+                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report this
+                                    project</Button>
+                            </div>
 
                         </Grid.Column>
 
