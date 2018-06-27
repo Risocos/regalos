@@ -3,12 +3,14 @@ import {Form, Grid, Header, Pagination} from "semantic-ui-react";
 import "../styling/ProjectOverview.css";
 import axios from "axios";
 import {ProjectCard} from "./ProjectCard";
+import {MapContainer} from "./MapContainer";
 import {BACKEND_URL, COUNTRIES} from "../constants";
 
 
 export class ProjectOverview extends Component {
     constructor(props) {
         super(props);
+
 
         this.state = {
             //list of options used for filtering the projectview
@@ -42,8 +44,8 @@ export class ProjectOverview extends Component {
     }
 
     createCardObject(project) {
-        if(project.country===null)
-            project.country={country_code: "none", name: "None"};
+        if (project.country === null)
+            project.country = {country_code: "none", name: "None"};
         return (
             <ProjectCard key={project.id}
                          id={project.id}
@@ -79,6 +81,7 @@ export class ProjectOverview extends Component {
     handleCountryChange = (e, d) => this.setState({
         filter: {country: d.value}
     });
+
 
 
     render() {
@@ -153,13 +156,14 @@ export class ProjectOverview extends Component {
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <div className='googlemaps'>
-                            <div className="gmap_canvas">
-                                <iframe title="maps" width="100%" height="500" id="gmap_canvas"
-                                        src="https://maps.google.com/maps?q=university of san francisco&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                        frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0"/>
-                            </div>
-                        </div>
+                        <MapContainer/>
+                        {/*<div className='googlemaps'>*/}
+                            {/*<div className="gmap_canvas">*/}
+                                {/*<iframe title="maps" width="100%" height="500" id="gmap_canvas"*/}
+                                        {/*src="https://maps.google.com/maps?q=university of san francisco&t=&z=13&ie=UTF8&iwloc=&output=embed"*/}
+                                        {/*frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0"/>*/}
+                            {/*</div>*/}
+                        {/*</div>*/}
                     </Grid.Row>
                 </Grid>
             </div>
