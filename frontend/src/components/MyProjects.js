@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Button, Confirm, Grid, Header, Table} from "semantic-ui-react";
-import "../styling/ProjectPanel.css";
 import {Link} from "react-router-dom";
 import axios from "axios/index";
 import {BACKEND_URL} from "../constants";
@@ -19,14 +18,13 @@ export class MyProjects extends Component {
 
     componentDidMount() {
         const TOKEN = sessionStorage.getItem("token");
-        const API_PATH = BACKEND_URL + '/users/' + sessionStorage.getItem("user");
-
+        const API_PATH = BACKEND_URL + '/projects/userprojects/' + sessionStorage.getItem("user");
         axios.get(API_PATH, {
             headers: {
                 Authorization: 'Bearer ' + TOKEN,
             }
         }).then(res => {
-            this.setState({projects: res.data.user.projects});
+            this.setState({projects: res.data.projects});
         })
     }
 
@@ -69,11 +67,6 @@ export class MyProjects extends Component {
             <Grid columns='equal'>
                 <Grid.Row>
                     <Grid.Column>
-                        {/*<div className={"backbutton"}><Button*/}
-                            {/*as={Link}*/}
-                            {/*to='/adminpanel'*/}
-                            {/*icon='left chevron'*/}
-                            {/*content="Back"/></div>*/}
                     </Grid.Column>
                     <Grid.Column width={12}>
                         <Header textAlign={"center"}> My projects </Header>
@@ -82,7 +75,7 @@ export class MyProjects extends Component {
                                 <Table.Row>
                                     <Table.HeaderCell/>
                                     <Table.HeaderCell>Project name</Table.HeaderCell>
-                                    <Table.HeaderCell>Donations</Table.HeaderCell>
+                                    <Table.HeaderCell>Status</Table.HeaderCell>
                                     <Table.HeaderCell>Target Budget</Table.HeaderCell>
                                     <Table.HeaderCell>Achieved</Table.HeaderCell>
                                     <Table.HeaderCell>Change project</Table.HeaderCell>

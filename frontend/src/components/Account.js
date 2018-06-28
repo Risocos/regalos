@@ -4,6 +4,7 @@ import '../styling/Account.css';
 import axios from 'axios';
 import {ProjectCard} from "./ProjectCard";
 import {BACKEND_URL} from "../constants";
+import {SuccessMessage} from "./SuccessMessage";
 
 export class Account extends Component {
 
@@ -38,7 +39,6 @@ export class Account extends Component {
             }
         ).then(res => {
             const data = res.data.user;
-            console.log(data);
 
             this.setState({
                 user: {
@@ -52,57 +52,75 @@ export class Account extends Component {
                     linkedin: data.linkedin,
                     projects: data.projects,
                 }
-            });
-        })
+            }, this.findUserProjects);
+        });
     }
 
     handleReport() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + "/users/report/" + this.state.user.id;
-        console.log(TOKEN);
         axios.put(API_PATH, {}, {
             headers: {
                 Authorization: TOKEN,
             }
+        }).then(() => {
+            this.setState({
+                message: <SuccessMessage content='User reported!'/>
+            })
         })
     }
 
     listProject(project) {
+        if (project.country === null)
+            project.country = {country_code: "none", name: "None"};
         return (
             <ProjectCard key={project.id}
                          id={project.id}
                          name={project.title}
                          desc={project.description}
                          target={project.target_budget}
+                         country={project.country.name}
                          achieved={project.current_budget}
                          cover={project.cover}
             />)
     }
 
+    findUserProjects() {
+        const API_PATH = BACKEND_URL + '/projects/userprojects/' + this.state.user.id;
+        axios.get(API_PATH, {}
+        ).then(res => this.setState({
+            projects: res.data.projects
+        }))
+    }
+
     renderTwitter() {
-        if(this.state.user.twitter!=null) {
-        return(
-            <a href={this.state.user.twitter}><Button circular color='twitter' icon='twitter' /></a>
-        )}
+        if (this.state.user.twitter != null) {
+            return (
+                <a href={this.state.user.twitter}><Button circular color='twitter' icon='twitter'/></a>
+            )
+        }
     }
 
     renderGoogle() {
-        if(this.state.user.google!=null) {
-        return(
-            <a href={this.state.user.google}><Button circular color='google plus' icon='google plus'/></a>
-        )}
+        if (this.state.user.google != null) {
+            return (
+                <a href={this.state.user.google}><Button circular color='google plus' icon='google plus'/></a>
+            )
+        }
     }
 
     renderLinkedin() {
-        if(this.state.user.linkedin!=null) {
-        return(
-            <a href={this.state.user.linkedin}><Button circular color='linkedin' icon='linkedin'/></a>
-        )}
+        if (this.state.user.linkedin != null) {
+            return (
+                <a href={this.state.user.linkedin}><Button circular color='linkedin' icon='linkedin'/></a>
+            )
+        }
     }
 
     render() {
         return (
             <div>
+                {this.state.message}
                 <div className='account-header'>
                     <Container text>
                         <Item.Group>
@@ -125,7 +143,8 @@ export class Account extends Component {
                                         {this.renderGoogle()}
                                         <div style={{float: 'right'}}>
                                             <div>
-                                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report user</Button>
+                                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report
+                                                    user</Button>
                                             </div>
                                         </div>
                                     </Item.Extra>
@@ -138,7 +157,7 @@ export class Account extends Component {
                 <Container style={{margin: '80px'}}>
                     <Header as='h1'>Projects</Header>
                     <Grid columns={3}>
-                        {this.state.user.projects.map(project => this.listProject(project))}
+                        {this.state.projects && this.state.projects.map(project => this.listProject(project))}
                     </Grid>
                 </Container>
             </div>

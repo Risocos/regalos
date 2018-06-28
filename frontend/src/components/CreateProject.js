@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
-import {Container, Form, Image, Message, Dropdown, Button} from "semantic-ui-react";
+import {Container, Form, Image, Dropdown, Button} from "semantic-ui-react";
 import "../styling/CreateProject.css";
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import {COUNTRIES, BACKEND_URL} from "../constants";
+import {Link} from "react-router-dom";
+import {SuccessMessage} from "./SuccessMessage";
+import {ErrorMessage} from "./ErrorMessage";
 
 
 //Installed dependencies for this:
@@ -29,9 +32,10 @@ export class CreateProject extends Component {
             country: '',
 
             //Utility variables
-            formMessage: [],
+            users: [],
+            message: [],
             uploadedFile: '',
-            imagePreview: '/white-image.png',
+            imagePreview: BACKEND_URL + '/uploads/users/no_avatar.png',
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -39,6 +43,29 @@ export class CreateProject extends Component {
         this.handleStartDateChange = this.handleStartDateChange.bind(this);
         this.handleEndDateChange = this.handleEndDateChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        const TOKEN = 'Bearer ' + sessionStorage.getItem("token");
+        const API_PATH = BACKEND_URL + '/users';
+
+        axios.get(API_PATH, {
+            headers: {
+                Authorization: TOKEN,
+            }
+        }).then(res => {
+            const USERS = res.data.users;
+            USERS.map(user => {
+                let obj = {key: user.id, value: user.id, text: user.username};
+                let oldUsers = this.state.users;
+                oldUsers.push(obj);
+                this.setState({
+                    users: oldUsers
+                });
+
+                return null;
+            })
+        })
     }
 
     handleStartDateChange(e) {
@@ -67,63 +94,6 @@ export class CreateProject extends Component {
         });
     }
 
-    isANumber(string) {
-        return !isNaN(parseFloat(string)) && isFinite(string);
-    }
-
-    validate() {
-        let isValid = true;
-        let messages = [];
-        if (this.state.name === '') {
-            messages.push("Name is empty");
-            isValid = false;
-        }
-        if (this.state.desc === '') {
-            messages.push("Description is empty");
-            isValid = false;
-        }
-        if (this.state.plan === '') {
-            messages.push("Project plan is empty");
-            isValid = false;
-        }
-        if (this.state.target === 0) {
-            messages.push("Target budget is empty");
-            isValid = false;
-        }
-
-        //Check if start date is before the end date
-        //If not, add error message and translate date to string
-        if (this.state.start >= this.state.end) {
-            let startDate = this.state.start.format("DD-MMMM-YYYY");
-            let endDate = this.state.end.format("DD-MMMM-YYYY");
-            messages.push("Start date must be before end date. " +
-                "Start: " + startDate + " End: " + endDate);
-            isValid = false;
-        }
-
-        //Check if target budget is a number
-        if (!this.isANumber(this.state.target)) {
-            messages.push("Target budget is not a number, please insert numbers only. Example: '10.45'");
-            isValid = false;
-        }
-
-        const errorMessage = (
-            <Message error>
-                <Message.Header style={{padding: "0px"}}>Oops! Something went wrong!</Message.Header>
-                <Message.List>
-                    {messages.map((value) => <Message.Item style={{height: '20px'}} key={value}>{value}</Message.Item>)}
-                </Message.List>
-            </Message>
-        );
-
-        this.setState({
-            formMessage: errorMessage
-        });
-
-        return isValid;
-
-    }
-
     handleImageChange(e) {
 
         let reader = new FileReader();
@@ -142,9 +112,6 @@ export class CreateProject extends Component {
     handleCountryChange = (e, d) => this.setState({country: d.value});
 
     handleSubmit() {
-        if (!this.validate()) {
-            return
-        }
 
         const API_PATH = BACKEND_URL + '/projects';
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
@@ -167,28 +134,34 @@ export class CreateProject extends Component {
                 Authorization: TOKEN,
                 'Content-Type': 'multipart/form-data'
             }
-        }).then(res => {
-            console.log(res);
+        }).then(() => {
+            this.setState({
+                message: <SuccessMessage content='Project created!'/>,
+            })
         }).catch(err => {
-            console.log(err);
-        });
-        let message = <Message success>
-            <Message.Header style={{padding: "0px"}}>Project created</Message.Header>
-        </Message>;
+            const errors = err.response.data.errors;
+            let items = [];
+            if (err.response.status === 422) {
+                if (errors.title)
+                    items.push(...errors.title);
+                if (errors.country_id)
+                    items.push(...errors.country_id);
+                if (errors.project_plan)
+                    items.push(...errors.project_plan);
+                if (errors.target_budget)
+                    items.push(...errors.target_budget);
+            }
 
-        this.setState({
-            formMessage: message,
-        })
+            this.setState({
+                message: <ErrorMessage content={items}/>
+            })
+        });
+
     }
 
     render() {
         //This needs to be replaced by collecting all users from app and showing these
-        let collaboratorsAvailable = [
-            {key: 0, value: 'Melle', text: 'Melle'},
-            {key: 1, value: 'Thijs', text: 'Thijs'},
-            {key: 2, value: 'Romy', text: 'Romy'},
-            {key: 3, value: 'Jan', text: 'Jan'},
-            {key: 4, value: 'Sander', text: 'Sander'}];
+        let collaboratorsAvailable = this.state.users;
 
         let countries = [];
         COUNTRIES.map(country => {
@@ -204,7 +177,7 @@ export class CreateProject extends Component {
         return (
             <Container>
                 <div className='message'>
-                    {this.state.formMessage}
+                    {this.state.message}
                 </div>
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Group widths='equal'>
@@ -226,7 +199,7 @@ export class CreateProject extends Component {
                             <Form.Input fluid label='Target budget' name='target' placeholder='$0'
                                         onChange={this.handleInputChange}/>
                             <label>Country</label><Dropdown placeholder='Select a country' fluid search selection
-                                      options={countries} onChange={this.handleCountryChange}/>
+                                                            options={countries} onChange={this.handleCountryChange}/>
                         </Form.Group>
                         <Form.Group className='formgroup' grouped>
                             <Dropdown placeholder='Collaborator name' fluid multiple search selection
@@ -234,7 +207,7 @@ export class CreateProject extends Component {
                         </Form.Group>
                     </Form.Group>
                     <Button.Group>
-                        <Button>Cancel</Button>
+                        <Button as={Link} to='/'>Cancel</Button>
                         <Button.Or/>
                         <Button positive>Create Project</Button>
                     </Button.Group>

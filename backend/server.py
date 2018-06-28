@@ -31,7 +31,7 @@ def login():
     if not auth or not auth.username or not auth.password:
         return jsonify(error_msg, 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-    user = User.query.filter_by(email=auth.username).first()
+    user = User.objects(email=auth.username).first()
 
     if not user:
         return jsonify(error_msg), 401, {'WWW-Authenticate': 'Basic realm="Login required!"'}

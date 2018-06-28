@@ -1,104 +1,47 @@
+import datetime
 import enum
 
 from backend import db
 
-# Many-to-Many tables
 
-user_reports = db.Table('user_report', db.metadata,
-                        db.Column('reporter_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-                        db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-                        # db.Column('reason', db.String(100)),
-                        db.Column('report_date', db.TIMESTAMP, server_default=db.func.now()),
-                        )
+class RegalosDocument(db.Document):
+    created_at = db.DateTimeField()
+    modified_at = db.DateTimeField(default=datetime.datetime.now)
 
-project_reports = db.Table('project_report', db.metadata,
-                           db.Column('reporter_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-                           db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True),
-                           # db.Column('reason', db.String(100), nullable=False),
-                           db.Column('report_date', db.TIMESTAMP, server_default=db.func.now()),
-                           )
+    meta = {'abstract': True}
+
+    def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = datetime.datetime.now()
+        self.modified_at = datetime.datetime.now()
+        return super(RegalosDocument, self).save(*args, **kwargs)
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    public_id = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(50), unique=True, nullable=False)
-    username = db.Column(db.String(50), nullable=False)
+class User(RegalosDocument):
+    public_id = db.StringField()
+    email = db.StringField(required=True, unique=True)
+    username = db.StringField(required=True)
     password = None
-    password_hash = db.Column(db.String(80), nullable=False)
-    admin = db.Column(db.Boolean, default=False)
-    biography = db.Column(db.String(100))
-    filename = db.Column(db.String)
-    verified = db.Column(db.Boolean, default=False, nullable=False)
-    flag_count = db.Column(db.SmallInteger, nullable=False, default=0)
+    password_hash = db.StringField(required=True)
+    admin = db.BooleanField(default=False)
+    biography = db.StringField()
+    filename = db.StringField()
+    verified = db.BooleanField(default=False)
 
-    twitter = db.Column(db.String, nullable=True)
-    linkedin = db.Column(db.String, nullable=True)
-    google = db.Column(db.String, nullable=True)
-
-    date_created = db.Column(db.TIMESTAMP, server_default=db.func.now(), nullable=False)
+    twitter = db.URLField()
+    linkedin = db.URLField()
+    google = db.URLField()
 
     # foreign keys and relations
-    given_reports = db.relation('User', secondary=user_reports,
-                                # when giving reports, the reporter_id is this users id
-                                primaryjoin=(user_reports.c.reporter_id == id),
-                                secondaryjoin=(user_reports.c.user_id == id),
-                                )
-
-    received_reports = db.relation('User', secondary=user_reports,
-                                   # when receiving reports the user_id is this users id
-                                   primaryjoin=(user_reports.c.user_id == id),
-                                   secondaryjoin=(user_reports.c.reporter_id == id),
-                                   )
-
-    project_reportings = db.relationship('Project', secondary=project_reports, backref='reportings')
-
-    def __repr__(self):
-        return '<User {email} {username}>'.format(email=self.email, username=self.username)
+    received_reports = db.ListField(db.ReferenceField('User'))
 
 
-class Country(db.Model):
-    id = db.Column(db.String(10), primary_key=True)
-    name = db.Column(db.String, nullable=False)
+class Country(RegalosDocument):
+    country_code = db.StringField(required=True, unique=True, min_length=2, max_length=10)
+    name = db.StringField(required=True)
 
 
-class Project(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(50), nullable=False)
-    short_description = db.Column(db.String(500), nullable=False)
-    project_plan = db.Column(db.Text, nullable=False)
-    # category = db.Column(db.String(50))
-    target_budget = db.Column(db.Integer, nullable=False)
-    current_budget = db.Column(db.Integer, default=0, nullable=False)
-    donators = db.Column(db.Integer, default=0, nullable=False)
-    start_date = db.Column(db.TIMESTAMP, nullable=False)
-    end_date = db.Column(db.TIMESTAMP, nullable=False)
-    filename = db.Column(db.String)
-    verified = db.Column(db.Boolean, nullable=False, default=False)
-    # Google Maps
-    latitude = db.Column(db.Float(10, 6))
-    longitude = db.Column(db.Float(10, 6))
-
-    flag_count = db.Column(db.SmallInteger, nullable=False, default=0)
-
-    # relations & foreign keys
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    owner = db.relationship('User',
-                            backref=db.backref('projects', lazy=True))  # backref makes it possible to do user.projects
-    country_id = db.Column(db.String(10), db.ForeignKey('country.id'), nullable=True)
-    country = db.relationship('Country', backref=db.backref('projects', lazy=True))
-
-    date_created = db.Column(db.TIMESTAMP, server_default=db.func.now(), nullable=False)
-
-    # TODO: delete file when model is deleted
-    # @listen(Project, 'delete')
-    # def before_delete(self):
-
-    def __repr__(self):
-        return '<Project {title} - {owner}>'.format(title=self.title, owner=self.owner)
-
-
-class Donation(db.Model):
+class Donation(RegalosDocument):
     # status of the paypal payment
     class Status(enum.Enum):
         PENDING = 1  # when payment is created
@@ -108,23 +51,35 @@ class Donation(db.Model):
         def __str__(self):
             return '{0}'.format(self.name)
 
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Float, nullable=False)
+    amount = db.FloatField(required=True, min_value=0)
 
-    # foreign keys
-    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
-    project = db.relationship('Project')
-    donator_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # can be null for anonymous payments
-    donator = db.relationship('User')
-    paypal_payment_id = db.Column(db.String, nullable=False)
-    status = db.Column(db.Enum(Status), default=Status.PENDING)
-
-    # TODO: how do we track material for a project?
-    # amount_material =
-    date_created = db.Column(db.TIMESTAMP, server_default=db.func.now())
+    # relations
+    # TODO: how to backreference with mongodb ??
+    # try to backreference with project id
+    project = db.ReferenceField('Project', required=True)
+    donator = db.ReferenceField(User, required=False)  # is not required because of anonymous donations
+    paypal_payment_id = db.StringField(required=True)
+    status = db.StringField(default=str(Status.PENDING))
 
 
-class Contributor(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
-    project_id = db.Column(db.Integer, primary_key=True)
+class Project(RegalosDocument):
+    title = db.StringField(required=True)
+    short_description = db.StringField(required=True)
+    project_plan = db.StringField(required=True)
+    # category = db.Column(db.String(50))
+    target_budget = db.IntField(required=True)
+    current_budget = db.IntField(default=0)
 
+    start_date = db.DateTimeField(required=True)
+    end_date = db.DateTimeField(required=True)
+    filename = db.StringField()
+    verified = db.BooleanField(default=False)
+    # Google Maps
+    latitude = db.FloatField()
+    longitude = db.FloatField()
+
+    # relations & foreign keys
+    collaborators = db.ListField(db.ReferenceField(User))
+    owner = db.ReferenceField(User, required=True)
+    country = db.ReferenceField(Country)
+    reportings = db.ListField(db.ReferenceField(User))

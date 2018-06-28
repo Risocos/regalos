@@ -4,7 +4,7 @@ import {
     Grid,
     Header, Table, Confirm
 } from "semantic-ui-react";
-import "../styling/UserPanel.css";
+import "../styling/AdminPanel.css";
 import {Link,} from "react-router-dom";
 import axios from 'axios';
 import {BACKEND_URL} from "../constants";

@@ -4,6 +4,7 @@ import "../styling/login.css"
 import {Link, Redirect} from "react-router-dom";
 import axios from 'axios';
 import {BACKEND_URL} from "../constants";
+import {ErrorMessage} from "./ErrorMessage";
 
 export class Register extends Component {
 
@@ -31,15 +32,14 @@ export class Register extends Component {
         });
     }
 
-    validate(){
-        if(this.state.password===this.state.temppass) return true;
-        return false
+    validate() {
+        return (this.state.password === this.state.temppass);
     }
 
     onSubmit = event => {
         event.preventDefault();
 
-        if(this.validate()) {
+        if (this.validate()) {
             const USERNAME = this.state.username;
             const EMAIL = this.state.email;
             const PASSWORD = this.state.password;
@@ -49,24 +49,35 @@ export class Register extends Component {
                 username: USERNAME,
                 email: EMAIL,
                 password: PASSWORD,
-            }).then(res => {
+            }).then(() => {
                 this.setState({
                     redirect: true,
                 })
             }).catch(err => {
-                console.log(err);
+                const errors = err.response.data.errors;
+                let items = [];
+                if (err.response.status === 422) {
+                    if (errors.email)
+                        items.push(...errors.email);
+                    if (errors.password)
+                        items.push(...errors.password);
+                }
+
+                this.setState({
+                    error: <ErrorMessage content={items}/>
+                })
             })
         }
+
         else {
             this.setState({
-                error: <Message negative>Passwords do not match</Message>,
+                error: <ErrorMessage content='Passwords do not match'/>
             })
         }
     };
 
     render() {
-
-        if(this.state.redirect===true)
+        if (this.state.redirect === true)
             return <Redirect to='/login'/>;
         return (
             <Grid textAlign="center"

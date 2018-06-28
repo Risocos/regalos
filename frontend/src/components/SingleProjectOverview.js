@@ -1,19 +1,24 @@
 import React, {Component} from 'react';
 import {
-    Header,
     Button,
-    Image,
-    Progress,
-    Statistic,
-    Grid,
+    Checkbox,
+    Container,
     Dimmer,
     Form,
+    Grid,
+    Header,
+    Icon,
+    Image,
     Input,
-    Radio, TextArea, Checkbox, Container, Icon, Tab
+    Progress,
+    Radio,
+    Statistic,
+    Tab,
+    TextArea
 } from "semantic-ui-react";
 import "../styling/SingleProjectOverview.css";
 import axios from 'axios';
-import {BACKEND_URL, COUNTRIES, FRONTEND_URL} from "../constants";
+import {BACKEND_URL, FRONTEND_URL} from "../constants";
 import {
     FacebookShareButton,
     GooglePlusShareButton,
@@ -23,6 +28,7 @@ import {
 } from "react-share";
 import {MAPS_KEY} from "../APIkeys";
 import {UserCard} from "./UserCard";
+import {SuccessMessage} from "./SuccessMessage";
 
 export class SingleProjectOverview extends Component {
     constructor(props) {
@@ -48,6 +54,7 @@ export class SingleProjectOverview extends Component {
             terms: false,
             amount: 0,
             item: '',
+            message: '',
         };
 
 
@@ -62,16 +69,23 @@ export class SingleProjectOverview extends Component {
                     const projectdata = response.data.project;
                     let collaborators = [];
                     let donators = [];
-                    let country = this.findCountry(projectdata.country_id);
+                    let country = projectdata.country.name;
 
-                    response.data.donators.forEach(donator => {
-                        if(!donators.includes(donator.donator_id))
-                            donators.push(donator.donator_id)
+                    response.data.donators.forEach(donation => {
+                        // users can donate multiple times, so check if already in list
+                        // check if anonymous donation
+                        if (donation.donator) {
+                            if (!donators.includes(donation.donator.id))
+                                donators.push(donation.donator.id)
+                        } else {
+                            // anonymous donation
+                            // TODO: show anonymous donations somehow?
+                        }
                     });
 
                     response.data.contributors.forEach(contributor => {
-                        if(!collaborators.includes(contributor.user_id))
-                            collaborators.push(contributor.user_id)
+                        if (contributor.id)
+                            collaborators.push(contributor.id)
                     });
 
                     this.setState({
@@ -89,21 +103,11 @@ export class SingleProjectOverview extends Component {
                     });
                 }
             ).catch(err => {
-            if (err.response.status === 404) {
-                this.props.history.push('/404')
+                if (err.response && err.response.status === 404) {
+                    this.props.history.push('/404')
+                }
             }
-        })
-    }
-
-    findCountry(cc) {
-        let name = '';
-        COUNTRIES.map((countryObject) => {
-            if (countryObject.countryCode === cc) {
-                name = countryObject.name;
-            }
-            return null;
-        });
-        return name;
+        )
     }
 
     isANumber(string) {
@@ -149,12 +153,16 @@ export class SingleProjectOverview extends Component {
     handleReport() {
         const TOKEN = "Bearer " + sessionStorage.getItem("token");
         const API_PATH = BACKEND_URL + "/projects/report/" + this.state.id;
-        console.log(TOKEN);
         axios.put(API_PATH, {}, {
             headers: {
                 Authorization: TOKEN,
             }
+        }).then(() => {
+            this.setState({
+                message: <SuccessMessage content='Project reported!'/>
+            })
         })
+
     }
 
     handleSubmit() {
@@ -258,10 +266,8 @@ export class SingleProjectOverview extends Component {
         const shareTitle = "Please help me by donating to my project: " + this.state.title;
         const shareUrl = window.location.href;
 
-        //TODO: functionality of filters
         //TODO: Posts, photo album, see what we can do
 
-        //TODO: Add payment system to donate form
         return (
             <div className="container">
                 {/*Donation form*/}
@@ -344,49 +350,66 @@ export class SingleProjectOverview extends Component {
                     </Container>
                 </Dimmer>
                 {/*Donation form end*/}
-
+                {this.state.message}
                 <Grid columns='equal'>
                     <Grid.Row>
 
                         <Grid.Column>
-                            <Header> <Button size='massive' color='green' onClick={this.handleOpen}> Donate
-                                now! </Button> </Header>
+
 
                             {/*Some buttons do not work in local environment due to API not excepting portnumbers in the URL*/}
-                            <FacebookShareButton
-                                url={shareUrl}
-                                quote={shareTitle}
-                            ><Button circular color='facebook' icon='facebook'/></FacebookShareButton>
+                            <Grid columns='equal'>
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Header>
+                                            <Button size='massive' color='green'
+                                                    onClick={this.handleOpen}> Donate now! </Button>
+                                        </Header>
+                                    </Grid.Column>
+                                </Grid.Row>
 
-                            <TwitterShareButton
-                                url={shareUrl}
-                                title={shareTitle}
-                            ><Button circular color='twitter' icon='twitter'/></TwitterShareButton>
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <FacebookShareButton
+                                            url={shareUrl}
+                                            quote={shareTitle}
+                                        ><Button circular color='facebook' icon='facebook'/></FacebookShareButton>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <TwitterShareButton
+                                            url={shareUrl}
+                                            title={shareTitle}
+                                        ><Button circular color='twitter' icon='twitter'/></TwitterShareButton>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <LinkedinShareButton
+                                            url={shareUrl}
+                                            title={shareTitle}
+                                            description={shareUrl}
+                                        ><Button circular color='linkedin' icon='linkedin'/></LinkedinShareButton>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <GooglePlusShareButton
+                                            url={shareUrl}
+                                            title={shareTitle}
+                                        ><Button circular color='google plus'
+                                                 icon='google plus'/></GooglePlusShareButton>
+                                    </Grid.Column>
+                                    <Grid.Column>
+                                        <WhatsappShareButton
+                                            url={shareUrl}
+                                            title={shareTitle}
+                                        ><Button circular color='green' icon='whatsapp'/></WhatsappShareButton>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
 
-                            <LinkedinShareButton
-                                url={shareUrl}
-                                title={shareTitle}
-                                description={shareUrl}
-                            ><Button circular color='linkedin' icon='linkedin'/></LinkedinShareButton>
-
-                            <GooglePlusShareButton
-                                url={shareUrl}
-                                title={shareTitle}
-                            ><Button circular color='google plus' icon='google plus'/></GooglePlusShareButton>
-
-                            <WhatsappShareButton
-                                url={shareUrl}
-                                title={shareTitle}
-                            ><Button circular color='green' icon='whatsapp'/></WhatsappShareButton>
-
-                            <div className="reportProject">
-                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report this
-                                    project</Button>
-                            </div>
                         </Grid.Column>
 
                         <Grid.Column textAlign="center" width={10}>
-                            <Image src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/600x400'} centered={true}/>
+                            <Image
+                                src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/600x400'}
+                                centered={true}/>
                             <Header as='h1'>{this.state.title}</Header>
                             <Header as='h3'>Target Budget: €{this.state.target}</Header>
                             <Header as='h3'>Achieved Budget: €{this.state.achieved}</Header>
@@ -401,6 +424,11 @@ export class SingleProjectOverview extends Component {
                             </Progress>
 
                             <Tab renderActiveOnly panes={panes}/>
+
+                            <div className="reportProject">
+                                <Button onClick={this.handleReport} negative><Icon name='flag'/>Report this
+                                    project</Button>
+                            </div>
 
                         </Grid.Column>
 

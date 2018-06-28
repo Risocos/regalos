@@ -3,7 +3,7 @@ import {Form, Grid, Header, Pagination} from "semantic-ui-react";
 import "../styling/ProjectOverview.css";
 import axios from "axios";
 import {ProjectCard} from "./ProjectCard";
-import {COUNTRIES, BACKEND_URL} from "../constants";
+import {BACKEND_URL, COUNTRIES} from "../constants";
 
 
 export class ProjectOverview extends Component {
@@ -39,19 +39,18 @@ export class ProjectOverview extends Component {
                     projects: projectList,
                 })
             })
-            .catch(function (error) {
-                console.log(error)
-            });
     }
 
     createCardObject(project) {
+        if(project.country===null)
+            project.country={country_code: "none", name: "None"};
         return (
             <ProjectCard key={project.id}
                          id={project.id}
                          name={project.title}
                          target={project.target_budget}
                          achieved={project.current_budget}
-                         country={project.country_id}
+                         country={project.country.name}
                          cover={project.cover}
                          className="card"
             />
