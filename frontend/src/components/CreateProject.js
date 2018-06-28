@@ -143,13 +143,19 @@ export class CreateProject extends Component {
             let items = [];
             if (err.response.status === 422) {
                 if (errors.title)
-                    items.push(...errors.title);
+                    items.push("Title must not be empty");
+                    //Uncomment in case backend provides proper error messages
+                    //items.push(...errors.title);
                 if (errors.country_id)
                     items.push(...errors.country_id);
                 if (errors.project_plan)
-                    items.push(...errors.project_plan);
+                    items.push("Project plan must not be empty");
+                    //Uncomment in case backend provides proper error messages
+                    //items.push(...errors.project_plan);
                 if (errors.target_budget)
-                    items.push(...errors.target_budget);
+                    items.push("Target budget must be a number")
+                    //Uncomment in case backend provides proper error messages
+                    //items.push(...errors.target_budget);
             }
 
             this.setState({

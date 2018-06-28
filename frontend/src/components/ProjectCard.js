@@ -49,10 +49,10 @@ export class ProjectCard extends Component {
                 <Card>
                     <Image className='cardImage' src={this.state.cover != null ? this.state.cover : 'http://via.placeholder.com/300x200'}/>
                     <Card.Content className="card-content">
-                        <Card.Header className="card-header">{this.state.name}</Card.Header>
-                        <Card.Meta>Country: {this.state.country}</Card.Meta>
-                        <Card.Meta>Target budget: €{this.state.target}</Card.Meta>
-                        <Card.Meta>Achieved budget: €{this.state.achieved}</Card.Meta>
+                        <Card.Header className="card-header card-text">{this.state.name}</Card.Header>
+                        <Card.Meta className='card-text'>Country: {this.state.country}</Card.Meta>
+                        <Card.Meta className='card-text'>Target budget: €{this.state.target}</Card.Meta>
+                        <Card.Meta className='card-text'>Achieved budget: €{this.state.achieved}</Card.Meta>
                         <Progress percent={this.returnProgress()} progress success> </Progress>
                     </Card.Content>
                 </Card>
