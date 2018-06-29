@@ -100,13 +100,15 @@ export class EditProfile extends Component {
         }).catch(err => {
             const errors = err.response.data.errors;
             let items = [];
-            if(errors.title)
-                items.push(...errors.title);
+            if(errors.email)
+                items.push(...errors.email);
             if(errors.biography)
-                items.push(...errors.biography);
+                items.push("Biography must not be empty");
+                //Uncomment in case backend provides proper error messages
+                //items.push(...errors.biography);
 
             this.setState({
-                message: <ErrorMessage content={errors}/>
+                message: <ErrorMessage content={items}/>
             })
         })
     }
